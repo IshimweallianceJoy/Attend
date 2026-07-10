@@ -1,7 +1,0 @@
-<!-- solution -->
-<Solution>
-  <Project Path="Core\Domain\Domain.csproj"/>
-  <Project Path="Core\Application\Application.csproj"/>
-  <Project Path="Infrastructure\Infrastructure.csproj"/>
-  <Project Path="Web\Web.csproj"/>
-</Solution>

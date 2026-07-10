@@ -51,11 +51,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Alliance\\source\\repos\\Attend\\Web\\Web.csproj",
-      "projectName": "Web",
-      "projectPath": "C:\\Users\\Alliance\\source\\repos\\Attend\\Web\\Web.csproj",
+      "projectUniqueName": "C:\\Users\\Alliance\\source\\repos\\Attend\\web\\Web.csproj",
+      "projectName": "Attend",
+      "projectPath": "C:\\Users\\Alliance\\source\\repos\\Attend\\web\\Web.csproj",
       "packagesPath": "C:\\Users\\Alliance\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Alliance\\source\\repos\\Attend\\Web\\obj\\",
+      "outputPath": "C:\\Users\\Alliance\\source\\repos\\Attend\\web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

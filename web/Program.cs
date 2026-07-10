@@ -1,10 +1,10 @@
-using Web.Components;
+using Attend.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents(); 
 
 var app = builder.Build();
 
@@ -18,6 +18,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapStaticAssets();
