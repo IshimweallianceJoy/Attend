@@ -1,5 +1,5 @@
-using Core.Domain.Entities;
-namespace Core.Application.Services.StudentServices
+using Domain.Entities;
+namespace Application.Services.StudentServices
 
 {
     public class StudentService:IStudentService
