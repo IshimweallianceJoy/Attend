@@ -1,4 +1,5 @@
 using Core.Application.Services.StudentServices;
+using Core.Domain.Entities;
 using Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);

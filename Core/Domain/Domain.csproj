@@ -6,7 +6,5 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
   </PropertyGroup>
-     <ItemGroup>
-  <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
+
 </Project>
