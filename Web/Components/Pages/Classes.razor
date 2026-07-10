@@ -1,0 +1,40 @@
+@page "/class"
+<h1>Class</h1>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Faculity</th>
+        
+    </tr>
+    @foreach(var cls in classes ){   
+    <tr>
+        <td>@cls.Id</td>
+        <td>@cls.Name</td>
+        <td>@cls.Department</td>
+        <td>@cls.Faculity</td>
+    </tr>
+
+    }
+ 
+</table>
+@code{
+    public class Class
+    {
+        public int Id {get; set; }
+        public string Name {get; set; }
+        public string Department {get; set;}
+        public string Faculity {get; set;}
+    }
+    private List<Class> classes= new List<Class>();
+    protected override void OnInitialized()
+    {
+       classes=new List<Class>
+        {
+            new Class{Id=1,Name="Class1",Department="Energy",Faculity="Electrical Technology"},
+             new Class{Id=2,Name="Class2",Department="Energy",Faculity="Elecronics"}
+        };
+    }
+
+}
