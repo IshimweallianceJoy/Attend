@@ -1,5 +1,5 @@
 using Domain.Entities;
-using Application.Interface;
+using Application.Interfaces;
 namespace Application.Services.StudentServices
 
 {
