@@ -1,3 +1,5 @@
+C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\EmbeddedAttribute.cs
+C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\ValidatableTypeAttribute.cs
 C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\appsettings.Development.json
 C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\appsettings.json
 C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Web.staticwebassets.runtime.json
@@ -7,8 +9,13 @@ C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Web.deps.json
 C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Web.runtimeconfig.json
 C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Web.dll
 C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Web.pdb
-C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\EmbeddedAttribute.cs
-C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\ValidatableTypeAttribute.cs
+C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Application.dll
+C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Domain.dll
+C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Infrastructure.dll
+C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Application.pdb
+C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Infrastructure.pdb
+C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Domain.pdb
+C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\Web.csproj.AssemblyReference.cache
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\rpswa.dswa.cache.json
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\Web.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\Web.AssemblyInfoInputs.cache
@@ -79,14 +86,9 @@ C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\staticwebassets.buil
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\staticwebassets.development.json
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\swae.build.ex.cache
+C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\Web.csproj.Up2Date
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\Web.dll
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\refint\Web.dll
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\Web.pdb
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\Web.genruntimeconfig.cache
 C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\ref\Web.dll
-C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\Web.csproj.AssemblyReference.cache
-C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Application.dll
-C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Application.pdb
-C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\Web.csproj.Up2Date
-C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Domain.dll
-C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\Domain.pdb
