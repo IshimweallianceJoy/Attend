@@ -3,6 +3,6 @@ namespace Application.Services.ClassServices
 {
     public interface IClassService
     {
-        public List<Classs>GetClasses();
+        public List<Classs>GetClassses();
     }
 }

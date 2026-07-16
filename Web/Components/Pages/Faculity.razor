@@ -1,0 +1,26 @@
+@page "/faculity"
+@using Domain.Entities;
+@using Application.Services.FaculityServices:
+
+@inject FaculityService IFaculityService
+
+<h1>Faculity</h1>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+@code{
+    private List<Faculity> faculities= new List<Faculity>();
+
+    protected override void OnInitialized()
+    {
+       
+    }
+}

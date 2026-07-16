@@ -1,0 +1,39 @@
+@page "/Attendence"
+@using Application.Services.AttendenceServices
+@using Domain.Entities;
+
+@inject IAttendenceService AttendenceService
+<h1>Class</h1>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>StudentId</th>
+        <th>ClassId</th>
+        <th>Time</th>
+        <th>Date</th>
+        <th>Status</th>
+
+        
+    </tr>
+    @foreach(var Attend in attendences ){   
+    <tr>
+        <td>@Attend.Id</td>
+        <td>@Attend.StudentId</td>
+        <td>@Attend.ClassesId</td>
+        <td>@Attend.Time</td>
+        <td>@Attend.Date</td>
+        <td>@Attend Status</td>
+    </tr>
+
+    }
+ 
+</table>
+@code{
+   
+    private List<Attendence> attendences= new List<Attendence>();
+    protected override void OnInitialized()
+    {
+        attendences = AttendenceService.GetAttendences();
+    }
+
+}

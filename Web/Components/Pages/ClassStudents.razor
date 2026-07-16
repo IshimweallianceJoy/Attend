@@ -1,0 +1,36 @@
+@page "/classStudent"
+@using Application.Services.ClassStudentServices
+@using Domain.Entities;
+
+
+@inject IClassStudentService ClassStudentService
+
+<h1>ClassStudent</h1>
+<table>
+    <tr>
+<th>ClassId</th>
+<th>StudentId</th>
+
+</tr>
+
+@foreach(var classst in classStudents){
+<tr>
+    <td>@classst.ClassesId</td>
+    <td>@classst.StudentsId</td>
+</tr>
+}
+
+</table>
+
+@code{
+
+    private List<ClassStudent> classStudents= new List<ClassStudent>();
+
+    protected override void OnInitialized()
+    {
+        classStudents= ClassStudentService.GetClassStudents();
+    }
+}
+
+
+    

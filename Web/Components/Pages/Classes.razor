@@ -3,7 +3,7 @@
 @using Domain.Entities;
 
 @inject IClassService ClassService
-<h1>Class</h1>
+<h1>Class</h1> 
 <table>
     <tr>
         <th>Id</th>
@@ -28,7 +28,7 @@
     private List<Classs> classes= new List<Classs>();
     protected override void OnInitialized()
     {
-        classes = ClassService.GetClasses();
+        classes = ClassService.GetClassses();
     }
 
 }

@@ -1,16 +1,19 @@
 using Domain.Entities;
+using Application.Interfaces;
 namespace Application.Services.ClassServices
 
 {
     public class ClassService:IClassService
     {
-        public List<Classs> GetClasses()
+         private readonly IClass _class;
+
+          public ClassService(IClass Classs)
         {
-          return new List<Classs>
+            _class=Classs;
+        }
+        public List<Classs> GetClassses()
         {
-            new Classs{Id=1,Name="Class1",Department="Energy",Faculity="Electrical Technology"},
-             new Classs{Id=2,Name="Class2",Department="Energy",Faculity="Elecronics"}
-        };
+           return _class.GetClassses();
         }
     }
 

@@ -1,16 +1,20 @@
 using Application.Interfaces;
 using Domain.Entities;
+using Infrastructure.Data;
 namespace Infrastructure.Repositories
 {
     public class StudentRepository : IStudent
     {
-         public List<Student> GetStudents()
+         private readonly ApplicationDbContext _dbcontext;
+        public StudentRepository(ApplicationDbContext dbcontext)
         {
-          return new List<Student>
-            {
-                new Student{Id=1,Name="joy",DOB=new DateTime(2004,04,5),Email="joy@gmail.com",Phone="078656644",Sex="male"},
-                new Student{Id=1,Name="joy",DOB=new DateTime(2004,04,5),Email="joy@gmail.com",Phone="078656644",Sex="male"}
-            };
+            _dbcontext= dbcontext;
+        }
+
+
+        public List<Student> GetStudents()
+        {
+            return _dbcontext.Students.ToList();
         }
     } 
 }

@@ -17,6 +17,8 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 
 builder.Services.AddScoped<IClassService, ClassService>();
 
+
+
 builder.Services.AddInfrastructureService(builder.Configuration);
 
 var app = builder.Build();

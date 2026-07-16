@@ -10,6 +10,10 @@ namespace Infrastructure.Data
         }
         public DbSet<Student> Students{get;set;}
         public DbSet<Classs> Classes{get;set;}
+        public DbSet<Attendence> attendences{get;set;}
+        public DbSet<ClassStudent> classStudents{get;set;}
+        public DbSet<Faculity> faculities{get;set;}
+        public DbSet<EducationLevel> educationLevels{get;set;}
 
 
 

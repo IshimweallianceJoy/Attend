@@ -35,8 +35,16 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Attendences.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBdHRlbmRlbmNlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Classes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDbGFzc2VzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/ClassStudents.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDbGFzc1N0dWRlbnRzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Counter.razor]
@@ -45,6 +53,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Faculity.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGYWN1bGl0eS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Home.razor]
