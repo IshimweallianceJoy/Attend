@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
 
         public List<Faculity> GetFaculities()
         {
-            return _dbcontext.faculities.ToList();
+            return _dbcontext.Faculities.ToList();
         } 
     }
 }

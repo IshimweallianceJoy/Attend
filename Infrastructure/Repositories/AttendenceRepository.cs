@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
 
         public List<Attendence> GetAttendences()
         {
-            return _dbcontext.attendences.ToList();
+            return _dbcontext.Attendences.ToList();
         }
     }
 }

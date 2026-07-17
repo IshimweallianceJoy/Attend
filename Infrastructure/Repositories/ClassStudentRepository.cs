@@ -13,7 +13,7 @@ namespace Infrastructure.Repositories
         }
         public List<ClassStudent> GetClassStudents()
         {
-           return _dbcontext.classStudents.ToList();
+           return _dbcontext.ClassStudents.ToList();
         }
     }
 }

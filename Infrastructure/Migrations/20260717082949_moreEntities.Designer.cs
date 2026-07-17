@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260717082949_moreEntities")]
+    partial class moreEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,6 +25,21 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AttendenceStudent", b =>
+                {
+                    b.Property<int>("attendencesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("studentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("attendencesId", "studentId");
+
+                    b.HasIndex("studentId");
+
+                    b.ToTable("AttendenceStudent");
+                });
+
             modelBuilder.Entity("Domain.Entities.Attendence", b =>
                 {
                     b.Property<int>("Id")
@@ -29,6 +47,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ClassStudentId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ClasssId")
                         .HasColumnType("int");
@@ -39,9 +60,11 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClassStudentId");
+
                     b.HasIndex("ClasssId");
 
-                    b.ToTable("Attendences");
+                    b.ToTable("attendences");
                 });
 
             modelBuilder.Entity("Domain.Entities.ClassStudent", b =>
@@ -64,7 +87,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("ClassStudents");
+                    b.ToTable("classStudents");
                 });
 
             modelBuilder.Entity("Domain.Entities.Classs", b =>
@@ -112,7 +135,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EducationLevels");
+                    b.ToTable("educationLevels");
                 });
 
             modelBuilder.Entity("Domain.Entities.Faculity", b =>
@@ -129,7 +152,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Faculities");
+                    b.ToTable("faculities");
                 });
 
             modelBuilder.Entity("Domain.Entities.Student", b =>
@@ -147,8 +170,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("DOB")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("DateAdded")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -218,11 +242,30 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentAttendences");
+                    b.ToTable("studentAttendences");
+                });
+
+            modelBuilder.Entity("AttendenceStudent", b =>
+                {
+                    b.HasOne("Domain.Entities.Attendence", null)
+                        .WithMany()
+                        .HasForeignKey("attendencesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Student", null)
+                        .WithMany()
+                        .HasForeignKey("studentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Attendence", b =>
                 {
+                    b.HasOne("Domain.Entities.ClassStudent", null)
+                        .WithMany("attendences")
+                        .HasForeignKey("ClassStudentId");
+
                     b.HasOne("Domain.Entities.Classs", "Classs")
                         .WithMany("attendences")
                         .HasForeignKey("ClasssId")
@@ -235,13 +278,13 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.ClassStudent", b =>
                 {
                     b.HasOne("Domain.Entities.Classs", "Classs")
-                        .WithMany()
+                        .WithMany("classStudents")
                         .HasForeignKey("ClasssId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Student", "Student")
-                        .WithMany()
+                        .WithMany("classStudents")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -289,9 +332,16 @@ namespace Infrastructure.Migrations
                     b.Navigation("attendence");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ClassStudent", b =>
+                {
+                    b.Navigation("attendences");
+                });
+
             modelBuilder.Entity("Domain.Entities.Classs", b =>
                 {
                     b.Navigation("attendences");
+
+                    b.Navigation("classStudents");
                 });
 
             modelBuilder.Entity("Domain.Entities.EducationLevel", b =>
@@ -302,6 +352,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Faculity", b =>
                 {
                     b.Navigation("classes");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Student", b =>
+                {
+                    b.Navigation("classStudents");
                 });
 #pragma warning restore 612, 618
         }

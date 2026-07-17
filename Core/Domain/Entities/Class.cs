@@ -14,7 +14,7 @@ namespace Domain.Entities{
         public EducationLevel EducationLevel{get;set;}
 
           //Navigation Property: One Education Level can have many Classes
-        public ICollection<ClassStudent> classStudents{get;set;}
+       
         public ICollection<Attendence> attendences{get;set;}
     }
 }

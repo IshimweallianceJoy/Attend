@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
 
         public List<EducationLevel> GetEducationLevels()
         {
-            return _dbcontext.educationLevels.ToList();
+            return _dbcontext.EducationLevels.ToList();
         }
     }
 }

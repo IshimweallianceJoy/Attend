@@ -1,9 +1,10 @@
-@page "/student"
+@page "/students"
 @using Application.Services.StudentServices
 @using Domain.Entities;
 
  @inject IStudentService StudentService
 <h1>Students</h1>
+<a class="btn btn-primary" href="/students/add">Add Student</a>
 <table class="table">
     <thead>
  <tr>
@@ -13,6 +14,11 @@
         <th>Sex</th>
         <th>Phone</th>
         <th>Email</th>
+          <th>RegNumber</th>
+        <th>ParentNames</th>
+        <th>ParentPhone</th>
+        <th>DateAdded</th>
+        <th>Status</th>
     </tr>
     </thead>
    
@@ -24,6 +30,11 @@
         <td>@student.Sex</td>
          <td>@student.Email</td>
         <td>@student.Phone</td>
+        <td>@student.RegNumber</td>
+        <td>@student.ParentNames</td>
+         <td>@student.ParentPhone</td>
+        <td>@student.DateAdded</td>
+        <td>@student.Status</td>
     </tr>
     }
 </table>

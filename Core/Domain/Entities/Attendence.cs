@@ -9,6 +9,6 @@ namespace Domain.Entities{
         public string   Name{get; set;}
          public Classs Classs{get; set;}
 
-         public ICollection<Student> student{get;set;}
+         
     }
 }
