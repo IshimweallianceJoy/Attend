@@ -4,8 +4,9 @@
 
  @inject IStudentService StudentService
 <h1>Students</h1>
-<table>
-    <tr>
+<table class="table">
+    <thead>
+ <tr>
         <th>Id</th>
         <th>Name</th>
         <th>DOB</th>
@@ -13,6 +14,8 @@
         <th>Phone</th>
         <th>Email</th>
     </tr>
+    </thead>
+   
     @foreach(var student in students){
             <tr>
         <td>@student.Id</td>

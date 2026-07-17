@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260717073631_moreRelationships")]
+    partial class moreRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("AttendenceStudent", b =>
-                {
-                    b.Property<int>("attendencesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("studentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("attendencesId", "studentId");
-
-                    b.HasIndex("studentId");
-
-                    b.ToTable("AttendenceStudent");
-                });
 
             modelBuilder.Entity("Domain.Entities.Attendence", b =>
                 {
@@ -45,21 +33,27 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ClassStudentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ClasssId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeOnly>("Time")
+                        .HasColumnType("time");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassStudentId");
-
                     b.HasIndex("ClasssId");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("attendences");
                 });
@@ -212,34 +206,23 @@ namespace Infrastructure.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("AttendenceStudent", b =>
-                {
-                    b.HasOne("Domain.Entities.Attendence", null)
-                        .WithMany()
-                        .HasForeignKey("attendencesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Student", null)
-                        .WithMany()
-                        .HasForeignKey("studentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Entities.Attendence", b =>
                 {
-                    b.HasOne("Domain.Entities.ClassStudent", null)
-                        .WithMany("attendences")
-                        .HasForeignKey("ClassStudentId");
-
                     b.HasOne("Domain.Entities.Classs", "Classs")
                         .WithMany("attendences")
                         .HasForeignKey("ClasssId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Student", "student")
+                        .WithMany("attendences")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Classs");
+
+                    b.Navigation("student");
                 });
 
             modelBuilder.Entity("Domain.Entities.ClassStudent", b =>
@@ -280,11 +263,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Faculity");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ClassStudent", b =>
-                {
-                    b.Navigation("attendences");
-                });
-
             modelBuilder.Entity("Domain.Entities.Classs", b =>
                 {
                     b.Navigation("attendences");
@@ -304,6 +282,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Student", b =>
                 {
+                    b.Navigation("attendences");
+
                     b.Navigation("classStudents");
                 });
 #pragma warning restore 612, 618
