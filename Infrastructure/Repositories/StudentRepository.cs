@@ -1,6 +1,7 @@
 using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Repositories
 {
     public class StudentRepository : IStudent
@@ -20,6 +21,10 @@ namespace Infrastructure.Repositories
         {
             _dbcontext.Students.Add(student);
             _dbcontext.SaveChanges();
+        }
+         public Student? GetStudentById(int id)
+        {
+            return _dbcontext.Students.FirstOrDefault(ss => ss.Id == id);
         }
     } 
 }

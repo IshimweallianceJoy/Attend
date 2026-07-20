@@ -1,0 +1,77 @@
+@page "/students/{id:int}"
+@using Application.Services.StudentServices
+@using Domain.Entities
+@inject IStudentService StudentService
+
+<h3 class="form-label" >Student Details </h3>
+<a href="/students" class="btn btn-secondary">Back to List</a>
+<table class="table">
+    <thead>
+<div >
+        <div class="for-group">
+        <label class="for-lable">Id:</label>
+        <small class="for-text">@student.Id</small>
+    </div>
+     <div class="for-group">
+        <label class="for-lable">Name:</label>
+        <small class="for-text">@student.Name</small>
+    </div>
+     <div class="for-group">
+        <label class="for-lable">Date of Birth:</label>
+        <small class="for-text">@student.DOB</small>
+    </div>
+     <div class="for-group">
+        <label class="for-lable">Sex:</label>
+        <small class="for-text">@student.Sex</small>
+    </div>
+     <div class="for-group">
+        <label class="for-lable">Phone:</label>
+        <small class="for-text">@student.Phone</small>
+    </div>
+     <div class="for-group">
+        <label class="for-lable">Email:</label>
+        <small class="for-text">@student.Email</small>
+    </div>
+     <div class="for-group">
+        <label class="for-lable">Reg NUmber:</label>
+        <small class="for-text">@student.RegNumber</small>
+    </div>
+     <div class="for-group">
+        <label class="for-lable">Adress:</label>
+        <small class="for-text">@student.Adress</small>
+    </div>
+    <div class="for-group">
+        <label class="for-lable">Parent Name:</label>
+        <small class="for-text">@student.ParentNames</small>
+    </div>
+    <div class="for-group">
+        <label class="for-lable">Parent Phone:</label>
+        <small class="for-text">@student.ParentPhone</small>
+    </div>
+    <div class="for-group">
+        <label class="for-lable">User Added:</label>
+        <small class="for-text">@student.UserAdded</small>
+    </div>
+    <div class="for-group">
+        <label class="for-lable">Date Added:</label>
+        <small class="for-text">@student.DateAdded</small>
+    </div>">
+    
+   </div>
+   
+</thead>
+</table>
+
+
+
+
+
+@code{
+    [Parameter]
+    public int Id{get; set;}
+    private Student? student;
+    protected override void OnParametersSet()
+    {
+        student = StudentService.GetStudentById(Id);
+    }
+}

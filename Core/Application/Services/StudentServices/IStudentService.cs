@@ -5,5 +5,6 @@ namespace Application.Services.StudentServices
     {
         public List<Student>GetStudents();
         public void AddStudent(Student student);
+        public Student? GetStudentById(int id);
     }
 }
