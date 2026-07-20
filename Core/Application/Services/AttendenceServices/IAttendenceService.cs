@@ -4,5 +4,6 @@ namespace Application.Services.AttendenceServices
     public interface IAttendenceService
     {
         public List<Attendence>GetAttendences();
+        public void AddAttendence(Attendence attendence);
     }
 }

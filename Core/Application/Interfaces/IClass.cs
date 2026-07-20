@@ -4,5 +4,6 @@ namespace Application.Interfaces
     public interface IClass
     {
         public List<Classs>GetClassses();
+        public void AddClass(Classs classs);
     }
 }

@@ -16,5 +16,9 @@ namespace Application.Services.AttendenceServices
         {
             return _attendence.GetAttendences();
         }
+        public void AddAttendence(Attendence attendence)
+        {
+            _attendence.AddAttendence(attendence);
+        }
     }
 }

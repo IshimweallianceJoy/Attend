@@ -3,7 +3,6 @@ namespace Domain.Entities{
     {
         public int Id {get; set; }
         public string Name {get; set; }
-        public string Department {get; set;}
         
         //Prefic should match the Navigation property name
         public int FaculityId{get;set;}

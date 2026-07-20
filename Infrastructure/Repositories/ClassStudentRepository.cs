@@ -15,5 +15,10 @@ namespace Infrastructure.Repositories
         {
            return _dbcontext.ClassStudents.ToList();
         }
+        public void AddClassStudent(ClassStudent classStudent)
+        {
+            _dbcontext.ClassStudents.Add(classStudent);
+            _dbcontext.SaveChanges();
+        }
     }
 }

@@ -7,19 +7,17 @@
 <table>
     <tr>
         <th>Id</th>
-        <th>StudentId</th>
+        <th>Name</th>
         <th>ClassId</th>
-        <th>Time</th>
-        <th>Date</th>
-        <th>Status</th>
+    
 
         
     </tr>
     @foreach(var Attend in attendences ){   
     <tr>
         <td>@Attend.Id</td>
+        <td>@Attend.Name</td>
         <td>@Attend.ClasssId</td>
-        <td>@Attend Status</td>
     </tr>
 
     }

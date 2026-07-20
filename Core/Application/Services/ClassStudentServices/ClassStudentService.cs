@@ -2,7 +2,7 @@ using Domain.Entities;
 using Application.Interfaces;
 namespace Application.Services.ClassStudentServices
 {
-    public class ClassStudentService : IClassStudentService
+    public class ClassStudentService 
     {
         private readonly IClassStudent _classstudent;
 
@@ -14,5 +14,10 @@ namespace Application.Services.ClassStudentServices
         {
             return _classstudent.GetClassStudents();
         }
+        private void AddClassStudent(ClassStudent classStudent)
+        {
+            _classstudent.AddClassStudent(classStudent);
+        }
+        
     }
 }

@@ -17,7 +17,7 @@ namespace Application.DependencyInjection
             services.AddScoped<IClassService, ClassService>();
             services.AddScoped<IAttendenceService, AttendenceService>();
             services.AddScoped<IFaculityService, FaculityService>();
-            services.AddScoped<IClassStudentService, ClassStudentService>();
+           
             services.AddScoped<IEducationLevelService, EducationLevelService>();
 
             

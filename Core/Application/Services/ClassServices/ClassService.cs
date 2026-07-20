@@ -7,13 +7,17 @@ namespace Application.Services.ClassServices
     {
          private readonly IClass _class;
 
-          public ClassService(IClass Classs)
+          public ClassService(IClass classs)
         {
-            _class=Classs;
+            _class=classs;
         }
         public List<Classs> GetClassses()
         {
            return _class.GetClassses();
+        }
+        public void AddClass(Classs classs)
+        {
+                _class.AddClass(classs);
         }
     }
 

@@ -4,20 +4,24 @@
 
 @inject IClassService ClassService
 <h1>Class</h1> 
-<table>
-    <tr>
+<a class="btn btn-primary" href="/class/add">Add Class</a>
+<table class="table">
+  <thead>
+     <tr>
         <th>Id</th>
         <th>Name</th>
-        <th>Department</th>
-        <th>Faculity</th>
+        <th>FaculityId</th>
+        <th>EducationLevelId</th>
         
     </tr>
+  </thead>
+   
     @foreach(var cls in classes ){   
     <tr>
         <td>@cls.Id</td>
         <td>@cls.Name</td>
-        <td>@cls.Department</td>
-        <td>@cls.Faculity</td>
+        <td>@cls.FaculityId</td>
+        <td>@cls.EducationLevelId</td>
     </tr>
 
     }

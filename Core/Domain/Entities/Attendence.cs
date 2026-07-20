@@ -5,7 +5,6 @@ namespace Domain.Entities{
     
         public int ClasssId {get; set;}
         
-        
         public string   Name{get; set;}
          public Classs Classs{get; set;}
 
