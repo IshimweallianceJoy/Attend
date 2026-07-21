@@ -19,6 +19,14 @@ namespace Application.Services.ClassServices
         {
                 _class.AddClass(classs);
         }
+        public Classs? GetClasssById(int id)
+        {
+            return _class.GetClasssById(id);
+        }
+          public void UpdateClass(Classs classs)
+        {
+            //_class.UpdateClass(classs);
+        }
     }
 
    

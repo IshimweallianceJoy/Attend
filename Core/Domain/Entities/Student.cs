@@ -14,7 +14,7 @@ namespace Domain.Entities
         public string ParentPhone { get; set; }
         public string UserAdded { get; set; }
         public DateTime DateAdded { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } = "Active";
 
           //Navigation Property: One Education Level can have many Classes
         

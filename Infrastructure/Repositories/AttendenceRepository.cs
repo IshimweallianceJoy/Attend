@@ -16,8 +16,7 @@ namespace Infrastructure.Repositories
         public List<Attendence> GetAttendences()
         {
             return _dbcontext.Attendences.ToList();
-        }
-        public void AddAttendence(Attendence attendence)
+        }         public void AddAttendence(Attendence attendence)
         {
             _dbcontext.Attendences.Add(attendence);
             _dbcontext.SaveChanges();

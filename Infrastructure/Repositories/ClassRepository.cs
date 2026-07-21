@@ -21,5 +21,9 @@ namespace Infrastructure.Repositories
             _dbcontext.Classes.Add(classs);
             _dbcontext.SaveChanges();
         }
+        public Classs? GetClasssById(int id)
+        {
+            return _dbcontext.Classes.FirstOrDefault(ee => ee.Id ==id);
+        }
     } 
 }

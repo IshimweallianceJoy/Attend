@@ -5,5 +5,18 @@ namespace Application.Interfaces
     {
         public List<Classs>GetClassses();
         public void AddClass(Classs classs);
+        public Classs? GetClasssById(int id);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

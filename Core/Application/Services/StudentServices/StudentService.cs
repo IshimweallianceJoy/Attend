@@ -23,6 +23,14 @@ namespace Application.Services.StudentServices
         {
             return _student.GetStudentById(id);
         }
+          public void UpdateStudent(Student student)
+        {
+            _student.UpdateStudent(student);
+        }
+        public void DeleteStusent(Student student)
+        {
+            _student.DeleteStusent(student);
+        }
     }
 
    
