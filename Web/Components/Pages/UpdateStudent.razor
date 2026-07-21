@@ -1,4 +1,5 @@
 @page "/students/update/{id:int}"
+@using Application.DTOs
 @using Domain.Entities
 @using Application.Services.StudentServices
 @rendermode InteractiveServer
@@ -6,6 +7,10 @@
 @inject IStudentService StudentService
 <div>
     <EditForm OnValidSubmit="EditStudent" Model="student">
+          <div class="form-group">
+            <label>Id</label>
+            <InputNumber @bind-Value="student.Id" class="form-control" />
+        </div>
         <div class="form-group">
             <label>Name</label>
             <InputText @bind-Value="student.Name" class="form-control" />
@@ -23,10 +28,7 @@
             <InputText @bind-Value="student.Adress" class="form-control" />
         </div>
         
-        <div class="form-group">
-            <label>Adress</label>
-            <InputText @bind-Value="student.Phone" class="form-control" />
-        </div>
+       
         
         <button type="submit" class="btn btn-primary">Update</button>
     </EditForm>
@@ -34,14 +36,17 @@
 @code{
     [Parameter]
     public int Id{get;set;}
-    private Student? existingstudent;
-    private Student student = new();
+    private GetStudentDTO? existingstudent;
+    private UpdateStudentDTO student = new();
     protected override void OnParametersSet()
     {
         existingstudent= StudentService.GetStudentById(Id);
         if (existingstudent != null)
         {
-            student = existingstudent;
+            student.Id = existingstudent.Id;
+            student.Name = existingstudent.Name;
+            student.Sex = existingstudent.Sex;
+            student.Adress = existingstudent.Adress;
         }
     }
     private void EditStudent()

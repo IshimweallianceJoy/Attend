@@ -1,5 +1,6 @@
 @page "/students/delete/{id:int}"
 @using Application.Services.StudentServices
+@using Application.DTOs
 @using Domain.Entities
 @rendermode InteractiveServer
 @inject NavigationManager Navigation    
@@ -8,7 +9,7 @@
     <EditForm OnValidSubmit="deleteStudent" Model="student" class="p-6 justify-content align-items-center">
         <div>
             <small style="color:red">Are You Sure You want to Delete Student:</small>
-            <small style="font-weight:900">@student.Id : @student.Name</small>
+            <small style="font-weight:900">@student.Id </small>
         </div>
 
         <button type="submit" class="btn btn-primary ">Confirm</button>
@@ -18,14 +19,14 @@
 @code{
   [Parameter]
     public int Id{get;set;}
-    private Student? existingstudent;
-    private Student student = new();
+    private GetStudentDTO? existingstudent;
+    private DeleteStudentDTO student = new();
     protected override void OnParametersSet()
     {
         existingstudent= StudentService.GetStudentById(Id);
         if (existingstudent != null)
         {
-            student = existingstudent;
+            student.Id = existingstudent.Id;
         }
     }
     private void deleteStudent()
