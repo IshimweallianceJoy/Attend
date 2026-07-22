@@ -1,9 +1,14 @@
+using Application.DTOs;
 using Domain.Entities;
 namespace Application.Interfaces
 {
     public interface IClassStudent
     {
-        public List<ClassStudent>GetClassStudents();
-        public void AddClassStudent(ClassStudent classStudent);
+        public List<GetClassStudentDTO>GetClassStudents();
+        public void AddClassStudent(AddClassStudentDTO classStudent);
+        public GetClassStudentDTO? GetClassStudentById(int id);
+        public void UpdateClassStudent(UpdateClassStudentDTO classstudent);
+        public void DeleteClassStudent(DeleteClassStudentDTO classstudent);
+        
     }
 }

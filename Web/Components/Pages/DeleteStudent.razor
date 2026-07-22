@@ -6,7 +6,7 @@
 @inject NavigationManager Navigation    
 @inject IStudentService StudentService
 <div class="container mt-5 flex justify-content-center shadow-sm border-0 p-6" >
-    <EditForm OnValidSubmit="deleteStudent" Model="student" class="p-6 justify-content align-items-center">
+    <EditForm OnValidSubmit="deleteStudentAsync" Model="student" class="p-6 justify-content align-items-center">
         <div>
             <small style="color:red">Are You Sure You want to Delete Student:</small>
             <small style="font-weight:900">@student.Id </small>
@@ -19,19 +19,19 @@
 @code{
   [Parameter]
     public int Id{get;set;}
-    private GetStudentDTO? existingstudent;
+    private  GetStudentDTO? existingstudent;
     private DeleteStudentDTO student = new();
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        existingstudent= StudentService.GetStudentById(Id);
+        existingstudent= await StudentService.GetStudentByIdAsync(Id);
         if (existingstudent != null)
         {
             student.Id = existingstudent.Id;
         }
     }
-    private void deleteStudent()
+    private async Task deleteStudentAsync()
     {
-        StudentService.DeleteStusent(student);
+      await  StudentService.DeleteStusentAsync(student);
         Navigation.NavigateTo("/students");
     }
 }

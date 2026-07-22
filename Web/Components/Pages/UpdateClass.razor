@@ -7,6 +7,9 @@
 @inject  IClassService ClassService
 <div>
     <EditForm OnValidSubmit="EditClass"  Model="classe">
+
+        <h1>Update Class</h1>
+
     <div class="form-group">
      <label>Id</label>
      <InputNumber class="form-control" @bind-Value="classe.Id"/>

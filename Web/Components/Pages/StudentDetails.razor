@@ -88,8 +88,8 @@
     [Parameter]
     public int Id{get; set;}
     private GetStudentDTO? student;
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        student = StudentService.GetStudentById(Id);
+        student = await StudentService.GetStudentByIdAsync(Id);
     }
 }

@@ -44,9 +44,9 @@
 @code{
    
     private List<GetStudentDTO> students=new List<GetStudentDTO>();
-    protected override void OnInitialized()         
+    protected override async Task OnInitializedAsync()         
     {
-        students = StudentService.GetStudents();
+        students = await StudentService.GetStudentsAsync();
     } 
 
 
