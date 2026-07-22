@@ -1,0 +1,52 @@
+@page "/class/update/{id:int}"
+@using Application.Services.ClassServices
+@using Application.DTOs
+@using Domain.Entities
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject  IClassService ClassService
+<div>
+    <EditForm OnValidSubmit="EditClass"  Model="classe">
+    <div class="form-group">
+     <label>Id</label>
+     <InputNumber class="form-control" @bind-Value="classe.Id"/>
+    </div>
+
+    <div class="form-group">
+        <label>Name</label>
+        <InputText class="form-control" @bind-Value="classe.Name"/>
+    </div>
+
+    <div class="form-group">
+        <label>Faculity</label>
+            classe.Id=exstingclass.Id;
+       <InputNumber class="form-control" @bind-Value="classe.FaculityId"/>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    </EditForm>
+</div>
+
+@code{
+    [Parameter]
+    public int Id{get;set;}
+    private GetClassDTO? exstingclass;
+    private UpdateClassDTO classe =new ();
+    protected override void OnParametersSet()
+    {
+        exstingclass= ClassService.GetClasssById(Id);
+        if (exstingclass != null)
+        {
+            classe.Id=exstingclass.Id;
+            classe.Name=exstingclass.Name;
+            classe.FaculityId=exstingclass.FaculityId;
+        }
+        
+    }
+    private void EditClass()
+    {
+        ClassService.UpdateClass(classe);
+        Navigation.NavigateTo("/class");
+    }
+}

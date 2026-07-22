@@ -1,6 +1,7 @@
 @page "/class/{id:int}"
 @using Application.Services.ClassServices
 @using Domain.Entities
+@using Application.DTOs
 @inject IClassService ClassService
 
 <h3 class="form-label" >Class Details </h3>
@@ -31,11 +32,19 @@
         <label class="col-md-4 font-weight-bold">Education Level:</label>
         <small class="col-md-8">@classs.EducationLevelId</small>
     </div>
+     <div class="row mb-3">
+        <label class="col-md-4 font-weight-bold">User Added:</label>
+        <small class="col-md-8">@classs.UserAdded</small>
+    </div>
+     <div class="row mb-3">
+        <label class="col-md-4 font-weight-bold">Date Added:</label>
+        <small class="col-md-8">@classs.DateAdded</small>
+    </div>
     
       <div class="row">
                     <div class="col text-right">
-                        <button class="btn btn-primary">Edit</button>
-                        <button class="btn btn-danger ml-2">Delete</button>
+                        <a href="/class/update/@classs.Id"><button class="btn btn-primary">Edit</button></a>
+                        <a href="/class/delete/@classs.Id"><button class="btn btn-danger ml-2">Delete</button></a> 
                     </div>
                 </div>
 
@@ -54,9 +63,9 @@
 @code{
     [Parameter]
     public int Id{get; set;}
-    private Classs? classs;
+    private GetClassDTO? classs;
     protected override void OnParametersSet()
     {
-        //classs = ClassService.GetClassById(Id);
+        classs = ClassService.GetClasssById(Id);
     }
 }

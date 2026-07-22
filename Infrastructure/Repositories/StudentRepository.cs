@@ -48,7 +48,7 @@ namespace Infrastructure.Repositories
                Adress = student.Adress,
                ParentNames = student.ParentNames,
                ParentPhone = student.ParentPhone,
-               UserAdded = "Admin",
+               UserAdded = "Joy",
                DateAdded = DateTime.UtcNow,
                Status = "Active"
             });

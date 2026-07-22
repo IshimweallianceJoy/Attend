@@ -1,29 +1,30 @@
 @using Application.Services.ClassServices
 @using Domain.Entities
+@using Application.DTOs
 @using Infrastructure.Migrations
 @rendermode InteractiveServer
 @inject NavigationManager navigation
 @inject IClassService ClassService
 @page "/class/add"
 <div>
-    <EditForm Model="classe" OnValidSubmit="SaveClass"> 
+    <EditForm Model="classs" OnValidSubmit="SaveClass"> 
 
       <h1>Add Class</h1>
 
         <div class="form-group">
                 <label for="Name" >Name:</label>
-                <InputText class="form-control" id="Name" @bind-Value="classe.Name" />
+                <InputText class="form-control" id="Name" @bind-Value="classs.Name" />
         </div>
     
        
         <div class="form-group">
                 <label for="Name" >Faculty:</label>
-                <InputNumber class="form-control" id="faculty" @bind-Value="classe.FaculityId" />
+                <InputNumber class="form-control" id="faculty" @bind-Value="classs.FaculityId" />
         </div>
     
               <div class="form-group">
                 <label for="Name" >Education Level</label>
-                <InputNumber class="form-control" id="education" @bind-Value="classe.EducationLevelId" />
+                <InputNumber class="form-control" id="education level" @bind-Value="classs.EducationLevelId" />
         </div>
 
         <button type="submit" class="btn btn-primary mt-3">Add Class</button>
@@ -33,10 +34,10 @@
 </div>
 
 @code{
-    private Classs classe = new ();
+    private AddClassDTO classs = new ();
     private void SaveClass()
     {
-        ClassService.AddClass(classe);
+        ClassService.AddClass(classs);
         navigation.NavigateTo("/class");
     }
 

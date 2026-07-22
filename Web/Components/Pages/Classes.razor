@@ -1,5 +1,6 @@
 @page "/class"
 @using Application.Services.ClassServices
+@using Application.DTOs;
 @using Domain.Entities;
 
 @inject IClassService ClassService
@@ -12,6 +13,10 @@
         <th>Name</th>
         <th>FaculityId</th>
         <th>EducationLevelId</th>
+          <th>UserAdded</th>
+        <th>DateAdded</th>
+        <th>Status</th>
+        <th>Actions</th>
         
     </tr>
   </thead>
@@ -22,6 +27,10 @@
         <td>@cls.Name</td>
         <td>@cls.FaculityId</td>
         <td>@cls.EducationLevelId</td>
+        <td>@cls.UserAdded</td>
+        <td>@cls.DateAdded</td>
+        <td>@cls.Status</td>
+        <td><a href="/class/@cls.Id" class="btn btn-primary">View Details</a></td>
     </tr>
 
     }
@@ -29,7 +38,7 @@
 </table>
 @code{
    
-    private List<Classs> classes= new List<Classs>();
+    private List<GetClassDTO> classes= new List<GetClassDTO>();
     protected override void OnInitialized()
     {
         classes = ClassService.GetClassses();

@@ -7,6 +7,10 @@ namespace Domain.Entities{
         //Prefic should match the Navigation property name
         public int FaculityId{get;set;}
         public int EducationLevelId{get;set;}
+        public string UserAdded{get; set;}
+        public DateTime DateAdded{get; set;}
+        public string Status{get; set;}
+
 
         //Nagivation properties
         public Faculity Faculity{get;set;}
