@@ -4,6 +4,13 @@
 @using Application.DTOs
 @inject IClassService ClassService
 
+@if(isLoading){
+    <small>the page is loading ...</small>
+}
+else if(classs == null){
+    <small>no class found</small>
+}
+else{
 <h3 class="form-label" >Class Details </h3>
 <a href="/class" class="btn btn-secondary">Back to List</a>
 
@@ -57,15 +64,18 @@
    
  </div>
 </div>
-
+}
 
 
 @code{
     [Parameter]
     public int Id{get; set;}
+    private bool isLoading= true;
     private GetClassDTO? classs;
-    protected override void OnParametersSet()
-    {
-        classs = ClassService.GetClasssById(Id);
-    }
+    protected override async Task OnParametersSetAsync()
+    { 
+         isLoading= true;
+        classs = await ClassService.GetClasssByIdAsync(Id);
+       isLoading= false;
+    } 
 }

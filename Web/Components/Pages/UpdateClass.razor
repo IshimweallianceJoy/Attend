@@ -6,7 +6,7 @@
 @inject NavigationManager Navigation
 @inject  IClassService ClassService
 <div>
-    <EditForm OnValidSubmit="EditClass"  Model="classe">
+    <EditForm OnValidSubmit="EditClassAync"  Model="classe">
 
         <h1>Update Class</h1>
 
@@ -36,9 +36,9 @@
     public int Id{get;set;}
     private GetClassDTO? exstingclass;
     private UpdateClassDTO classe =new ();
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        exstingclass= ClassService.GetClasssById(Id);
+        exstingclass= await ClassService.GetClasssByIdAsync(Id);
         if (exstingclass != null)
         {
             classe.Id=exstingclass.Id;
@@ -47,9 +47,9 @@
         }
         
     }
-    private void EditClass()
+    private async Task EditClassAync()
     {
-        ClassService.UpdateClass(classe);
+      await  ClassService.UpdateClassAsync(classe);
         Navigation.NavigateTo("/class");
     }
 }

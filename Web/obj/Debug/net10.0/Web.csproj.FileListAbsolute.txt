@@ -272,3 +272,7 @@ C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\BuildHost-netcore\ru
 C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\BuildHost-netcore\tr\System.CommandLine.resources.dll
 C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\BuildHost-netcore\zh-Hans\System.CommandLine.resources.dll
 C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\BuildHost-netcore\zh-Hant\System.CommandLine.resources.dll
+C:\Users\Alliance\source\repos\Attend\Web\bin\Debug\net10.0\MudBlazor.dll
+C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\compressed\tzxjg6is5z-{0}-8fy1no3hvo-8fy1no3hvo.gz
+C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\compressed\0wz98yz2xy-{0}-a4sy8psjxz-a4sy8psjxz.gz
+C:\Users\Alliance\source\repos\Attend\Web\obj\Debug\net10.0\compressed\o7k4cxtn0u-{0}-nla2550lvf-nla2550lvf.gz

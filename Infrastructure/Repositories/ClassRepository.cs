@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Data;
 using Application.DTOs;
+using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Repositories
 {
     public class ClassRepository : IClass
@@ -13,9 +14,9 @@ namespace Infrastructure.Repositories
         }
 
 
-        public List<GetClassDTO> GetClassses()
+        public async Task<List<GetClassDTO>> GetClasssesAsync()
         {
-            return _dbcontext.Classes.Select(cc => new GetClassDTO
+            return await _dbcontext.Classes.Select(cc => new GetClassDTO
             {
                 Id = cc.Id,
                 Name = cc.Name,
@@ -25,9 +26,9 @@ namespace Infrastructure.Repositories
                 DateAdded= cc.DateAdded,
                 Status= cc.Status,
 
-            }).ToList();
+            }).ToListAsync();
         }
-        public void AddClass(AddClassDTO classs)
+        public async Task AddClassAsync(AddClassDTO classs)
         {
             _dbcontext.Classes.Add( new Classs
             {
@@ -38,11 +39,11 @@ namespace Infrastructure.Repositories
                 DateAdded= DateTime.UtcNow,
                 Status= "Active",
             });
-            _dbcontext.SaveChanges();
+           await _dbcontext.SaveChangesAsync();
         }
-        public GetClassDTO? GetClasssById(int id)
+        public async Task <GetClassDTO?> GetClasssByIdAsync(int id)
         {
-            return _dbcontext.Classes.Where(cc => cc.Id == id).Select( cc => new GetClassDTO
+            return await _dbcontext.Classes.Where(cc => cc.Id == id).Select( cc => new GetClassDTO
             {
                 
                 Id = cc.Id,
@@ -52,27 +53,27 @@ namespace Infrastructure.Repositories
                 UserAdded= cc.UserAdded,
                 DateAdded= cc.DateAdded,
                 Status= cc.Status,
-            }).FirstOrDefault();
+            }).FirstOrDefaultAsync();
         }
-        public void UpdateClass(UpdateClassDTO classs)
+        public async Task UpdateClassAsync(UpdateClassDTO classs)
         {
-               var ExistingClass =  _dbcontext.Classes.FirstOrDefault(cc => cc.Id == classs.Id);
+               var ExistingClass = await _dbcontext.Classes.FirstOrDefaultAsync(cc => cc.Id == classs.Id);
              if(ExistingClass != null)
             {
                 ExistingClass.Id = classs.Id;
                 ExistingClass.Name = classs.Name;
                 ExistingClass.FaculityId= classs.FaculityId;
                 
-              }  _dbcontext.SaveChanges();
+              } await _dbcontext.SaveChangesAsync();
         
         } 
-        public void DeleteClass(DeleteClassDTO classs)
+        public async Task DeleteClassAsync(DeleteClassDTO classs)
         {
-            var ExistingClass = _dbcontext.Classes.FirstOrDefault(cc => cc.Id == classs.Id);
+            var ExistingClass = await _dbcontext.Classes.FirstOrDefaultAsync(cc => cc.Id == classs.Id);
              if(ExistingClass != null )
             {
                 ExistingClass.Status= "Deleted";
-            }_dbcontext.SaveChanges();
+            } await _dbcontext.SaveChangesAsync();
         }
     } 
 }

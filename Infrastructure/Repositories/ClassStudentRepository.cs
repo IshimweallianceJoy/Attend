@@ -37,17 +37,39 @@ namespace Infrastructure.Repositories
             _dbcontext.SaveChanges();
         }
 
-        public GetClassStudentDTO? GetClassStudent(int id)
+        public GetClassStudentDTO? GetClassStudentById(int id)
         {
             return _dbcontext.ClassStudents.Where(cs => cs.Id == id).Select( cs => new GetClassStudentDTO
             {
-                
+                  Id= cs.Id,
+                ClasssId=cs.ClasssId,
+                StudentId= cs.StudentId,
+                UserAdded= cs.UserAdded,
+                DateAdded=cs.DateAdded,
+                Status= cs. Status,
+
             }).FirstOrDefault();
             
         }
-        public void UpdateClassStudent(UpdateClassStudentDTO clsssstudent)
+        public void UpdateClassStudent(UpdateClassStudentDTO clssstudent)
         {
-            
+           var ExistingClassStudent = _dbcontext.ClassStudents.FirstOrDefault(cs => cs.Id == clssstudent.Id);
+           if(ExistingClassStudent != null)
+            {
+                ExistingClassStudent.Id= clssstudent.Id;
+                ExistingClassStudent.ClasssId= clssstudent.ClasssId;
+                ExistingClassStudent.StudentId= clssstudent.StudentId;
+            }
+            _dbcontext.SaveChanges();
+        }
+        public void DeleteClassStudent(DeleteClassStudentDTO clssstudent)
+        {
+            var ExistingClassStudent= _dbcontext.ClassStudents.FirstOrDefault(cs => cs.Id == clssstudent.Id);
+            if(ExistingClassStudent != null)
+            {
+                ExistingClassStudent.Status="Deleted";
+            }
+            _dbcontext.SaveChanges();
         }
     }
 }

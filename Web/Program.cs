@@ -5,6 +5,8 @@ using Domain.Entities;
 using Web.Components;
 using Infrastructure.Repositories;
 using Infrastructure.DependencyInjection;
+using MudBlazor.Services;
+using Application.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +15,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents(); 
 
     //Registration of Services
-builder.Services.AddScoped<IStudentService, StudentService>();
-
-builder.Services.AddScoped<IClassService, ClassService>();
+    builder.Services.AddMudServices();
 
 
+builder.Services.AddApplicationServices();
 
 builder.Services.AddInfrastructureService(builder.Configuration);
 

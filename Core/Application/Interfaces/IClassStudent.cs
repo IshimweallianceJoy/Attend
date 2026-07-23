@@ -7,8 +7,8 @@ namespace Application.Interfaces
         public List<GetClassStudentDTO>GetClassStudents();
         public void AddClassStudent(AddClassStudentDTO classStudent);
         public GetClassStudentDTO? GetClassStudentById(int id);
-        public void UpdateClassStudent(UpdateClassStudentDTO classstudent);
-        public void DeleteClassStudent(DeleteClassStudentDTO classstudent);
+        public void UpdateClassStudent(UpdateClassStudentDTO clssstudent);
+        public void DeleteClassStudent(DeleteClassStudentDTO clssstudent);
         
     }
 }

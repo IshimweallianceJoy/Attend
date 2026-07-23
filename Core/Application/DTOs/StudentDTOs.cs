@@ -38,7 +38,7 @@ namespace Application.DTOs
         public string Adress { get; set; }
         public string ParentNames { get; set; }
         public string ParentPhone { get; set; }
-        public string UserAdded { get; set; }
-        public DateTime DateAdded { get; set; }
-        public string Status { get; set; } = "Active";
+        public string UserAdded { get; set; } 
+        public DateTime DateAdded { get; set; } 
+        public string Status { get; set; } 
 }    }

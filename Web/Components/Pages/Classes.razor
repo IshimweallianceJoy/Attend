@@ -39,9 +39,9 @@
 @code{
    
     private List<GetClassDTO> classes= new List<GetClassDTO>();
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        classes = ClassService.GetClassses();
+        classes = await ClassService.GetClasssesAsync();
     }
 
 }

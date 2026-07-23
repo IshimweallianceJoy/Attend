@@ -12,25 +12,25 @@ namespace Application.Services.ClassServices
         {
             _class=classs;
         }
-        public List<GetClassDTO> GetClassses()
+        public async Task <List<GetClassDTO>> GetClasssesAsync()
         {
-           return _class.GetClassses();
+           return await _class.GetClasssesAsync();
         }
-        public void AddClass(AddClassDTO classs)
+        public async Task AddClassAsync(AddClassDTO classs)
         {
-                _class.AddClass(classs);
+              await  _class.AddClassAsync(classs);
         }
-        public GetClassDTO? GetClasssById(int id)
+        public async Task <GetClassDTO?> GetClasssByIdAsync(int id)
         {
-            return _class.GetClasssById(id);
+            return await _class.GetClasssByIdAsync(id);
         }
-          public void UpdateClass(UpdateClassDTO classs)
+          public async Task UpdateClassAsync(UpdateClassDTO classs)
         {
-            _class.UpdateClass(classs);
+           await _class.UpdateClassAsync(classs);
         }
-        public void DeleteClass(DeleteClassDTO classs)
+        public async Task DeleteClassAsync(DeleteClassDTO classs)
         {
-            _class.DeleteClass(classs);
+           await _class.DeleteClassAsync(classs);
         }
     }
 
