@@ -6,67 +6,132 @@
 @inject NavigationManager Navigation
 @inject IStudentService StudentService
 @page "/students/add"
-<div>
 
-     <EditForm Model="student" OnValidSubmit="SaveStudentAsync" >
-     <h1>Add Student</h1>
-      <div class="form-group">
-            <label for="name" >Name:</label>
-            <InputText class="form-control" id="name" @bind-Value="student.Name" />
-        </div>
+ <MudDialog>
+    <TitleContent>Add Student</TitleContent>
+    <DialogContent>
+        <EditForm Model="student" OnValidSubmit="SaveStudentAsync">
+           <MudGrid>
+            <MudItem xs="6">
+                <MudTextField 
+                label="Fullname"
+                @bind-Value="student.Name"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="Fullname">
+                </MudTextField>
+            </MudItem>
+            <MudItem xs="6">
+                <MudSelect 
+                T="string"
+                label="Sex"
+                @bind-Value="student.Sex"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="select sex">
+                <MudSelectItem Value="@("Male")">Male</MudSelectItem>
+                <MudSelectItem Value="@("Female")">Female</MudSelectItem>
 
-        <div class ="form-group">
-            <label for="DOB">Date of Birth</label>
-            <InputDate class="form-control" id="DOB" @bind-Value="student.DOB"/>
-        </div>
+                </MudSelect>
+            </MudItem>
 
-        <div class="form-group">
-              <label for="Sex" >Sex:</label>
-                 <InputSelect id="Sex" class="form-control" @bind-Value="student.Sex">
-                   <option value="">Select Sex</option>
-                   <option value="Male">Male</option>
-                   <option value="Female">Female</option>
-                </InputSelect>
-        </div>
+            <MudItem xs="6">
+                <MudDatePicker 
+                label="Date of Birth"
+                Date="student.DOB"
+                DateChanged="date => student.DOB = date ?? default"
+                Margin="Margin.Dense"
+                DateFormat="yyyy-MM-dd"
+                Variant="Variant.Outlined"
+                Placeholder="dd/mm/yyyy">
+                </MudDatePicker>
+            </MudItem>
+            
+            <MudItem xs="6">
+                <MudTextField 
+                label="Email"
+                @bind-Value="student.Email"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="mellissa@gmail.com">
+                </MudTextField>
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField 
+                label="Phone Number"
+                @bind-Value="student.Phone"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="078 2828 2828">
+                </MudTextField>
+            </MudItem>
+           
+            <MudItem xs="6">
+                <MudTextField 
+                label="Address"
+                @bind-Value="student.Adress"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="Kigali-Rwanda">
+                </MudTextField>
+            </MudItem>
 
-        <div class="form-group">
-            <label for="regNumber" >Registration Number:</label>
-            <InputText id="regNumber" class="form-control" @bind-Value="student.RegNumber" />
-        </div>
+            <MudItem xs="6">
+                <MudTextField 
+                label="Registration Number"
+                @bind-Value="student.RegNumber"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="2023-0001">
+                </MudTextField>
+            </MudItem>
 
-          <div class="form-group">
-            <label for="phone" >Phone:</label>
-            <InputText id="phone" class="form-control" @bind-Value="student.Phone" />
-        </div>
-        <div class="form-group">
-            <label for="email" >Email:</label>
-            <InputText id="email" class="form-control" @bind-Value="student.Email" />
-        </div>
-        <div class="form-group">
-            <label for="address" >Address:</label>
-            <InputText id="address" class="form-control" @bind-Value="student.Adress" />
-        </div>
-         <div class="form-group">
-            <label for="Parent's Name" >Parent's Name:</label>
-            <InputText id="parentName" class="form-control" @bind-Value="student.ParentNames" />
-        </div>
-        <div class="form-group">
-            <label for="Parent's Phone" >Parent's Phone:</label>
-            <InputText id="parentPhone" class="form-control" @bind-Value="student.ParentPhone" />
-        </div>
-       
-       
-        <button type="submit" class="btn btn-primary mt-3">Add Student</button>
-    </EditForm>
-</div>
- 
+            <MudItem xs="6">
+                <MudTextField 
+                label="Parent Names"
+                @bind-Value="student.ParentNames"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="Parent Names">
+                </MudTextField>
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudTextField 
+                label="Parent Phone"
+                @bind-Value="student.ParentPhone"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="Parent Phone">
+                </MudTextField>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudButton 
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                FullWidth="true" 
+                ButtonType="ButtonType.Submit">
+                SAVE
+                </MudButton>
+            </MudItem>
+
+           </MudGrid> 
+        </EditForm>
+
+    </DialogContent>
+    
+</MudDialog>
 @code
     {
+      [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
     private AddStudentDTO student = new ();
+
     private async Task SaveStudentAsync()
     {
-      await  StudentService.AddStudentAsync(student);
-        Navigation.NavigateTo("/students");
+        await StudentService.AddStudentAsync(student);
+        MudDialog.Close(DialogResult.Ok(true));
     }
-    }
+}
  

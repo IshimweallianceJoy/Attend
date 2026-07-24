@@ -6,39 +6,65 @@
 @inject NavigationManager navigation
 @inject IClassService ClassService
 @page "/class/add"
-<div>
-    <EditForm Model="classs" OnValidSubmit="SaveClassAsync"> 
+<MudDialog>
+    <TitleContent>Add Class</TitleContent>
+    <DialogContent>
+        <EditForm Model="classs" OnValidSubmit="SaveClassAsync">
+           <MudGrid>
+            <MudItem xs="12">
+                <MudTextField 
+                @bind-Value="classs.Name"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="Class Name">
+                </MudTextField>
+            </MudItem>
+            
+           
+            <MudItem xs="12">
+                <MudTextField 
+                @bind-Value="classs.FaculityId"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="Faculity ">
+                </MudTextField>
+            </MudItem>
+           
+            <MudItem xs="12">
+                <MudTextField 
+                @bind-Value="classs.EducationLevelId"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="Education Level">
+                </MudTextField>
+            </MudItem>
 
-      <h1>Add Class</h1>
+             <MudItem xs="12">
+                <MudButton 
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                FullWidth="true" 
+                ButtonType="ButtonType.Submit">
+                SAVE
+                </MudButton>
+            </MudItem>
 
-        <div class="form-group">
-                <label for="Name" >Name:</label>
-                <InputText class="form-control" id="Name" @bind-Value="classs.Name" />
-        </div>
+           </MudGrid> 
+        </EditForm>
+
+    </DialogContent>
     
-       
-        <div class="form-group">
-                <label for="Name" >Faculty:</label>
-                <InputNumber class="form-control" id="faculty" @bind-Value="classs.FaculityId" />
-        </div>
+</MudDialog>
     
-              <div class="form-group">
-                <label for="Name" >Education Level</label>
-                <InputNumber class="form-control" id="education level" @bind-Value="classs.EducationLevelId" />
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-3">Add Class</button>
-    
-    </EditForm>
-
-</div>
 
 @code{
+      [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
     private AddClassDTO classs = new ();
     private async Task SaveClassAsync()
     {
        await ClassService.AddClassAsync(classs);
-        navigation.NavigateTo("/class");
+        MudDialog.Close(DialogResult.Ok(true));
     }
 
 }

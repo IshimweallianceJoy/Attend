@@ -3,6 +3,7 @@
 @using Application.DTOs;
 @using Domain.Entities;
 
+@inject IDialogService DialogService
 @inject IClassService ClassService
 @* <h1>Class</h1> 
 <a class="btn btn-primary" href="/class/add">Add Class</a>
@@ -59,7 +60,7 @@
                   </MudTextField>
                 </MudContainer>
 
-                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ml-4">Add Class</MudButton>
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ml-4" @onclick="() => OpenDialogAsync(_closeButton)" >Add Class</MudButton>
             
             </ToolBarContent>
 
@@ -133,5 +134,17 @@
     {
         classes = await ClassService.GetClasssesAsync();
     }
+    private readonly DialogOptions _closeButton = new() { CloseButton = true };
+        private async Task OpenDialogAsync(DialogOptions options)
+        {
+            var dialog = await DialogService.ShowAsync<AddClass>("Add New Class", options);
+                
+            var result = await dialog.Result;
+
+            if (result is not null && !result.Canceled)
+            {
+                classes = await ClassService.GetClasssesAsync();
+            }
+        }
 
 }
