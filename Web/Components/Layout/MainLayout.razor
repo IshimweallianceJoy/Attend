@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -8,7 +8,13 @@
 <MudLayout>
     <MudAppBar>
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        My Application
+        Attend
+        <MudSpacer/>
+        <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
+                       Color="Color.Inherit"
+                       Edge="Edge.End"
+                       OnClick="ToggleTheme"
+                       title="@(_isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode")" />
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen">
         <NavMenu/>
@@ -20,6 +26,55 @@
 
 @code {
     bool _drawerOpen = true;
+
+    private MudTheme _theme = new MudTheme()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Primary = Colors.Blue.Darken2,
+            Secondary = Colors.Teal.Darken1,
+            Tertiary = Colors.Orange.Accent2,
+            AppbarBackground = Colors.Blue.Darken3,
+            Background = Colors.Gray.Lighten5,
+            Surface = Colors.Shades.White,
+            DrawerBackground = Colors.Shades.White,
+            DrawerText = Colors.Shades.Black,
+            Success = Colors.Green.Darken1,
+            Warning = Colors.Orange.Darken1,
+            Error = Colors.Red.Darken1,
+            Info = Colors.Blue.Darken1,
+            TextPrimary = Colors.Shades.Black,
+            TextSecondary = Colors.Gray.Darken1,
+            Divider = Colors.Gray.Lighten1,
+            DividerLight = Colors.Gray.Lighten2
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Blue.Lighten1,
+            Secondary = Colors.Teal.Lighten1,
+            Tertiary = Colors.Orange.Lighten1,
+            AppbarBackground = Colors.Gray.Darken4,
+            Background = Colors.Gray.Darken3,
+            Surface = Colors.Gray.Darken2,
+            DrawerBackground = Colors.Gray.Darken3,
+            DrawerText = Colors.Shades.White,
+            Success = Colors.Green.Lighten1,
+            Warning = Colors.Orange.Lighten1,
+            Error = Colors.Red.Lighten1,
+            Info = Colors.Blue.Lighten1,
+            TextPrimary = Colors.Shades.White,
+            TextSecondary = Colors.Gray.Lighten1,
+            Divider = Colors.Gray.Darken1,
+            DividerLight = Colors.Gray.Darken2
+        }
+    };
+
+    private bool _isDarkMode;
+
+    void ToggleTheme()
+    {
+        _isDarkMode = !_isDarkMode;
+    }
 
     void DrawerToggle()
     {

@@ -4,7 +4,7 @@
 @using Application.DTOs;
 
  @inject IStudentService StudentService
-<h1>Students</h1>
+@* <h1>Students</h1>
 <a class="btn btn-primary" href="/students/add">Add Student</a>
 <table class="table">
     <thead>
@@ -38,8 +38,99 @@
         <td><a href="/students/@student.Id" class="btn btn-primary">View Details</a></td>
     </tr>
     }
-</table>
+</table> *@
+  
+  <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4" >
+        <MudDataGrid T="GetStudentDTO" MultiSelection="true" Items="@students" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+            Hideable="true" RowClick="@RowClicked" RowContextMenuClick="RowRightClicked" SelectedItemsChanged="@SelectedItemsChanged">
+            
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Students</MudText>
+                <MudSpacer />
+                <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="d-none d-md-flex">
+                  <MudTextField 
+                    @bind-Value="_searchString" 
+                    Placeholder="Search" 
+                    Adornment="Adornment.Start" 
+                    Immediate="true"
+                    AdornmentIcon="@Icons.Material.Filled.Search" 
+                    IconSize="Size.Medium" 
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    Class="mt-1 w-100">
+                  </MudTextField>
+                </MudContainer>
+
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ml-4">Add Student</MudButton>
+            
+            </ToolBarContent>
+
+            <Columns>
+                <SelectColumn T="GetStudentDTO" />
+                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
+                <PropertyColumn Property="x => x.Name" />
+                <PropertyColumn Property="x => x.Sex" SortBy="@_sortBy" />
+                <PropertyColumn Property="x => x.DOB" Title="Date Of Birth" />
+                <PropertyColumn Property="x => x.Phone" Title="Phone" />
+                <PropertyColumn Property="x => x.Email" Title="Email" />
+                <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
+                <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
+                <PropertyColumn Property="x => x.Status" Title="Status" />
+            </Columns>
+
+            <PagerContent>
+                <MudDataGridPager T="GetStudentDTO" />
+            </PagerContent>
+
+        </MudDataGrid>
+</MudContainer>
+
 @code{
+
+      private string _searchString;
+        private bool _sortNameByLength;
+        private List<string> _events = new();
+
+        void RowClicked(DataGridRowClickEventArgs<GetStudentDTO> args)
+        {
+            _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        }
+        
+        void RowRightClicked(DataGridRowClickEventArgs<GetStudentDTO> args)
+        {
+            _events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        }
+
+        void SelectedItemsChanged(HashSet<GetStudentDTO> items)
+        {
+            _events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
+        }
+
+
+        private Func<GetStudentDTO, object> _sortBy => x =>
+        {
+            if (_sortNameByLength)
+                return x.Name.Length;
+            else
+                return x.Name;
+        };
+        // quick filter - filter globally across multiple columns with the same input
+        private Func<GetStudentDTO, bool> _quickFilter => x =>
+        {
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+
+            if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.Sex.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if ($"{x.Phone} {x.Email}".Contains(_searchString))
+                return true;
+
+            return false;
+        };
    
     private List<GetStudentDTO> students=new List<GetStudentDTO>();
     protected override async Task OnInitializedAsync()         
