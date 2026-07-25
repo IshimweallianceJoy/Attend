@@ -4,9 +4,9 @@ namespace Application.Services.ClassStudentServices
 {
      public interface IClassStudentService
     {
-        public List<GetClassStudentDTO>GetClassStudents();
+         Task<List<GetClassStudentDTO>> GetClassStudentsAsync();
          Task AddClassStudentAsync(AddClassStudentDTO classStudent);
-        public GetClassStudentDTO? GetClassStudentById(int id);
+        Task<GetClassStudentDTO?> GetClassStudentByIdAsync(int id);
          Task UpdateClassStudentAsync(UpdateClassStudentDTO classstudent);
          Task DeleteClassStudentAsync(DeleteClassStudentDTO classstudent);
     }

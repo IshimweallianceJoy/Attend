@@ -3,33 +3,33 @@ using Application.Interfaces;
 using Application.DTOs;
 namespace Application.Services.ClassStudentServices
 {
-    public class ClassStudentService 
+    public class ClassStudentService: IClassStudentService 
     {
         private readonly IClassStudent _classstudent;
 
-        public ClassStudentService(IClassStudent classStudents)
+        public  ClassStudentService(IClassStudent classStudents)
         {
             _classstudent=classStudents;
         }
-        public List<GetClassStudentDTO> GetClassStudents()
+        public async Task <List<GetClassStudentDTO>> GetClassStudentsAsync()
         {
-            return _classstudent.GetClassStudents();
+            return await _classstudent.GetClassStudentsAsync();
         }
-        public void AddClassStudent(AddClassStudentDTO classStudent)
+        public async Task AddClassStudentAsync(AddClassStudentDTO classStudent)
         {
-            _classstudent.AddClassStudent(classStudent);
+          await  _classstudent.AddClassStudentAsync(classStudent);
         }
-        public GetClassStudentDTO? GetClassStudentById(int id)
+        public async Task <GetClassStudentDTO?> GetClassStudentByIdAsync(int id)
         {
-            return _classstudent.GetClassStudentById(id);
+            return await _classstudent.GetClassStudentByIdAsync(id);
         }
-        public void UpdateClassStudent(UpdateClassStudentDTO classstudent)
+        public async Task UpdateClassStudentAsync(UpdateClassStudentDTO classstudent)
         {
-            _classstudent.UpdateClassStudent(classstudent);
+           await _classstudent.UpdateClassStudentAsync(classstudent);
         }
-        public void DeleteClassStudent(DeleteClassStudentDTO classstudent)
+        public async Task DeleteClassStudentAsync(DeleteClassStudentDTO classstudent)
         {
-            _classstudent.DeleteClassStudent(classstudent);
+          await  _classstudent.DeleteClassStudentAsync(classstudent);
         }
     }
 }

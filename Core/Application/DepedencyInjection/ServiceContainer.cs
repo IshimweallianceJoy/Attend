@@ -15,6 +15,7 @@ namespace Application.DependencyInjection
         {
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IClassService, ClassService>();
+            services.AddScoped<IClassStudentService, ClassStudentService>();
             // services.AddScoped<IAttendenceService, AttendenceService>();
             // services.AddScoped<IFaculityService, FaculityService>();
            

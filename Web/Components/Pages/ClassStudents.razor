@@ -1,10 +1,11 @@
 @page "/classStudent"
 @using Application.Services.ClassStudentServices
+@using Application.DTOs;
 @using Domain.Entities;
 
-
+@inject IDialogService DialogService
 @inject IClassStudentService ClassStudentService
-
+@* 
 <h1>ClassStudent</h1>
 <table>
     <tr>
@@ -20,16 +21,113 @@
 </tr>
 }
 
-</table>
+</table> *@
+
+
+  <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4" >
+        <MudDataGrid T="GetClassStudentDTO" MultiSelection="true" Items="@classstudents" SortMode="SortMode.Multiple" Filterable="true" 
+            Hideable="true" RowClick="@RowClicked" RowContextMenuClick="RowRightClicked" SelectedItemsChanged="@SelectedItemsChanged">
+            
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Class_Student</MudText>
+                <MudSpacer />
+                <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="d-none d-md-flex">
+                  <MudTextField 
+                    @bind-Value="_searchString" 
+                    Placeholder="Search" 
+                    Adornment="Adornment.Start" 
+                    Immediate="true"
+                    AdornmentIcon="@Icons.Material.Filled.Search" 
+                    IconSize="Size.Medium" 
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    Class="mt-1 w-100">
+                  </MudTextField>
+                </MudContainer>
+
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ml-4" @onclick="() => OpenDialogAsync(_closeButton)" >Add Class_Student</MudButton>
+            
+            </ToolBarContent>
+
+            <Columns>
+                <SelectColumn T="GetClassStudentDTO" />
+                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
+                <PropertyColumn Property="x => x.ClasssId" Title="Class" />
+                <PropertyColumn Property="x => x.StudentId" Title="Student" />
+                <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
+                <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
+                <PropertyColumn Property="x => x.Status" Title="Status" />
+            </Columns>
+
+            <PagerContent>
+                <MudDataGridPager T="GetClassStudentDTO" />
+            </PagerContent>
+
+        </MudDataGrid>
+</MudContainer>
 
 @code{
 
-    private List<ClassStudent> classStudents= new List<ClassStudent>();
+      private string _searchString;
+        private bool _sortNameByLength;
+        private List<string> _events = new();
 
-    protected override void OnInitialized()
+        void RowClicked(DataGridRowClickEventArgs<GetClassStudentDTO> args)
+        {
+            _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        }
+        
+        void RowRightClicked(DataGridRowClickEventArgs<GetClassStudentDTO> args)
+        {
+            _events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        }
+
+        void SelectedItemsChanged(HashSet<GetClassStudentDTO> items)
+        {
+            _events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
+        }
+
+
+        @* private Func<GetClassStudentDTO, object> _sortBy => x =>
+        {
+            if (_sortNameByLength)
+                return x.ClasssId.Length;
+            else
+                return x.ClasssId;
+        };
+        // quick filter - filter globally across multiple columns with the same input
+        private Func<GetClassStudentDTO, bool> _quickFilter => x =>
+        {
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+
+            if (x.Classs.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.Student.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        }; *@
+   
+    private List<GetClassStudentDTO> classstudents= new List<GetClassStudentDTO>();
+    protected override async Task OnInitializedAsync()
     {
-       // classStudents= ClassStudentService.GetClassStudents();
+        classstudents = await ClassStudentService.GetClassStudentsAsync();
     }
+    private readonly DialogOptions _closeButton = new() { CloseButton = true };
+        private async Task OpenDialogAsync(DialogOptions options)
+        {
+            var dialog = await DialogService.ShowAsync<AddClassStudent>("Add New Class_Student", options);
+                
+            var result = await dialog.Result;
+
+            if (result is not null && !result.Canceled)
+            {
+                classstudents = await ClassStudentService.GetClassStudentsAsync();
+            }
+        }
+
 }
 
 

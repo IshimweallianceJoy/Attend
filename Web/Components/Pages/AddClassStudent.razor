@@ -1,0 +1,70 @@
+@using Application.Services.ClassStudentServices
+@using Application.DTOs
+@using Domain.Entities
+@using Infrastructure.Migrations
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject IClassStudentService ClassStudentService
+@page "/classStudent/add"
+
+ <MudDialog>
+    <TitleContent>Add Class_Student</TitleContent>
+    <DialogContent>
+        <EditForm Model="classstudent" OnValidSubmit="SaveClassStudentAsync">
+           <MudGrid>
+            <MudItem xs="12">
+                <MudTextField 
+                label="Class"
+                @bind-Value="classstudent.ClasssId"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="Class">
+                </MudTextField>
+            </MudItem>
+            <MudItem xs="6">
+              
+            </MudItem>
+
+           
+            
+          
+
+            <MudItem xs="12">
+                <MudTextField 
+                label="Student"
+                @bind-Value="classstudent.StudentId"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="Student">
+                </MudTextField>
+            </MudItem>
+
+
+            <MudItem xs="12">
+                <MudButton 
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                FullWidth="true" 
+                ButtonType="ButtonType.Submit">
+                SAVE
+                </MudButton>
+            </MudItem>
+
+           </MudGrid> 
+        </EditForm>
+
+    </DialogContent>
+    
+</MudDialog>
+@code
+    {
+      [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+    private AddClassStudentDTO classstudent = new ();
+
+    private async Task SaveClassStudentAsync()
+    {
+        await ClassStudentService.AddClassStudentAsync(classstudent);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+}

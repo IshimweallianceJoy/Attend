@@ -2,6 +2,7 @@ using Domain.Entities;
 using Application.Interfaces;
 using Infrastructure.Data;
 using Application.DTOs;
+using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Repositories
 {
     public class ClassStudentRepository : IClassStudent
@@ -12,9 +13,9 @@ namespace Infrastructure.Repositories
         {
             _dbcontext=applicationDb;
         }
-        public List<GetClassStudentDTO> GetClassStudents()
+        public async Task <List<GetClassStudentDTO>> GetClassStudentsAsync()
         {
-           return _dbcontext.ClassStudents.Select(cs =>  new GetClassStudentDTO
+           return await _dbcontext.ClassStudents.Select(cs =>  new GetClassStudentDTO
             {
                 Id= cs.Id,
                 ClasssId=cs.ClasssId,
@@ -22,9 +23,9 @@ namespace Infrastructure.Repositories
                 UserAdded= cs.UserAdded,
                 DateAdded=cs.DateAdded,
                 Status= cs. Status,
-            }).ToList();
+            }).ToListAsync();
         }
-        public void AddClassStudent(AddClassStudentDTO classStudent)
+        public async Task AddClassStudentAsync(AddClassStudentDTO classStudent)
         {
             _dbcontext.ClassStudents.Add(new ClassStudent
             {
@@ -34,12 +35,12 @@ namespace Infrastructure.Repositories
                 DateAdded= DateTime.UtcNow,
                 Status="Active",
             });
-            _dbcontext.SaveChanges();
+           await _dbcontext.SaveChangesAsync();
         }
 
-        public GetClassStudentDTO? GetClassStudentById(int id)
+        public async Task <GetClassStudentDTO?> GetClassStudentByIdAsync(int id)
         {
-            return _dbcontext.ClassStudents.Where(cs => cs.Id == id).Select( cs => new GetClassStudentDTO
+            return await _dbcontext.ClassStudents.Where(cs => cs.Id == id).Select( cs => new GetClassStudentDTO
             {
                   Id= cs.Id,
                 ClasssId=cs.ClasssId,
@@ -48,28 +49,28 @@ namespace Infrastructure.Repositories
                 DateAdded=cs.DateAdded,
                 Status= cs. Status,
 
-            }).FirstOrDefault();
+            }).FirstOrDefaultAsync();
             
         }
-        public void UpdateClassStudent(UpdateClassStudentDTO clssstudent)
+        public async Task UpdateClassStudentAsync(UpdateClassStudentDTO clssstudent)
         {
-           var ExistingClassStudent = _dbcontext.ClassStudents.FirstOrDefault(cs => cs.Id == clssstudent.Id);
+           var ExistingClassStudent = await _dbcontext.ClassStudents.FirstOrDefaultAsync(cs => cs.Id == clssstudent.Id);
            if(ExistingClassStudent != null)
             {
                 ExistingClassStudent.Id= clssstudent.Id;
                 ExistingClassStudent.ClasssId= clssstudent.ClasssId;
                 ExistingClassStudent.StudentId= clssstudent.StudentId;
             }
-            _dbcontext.SaveChanges();
+           await _dbcontext.SaveChangesAsync();
         }
-        public void DeleteClassStudent(DeleteClassStudentDTO clssstudent)
+        public async Task DeleteClassStudentAsync(DeleteClassStudentDTO clssstudent)
         {
-            var ExistingClassStudent= _dbcontext.ClassStudents.FirstOrDefault(cs => cs.Id == clssstudent.Id);
+            var ExistingClassStudent= await _dbcontext.ClassStudents.FirstOrDefaultAsync(cs => cs.Id == clssstudent.Id);
             if(ExistingClassStudent != null)
             {
                 ExistingClassStudent.Status="Deleted";
             }
-            _dbcontext.SaveChanges();
+          await  _dbcontext.SaveChangesAsync();
         }
     }
 }
