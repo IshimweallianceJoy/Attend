@@ -1,7 +1,9 @@
 ﻿<MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    <MudNavLink Href="/Students" Match="NavLinkMatch.Prefix">Students</MudNavLink>
-     <MudNavLink Href="/Class" Match="NavLinkMatch.Prefix">Class</MudNavLink>
+    <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
+    <MudNavLink Href="/" Icon="fas fa-home" Match="NavLinkMatch.All"  >Dashboard</MudNavLink>
+   
+    <MudNavLink  Href="/Students" Icon="@Icons.Material.Filled.School" Match="NavLinkMatch.Prefix">Students</MudNavLink>
+     <MudNavLink Href="/Class" Icon="@Icons.Material.Filled.Class" Match="NavLinkMatch.Prefix">Class</MudNavLink>
       <MudNavLink Href="/ClassStudent" Match="NavLinkMatch.Prefix">Class_Student</MudNavLink>
     <MudNavGroup Title="Settings" Expanded="true">
         <MudNavLink Href="/users"  Match="NavLinkMatch.Prefix">Users</MudNavLink>
@@ -10,3 +12,4 @@
     <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
 </MudNavMenu>
 
+<MudIcon  Color="Color.Secondary" />

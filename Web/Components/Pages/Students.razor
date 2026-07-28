@@ -5,6 +5,7 @@
 
 @inject IDialogService DialogService
  @inject IStudentService StudentService
+   
 @* <h1>Students</h1>
 <a class="btn btn-primary" href="/students/add">Add Student</a>
 <table class="table">
@@ -65,7 +66,7 @@
                 <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ml-4" @onclick="() => OpenDialogAsync(_closeButton)" >Add Student</MudButton>
             
             </ToolBarContent>
-
+          
             <Columns>
                 <SelectColumn T="GetStudentDTO" />
                 <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
@@ -76,8 +77,10 @@
                 <PropertyColumn Property="x => x.Email" Title="Email" />
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
-                <PropertyColumn Property="x => x.Status" Title="Status" />
+                <PropertyColumn Property="x => x.Status" Title="Status"  />
+               
             </Columns>
+            
 
             <PagerContent>
                 <MudDataGridPager T="GetStudentDTO" />
