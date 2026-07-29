@@ -1,34 +1,117 @@
-@* @page "/Attendence"
+@page "/attendence"
 @using Application.Services.AttendenceServices
+@using Application.DTOs;
 @using Domain.Entities;
 
+@inject IDialogService DialogService
 @inject IAttendenceService AttendenceService
-<h1>Class</h1>
-<table>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>ClassId</th>
-    
 
-        
-    </tr>
-    @foreach(var Attend in attendences ){   
-    <tr>
-        <td>@Attend.Id</td>
-        <td>@Attend.Name</td>
-        <td>@Attend.ClasssId</td>
-    </tr>
 
-    }
- 
-</table>
+
+  <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4" >
+        <MudDataGrid T="GetAttendenceDTO" MultiSelection="true" Items="@attendences" SortMode="SortMode.Multiple" Filterable="true" 
+            Hideable="true" RowClick="@RowClicked" RowContextMenuClick="RowRightClicked" SelectedItemsChanged="@SelectedItemsChanged">
+            
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Classes</MudText>
+                <MudSpacer />
+                <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="d-none d-md-flex">
+                  <MudTextField 
+                    @bind-Value="_searchString" 
+                    Placeholder="Search" 
+                    Adornment="Adornment.Start" 
+                    Immediate="true"
+                    AdornmentIcon="@Icons.Material.Filled.Search" 
+                    IconSize="Size.Medium" 
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    Class="mt-1 w-100">
+                  </MudTextField>
+                </MudContainer>
+
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ml-4" @onclick="() => OpenDialogAsync(_closeButton)" >Add Class</MudButton>
+            
+            </ToolBarContent>
+
+            <Columns>
+                <SelectColumn T="GetAttendenceDTO" />
+                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
+                <PropertyColumn Property="x => x.ClasssId" Title="Class" />  
+                <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
+                <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />       
+                <PropertyColumn Property="x => x.Status" Title="Status" />
+            </Columns>
+
+            <PagerContent>
+                <MudDataGridPager T="GetAttendenceDTO" />
+            </PagerContent>
+
+        </MudDataGrid>
+</MudContainer>
 @code{
-   
-    private List<Attendence> attendences= new List<Attendence>();
-    protected override void OnInitialized()
-    {
-        attendences = AttendenceService.GetAttendences();
-    }
 
-} *@
+    
+      private string _searchString;
+        private bool _sortNameByLength;
+        private List<string> _events = new();
+
+        void RowClicked(DataGridRowClickEventArgs<GetAttendenceDTO> args)
+        {
+            _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        }
+        
+        void RowRightClicked(DataGridRowClickEventArgs<GetAttendenceDTO> args)
+        {
+            _events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        }
+
+        void SelectedItemsChanged(HashSet<GetAttendenceDTO> items)
+        {
+            _events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
+        }
+
+
+        @* private Func<GetAttendenceDTO, object> _sortBy => x =>
+        {
+            if (_sortNameByLength)
+                return x.Name.Length;
+            else
+                return x.Name;
+        };
+        // quick filter - filter globally across multiple columns with the same input
+        private Func<GetAttendenceDTO, bool> _quickFilter => x =>
+        {
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+
+            if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.FaculityId.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.EducationLevelId.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        }; *@
+   
+    private List<GetAttendenceDTO> attendences= new List<GetAttendenceDTO>();
+    protected override async Task OnInitializedAsync()
+    {
+        attendences = await AttendenceService.GetAttendencesAsync();
+    }
+    private readonly DialogOptions _closeButton = new() { CloseButton = true };
+        private async Task OpenDialogAsync(DialogOptions options)
+        {
+            var dialog = await DialogService.ShowAsync<AddAttendence>("Add New Attendence", options);
+                
+            var result = await dialog.Result;
+
+            if (result is not null && !result.Canceled)
+            {
+                attendences = await AttendenceService.GetAttendencesAsync();
+            }
+        }
+
+}

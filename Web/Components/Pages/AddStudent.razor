@@ -14,12 +14,15 @@
            <MudGrid>
             <MudItem xs="6">
                 <MudTextField 
-                label="Fullname" ClearIcon=""
+                label="Fullname"
                 @bind-Value="student.Name"
                 Margin="Margin.Dense"
                 Variant="Variant.Outlined"
+                Adornment="Adornment.End"
+                Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.DriveFileRenameOutline"
                 Placeholder="Fullname">
-                icon=""
+
                 </MudTextField>
             </MudItem>
             <MudItem xs="6">
@@ -29,6 +32,7 @@
                 @bind-Value="student.Sex"
                 Margin="Margin.Dense"
                 Variant="Variant.Outlined"
+                AdornmentIcon="@Icons.Material.Filled.Transgender"
                 Placeholder="select sex">
                 <MudSelectItem Value="@("Male")">Male</MudSelectItem>
                 <MudSelectItem Value="@("Female")">Female</MudSelectItem>
@@ -44,6 +48,7 @@
                 Margin="Margin.Dense"
                 DateFormat="yyyy-MM-dd"
                 Variant="Variant.Outlined"
+               
                 Placeholder="dd/mm/yyyy">
                 </MudDatePicker>
             </MudItem>
@@ -54,6 +59,9 @@
                 @bind-Value="student.Email"
                 Margin="Margin.Dense"
                 Variant="Variant.Outlined"
+                 Adornment="Adornment.End"
+                Immediate="true"
+                 AdornmentIcon="@Icons.Material.Filled.Email"
                 Placeholder="mellissa@gmail.com">
                 </MudTextField>
             </MudItem>
@@ -63,6 +71,9 @@
                 @bind-Value="student.Phone"
                 Margin="Margin.Dense"
                 Variant="Variant.Outlined"
+                 Adornment="Adornment.End"
+                Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.Phone"
                 Placeholder="078 2828 2828">
                 </MudTextField>
             </MudItem>
@@ -73,6 +84,9 @@
                 @bind-Value="student.Adress"
                 Margin="Margin.Dense"
                 Variant="Variant.Outlined"
+                 Adornment="Adornment.End"
+                Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.LocationOn"
                 Placeholder="Kigali-Rwanda">
                 </MudTextField>
             </MudItem>
@@ -83,6 +97,9 @@
                 @bind-Value="student.RegNumber"
                 Margin="Margin.Dense"
                 Variant="Variant.Outlined"
+                 Adornment="Adornment.End"
+                Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.AppRegistration"
                 Placeholder="2023-0001">
                 </MudTextField>
             </MudItem>
@@ -93,6 +110,9 @@
                 @bind-Value="student.ParentNames"
                 Margin="Margin.Dense"
                 Variant="Variant.Outlined"
+                 Adornment="Adornment.End"
+                Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.DriveFileRenameOutline"
                 Placeholder="Parent Names">
                 </MudTextField>
             </MudItem>
@@ -103,6 +123,9 @@
                 @bind-Value="student.ParentPhone"
                 Margin="Margin.Dense"
                 Variant="Variant.Outlined"
+                 Adornment="Adornment.End"
+                Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.Phone"
                 Placeholder="Parent Phone">
                 </MudTextField>
             </MudItem>
