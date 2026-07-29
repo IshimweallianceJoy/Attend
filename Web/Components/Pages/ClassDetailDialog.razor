@@ -1,9 +1,17 @@
 @using Application.DTOs
 @using Application.Services.ClassServices
 
+@inject NavigationManager NavigationManager
 @inject IClassService ClassService
 
+ <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="BackToList" StartIcon="@Icons.Material.Filled.ArrowBack">Back to List</MudButton>
 <MudDialog>
+
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-2"/> Class Details
+        </MudText>
+    </TitleContent>
     <DialogContent>
         @if (isLoading)
         {
@@ -35,6 +43,10 @@
             </MudGrid>
         }
     </DialogContent>
+
+       <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Close">Close</MudButton>
+    </DialogActions>
 </MudDialog>
 
 @code {
@@ -62,4 +74,10 @@
             isLoading = false;
         }
     } 
+
+     private void Close() => MudDialog.Close();
+     private void BackToList()
+    {
+        NavigationManager.NavigateTo("/Classes");
+    }
 }
