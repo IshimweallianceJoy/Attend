@@ -1,0 +1,65 @@
+@using Application.DTOs
+@using Application.Services.ClassServices
+
+@inject IClassService ClassService
+
+<MudDialog>
+    <DialogContent>
+        @if (isLoading)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else if (classs == null)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Error">Class details could not be found.</MudText>
+        }
+        else
+        {
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Class ID</MudText>
+                    <MudText Typo="Typo.body1">@classs.Id</MudText>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Name</MudText>
+                    <MudText Typo="Typo.body1">@classs.Name</MudText>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Faculty</MudText>
+                    <MudText Typo="Typo.body1">@classs.FaculityId</MudText>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Education Level</MudText>
+                    <MudText Typo="Typo.body1">@classs.EducationLevelId</MudText>
+                </MudItem>
+            </MudGrid>
+        }
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] 
+    IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter] 
+    public int Id { get; set; } 
+
+    private bool isLoading = true;
+    private GetClassDTO classs;
+
+    protected override async Task OnParametersSetAsync()
+    { 
+        isLoading = true;
+        try
+        {
+            if (Id > 0)
+            {
+                classs = await ClassService.GetClasssByIdAsync(Id);
+            }
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    } 
+}

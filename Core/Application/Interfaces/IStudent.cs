@@ -4,7 +4,7 @@ namespace Application.Interfaces
 {
     public interface IStudent
     {
-         Task<List<GetStudentDTO>>GetStudentsAsync();
+         Task<List<GetStudentDTO>> GetStudentsAsync();
          Task AddStudentAsync(AddStudentDTO student);
         Task <GetStudentDTO?> GetStudentByIdAsync(int id);
          Task UpdateStudentAsync(UpdateStudentDTO student);

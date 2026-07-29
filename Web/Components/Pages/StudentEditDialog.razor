@@ -1,0 +1,90 @@
+@using Application.DTOs
+@using Application.Services.StudentServices
+
+@inject IStudentService StudentService
+
+<MudDialog>
+    <DialogContent>
+         @if (isLoading)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else if (student == null)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Error">Student could not be found.</MudText>
+        }
+        else
+        {
+        <MudForm @ref="_form">
+            <MudNumericField @bind-Value="student.Id" Label="Id" Variant="Variant.Outlined" Required="true" RequiredError="Faculty ID is required." Class="mb-3" />
+            <MudTextField @bind-Value="student.Name" Label="Name" Variant="Variant.Outlined" Required="true" RequiredError="Name is required." Class="mb-3" />
+            <MudSelect T="string" label="Sex" @bind-Value="student.Sex" Margin="Margin.Dense" Variant="Variant.Outlined" Placeholder="select sex">
+                <MudSelectItem Value="@("Male")">Male</MudSelectItem>
+                <MudSelectItem Value="@("Female")">Female</MudSelectItem>
+
+            </MudSelect>
+            <MudTextField @bind-Value="student.Adress" Label="Address" Variant="Variant.Outlined" Required="true" RequiredError="Address is required." Class="mb-3" />
+        </MudForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Save" Disabled="@isLoading" Color="Color.Primary" Variant="Variant.Filled">Save</MudButton>
+        <MudButton OnClick="Cancel" Color="Color.Default" Variant="Variant.Text">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code{
+
+    
+    [CascadingParameter]
+    public IMudDialogInstance? MudDialog { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private bool isLoading = true;
+    private GetStudentDTO? student;
+    private MudForm? _form;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        isLoading = true;
+
+        if (Id > 0)
+        {
+            student = await StudentService.GetStudentByIdAsync(Id);
+        }
+
+        isLoading = false;
+    }
+
+    private async Task Save()
+    {
+        if (_form == null)
+            return;
+
+        await _form.ValidateAsync();
+
+        if (!_form.IsValid || student == null)
+            return;
+
+        await StudentService.UpdateStudentAsync(new UpdateStudentDTO
+        {
+            Id = student.Id,
+            Name = student.Name,
+            Sex = student.Sex,
+            Adress = student.Adress
+        });
+
+        MudDialog?.Close(DialogResult.Ok(student));
+        StateHasChanged();
+    }
+
+    private void Cancel()
+    {
+        MudDialog?.Cancel();
+    }
+}
