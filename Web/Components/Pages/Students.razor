@@ -177,10 +177,10 @@
                     { nameof(StudentDetailDialog.Id), student.Id } // Pass the Id directly
                 };
 
-                    var dialog = await DialogService.ShowAsync<StudentDetailDialog>("Student Details", parameters);
+                var dialog = await DialogService.ShowAsync<StudentDetailDialog>("Student Details", parameters);
             }
-    
-      private async Task EditStudentAsync(GetStudentDTO student)
+
+            private async Task EditStudentAsync(GetStudentDTO student)
             {
                 var parameters = new DialogParameters
                 {
@@ -197,4 +197,5 @@
                     StateHasChanged();
                 }
             }
+    
 }
