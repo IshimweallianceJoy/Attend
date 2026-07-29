@@ -78,6 +78,11 @@
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
                 <PropertyColumn Property="x => x.Status" Title="Status"  />
+                <TemplateColumn Title="Actions">
+                <CellTemplate>
+                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" @onclick="() => ViewStudentAsync(context.Item)" />
+                    </CellTemplate>
+                </TemplateColumn>
                
             </Columns>
             
@@ -90,10 +95,12 @@
 </MudContainer>
 
 @code{
+    
 
       private string _searchString;
         private bool _sortNameByLength;
         private List<string> _events = new();
+        protected IDialogReference dialogReference;
 
         void RowClicked(DataGridRowClickEventArgs<GetStudentDTO> args)
         {
@@ -159,5 +166,15 @@
 
 
         }
+
+            private async Task ViewStudentAsync(GetStudentDTO student)
+            {
+                var parameters = new DialogParameters
+                {
+                    { nameof(StudentDetailDialog.Id), student.Id } // Pass the Id directly
+                };
+
+                    var dialog = await DialogService.ShowAsync<StudentDetailDialog>("Student Details", parameters);
+            }
     
 }

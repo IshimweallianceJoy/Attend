@@ -2,6 +2,8 @@
 @using Application.Services.ClassServices
 @using Application.DTOs;
 @using Domain.Entities;
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.EntityFrameworkCore;
 
 @inject IDialogService DialogService
 @inject IClassService ClassService
@@ -73,6 +75,11 @@
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
                 <PropertyColumn Property="x => x.Status" Title="Status" />
+                <TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" OnClick="@(() => ViewClassAsync(context.Item))" />
+                    </CellTemplate>
+                </TemplateColumn>
             </Columns>
 
             <PagerContent>
@@ -83,68 +90,81 @@
 </MudContainer>
 @code{
 
-    
-      private string _searchString;
-        private bool _sortNameByLength;
-        private List<string> _events = new();
+    private string _searchString;
+    private bool _sortNameByLength;
+    private List<string> _events = new();
+    protected IDialogReference dialogReference;
 
-        void RowClicked(DataGridRowClickEventArgs<GetClassDTO> args)
-        {
-            _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
-        }
-        
-        void RowRightClicked(DataGridRowClickEventArgs<GetClassDTO> args)
-        {
-            _events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
-        }
+    void RowClicked(DataGridRowClickEventArgs<GetClassDTO> args)
+    {
+        _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+    }
 
-        void SelectedItemsChanged(HashSet<GetClassDTO> items)
-        {
-            _events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
-        }
+    void RowRightClicked(DataGridRowClickEventArgs<GetClassDTO> args)
+    {
+        _events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+    }
+
+    void SelectedItemsChanged(HashSet<GetClassDTO> items)
+    {
+        _events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
+    }
 
 
-        private Func<GetClassDTO, object> _sortBy => x =>
-        {
-            if (_sortNameByLength)
-                return x.Name.Length;
-            else
-                return x.Name;
-        };
-        // quick filter - filter globally across multiple columns with the same input
-        private Func<GetClassDTO, bool> _quickFilter => x =>
-        {
-            if (string.IsNullOrWhiteSpace(_searchString))
-                return true;
+    private Func<GetClassDTO, object> _sortBy => x =>
+    {
+        if (_sortNameByLength)
+            return x.Name.Length;
+        else
+            return x.Name;
+    };
+    // quick filter - filter globally across multiple columns with the same input
+    private Func<GetClassDTO, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
 
-            if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
+        if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
 
-            if (x.FaculityId.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
+        if (x.FaculityId.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
 
-            if (x.EducationLevelId.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
+        if (x.EducationLevelId.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
 
-            return false;
-        };
-   
+        return false;
+    };
+
     private List<GetClassDTO> classes= new List<GetClassDTO>();
     protected override async Task OnInitializedAsync()
     {
         classes = await ClassService.GetClasssesAsync();
     }
     private readonly DialogOptions _closeButton = new() { CloseButton = true };
-        private async Task OpenDialogAsync(DialogOptions options)
-        {
-            var dialog = await DialogService.ShowAsync<AddClass>("Add New Class", options);
-                
-            var result = await dialog.Result;
+    private async Task OpenDialogAsync(DialogOptions options)
+    {
+        var dialog = await DialogService.ShowAsync<AddClass>("Add New Class", options);
 
-            if (result is not null && !result.Canceled)
-            {
-                classes = await ClassService.GetClasssesAsync();
-            }
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            classes = await ClassService.GetClasssesAsync();
         }
+    }
+
+
+
+    private async Task ViewClassAsync(GetClassDTO classs)
+    {
+    var parameters = new DialogParameters
+    {
+        { nameof(ClassDetailDialog.Id), classs.Id } // Pass the Id directly
+    };
+
+        var dialog = await DialogService.ShowAsync<ClassDetailDialog>("Class Details", parameters);
+    }
+
 
 }
