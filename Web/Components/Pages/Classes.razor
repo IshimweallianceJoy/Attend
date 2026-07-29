@@ -75,9 +75,10 @@
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
                 <PropertyColumn Property="x => x.Status" Title="Status" />
-                <TemplateColumn CellClass="d-flex justify-end">
+                <TemplateColumn CellClass="d-flex justify-end" Title="Actions">
                     <CellTemplate>
                         <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" OnClick="@(() => ViewClassAsync(context.Item))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => EditClassAsync(context.Item))" />
                     </CellTemplate>
                 </TemplateColumn>
             </Columns>
@@ -114,7 +115,7 @@
     private Func<GetClassDTO, object> _sortBy => x =>
     {
         if (_sortNameByLength)
-            return x.Name.Length;
+            return (object)x.Name.Length;
         else
             return x.Name;
     };
@@ -158,12 +159,29 @@
 
     private async Task ViewClassAsync(GetClassDTO classs)
     {
-    var parameters = new DialogParameters
-    {
-        { nameof(ClassDetailDialog.Id), classs.Id } // Pass the Id directly
-    };
+        var parameters = new DialogParameters
+        {
+            { nameof(ClassDetailDialog.Id), classs.Id } // Pass the Id directly
+        };
 
         var dialog = await DialogService.ShowAsync<ClassDetailDialog>("Class Details", parameters);
+    }
+
+    private async Task EditClassAsync(GetClassDTO classs)
+    {
+        var parameters = new DialogParameters
+        {
+            { nameof(ClassEditDialog.Id), classs.Id } // Pass the Id directly
+        };
+
+        var dialog = await DialogService.ShowAsync<ClassEditDialog>("Edit Class", parameters);
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            classes = await ClassService.GetClasssesAsync();
+            StateHasChanged();
+        }
     }
 
 

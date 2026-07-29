@@ -1,36 +1,51 @@
-# Build outputs
+## .NET Core ignore rules
 [Bb]in/
 [Oo]bj/
-[Dd]ebug/
-[Rr]elease/
-[Bb]uild/
-[Oo]ut/
-[Oo]utput/
 
-# .NET / NuGet
-*.user
+## External packages
+*.nupkg
+**/packages/*
+!**/packages/build/
+
+## User-specific files
+*.rsuser
 *.suo
+*.user
 *.userosscache
 *.sln.docstates
-*.nupkg
-*.snupkg
-.nuget/
-packages/
-project.lock.json
 
-# Visual Studio / VS Code
-.vs/
+## Build results
+[Tt]est[Rr]esult*/
+
+## Visual Studio Code
 .vscode/
-.vscode-test/
-*.dbmdl
-*.jfm
-*.cache
-*.log
 
-# JetBrains / Rider
+## Visual Studio for Mac / macOS
+.DS_Store
+
+## JetBrains IDEs
 .idea/
 
-# OS files
-Thumbs.db
-Desktop.ini
-.DS_Store
+## Local configuration files (Often contain connection strings)
+appsettings.json
+appsettings.*.json
+*.db
+*.sqlite
+
+## Migration files (Disallowed as per user request)
+**/Migrations/*
+
+## User Secrets
+secrets.json
+
+## Logs
+*.log
+
+## todo
+TODO.md
+
+fix_dialogs.py
+Releases/
+dotnet-install.*
+fix_datepickers.*
+resolve_conflicts.ps1

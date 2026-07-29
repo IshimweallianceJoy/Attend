@@ -1,0 +1,85 @@
+@using Application.DTOs
+@using Application.Services.ClassServices
+
+<MudDialog>
+    <DialogContent>
+        @if (isLoading)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else if (classs == null)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Error">Class details could not be found.</MudText>
+        }
+        else
+        {
+            <MudText Typo="Typo.h6" Class="mb-4">@Title</MudText>
+            <MudForm @ref="_form">
+                <MudTextField @bind-Value="classs.Name" Label="Name" Variant="Variant.Outlined" Required="true" RequiredError="Name is required." Class="mb-3" />
+                <MudNumericField @bind-Value="classs.FaculityId" Label="Faculty" Variant="Variant.Outlined" Required="true" RequiredError="Faculty ID is required." Class="mb-3" />
+                <MudNumericField @bind-Value="classs.EducationLevelId" Label="Education level" Variant="Variant.Outlined" Required="true" RequiredError="Education level ID is required." Class="mb-3" />
+            </MudForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Save" Disabled="@isLoading" Color="Color.Primary" Variant="Variant.Filled">Save</MudButton>
+        <MudButton OnClick="Cancel" Color="Color.Default" Variant="Variant.Text">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code{
+    [CascadingParameter]
+    public IMudDialogInstance? MudDialog { get; set; }
+
+    [Inject]
+    public IClassService ClassService { get; set; } 
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private bool isLoading = true;
+    private GetClassDTO? classs;
+    private MudForm? _form;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        isLoading = true;
+
+        if (Id > 0)
+        {
+            classs = await ClassService.GetClasssByIdAsync(Id);
+        }
+
+        isLoading = false;
+    }
+
+    private async Task Save()
+    {
+        if (_form == null)
+            return;
+
+        await _form.ValidateAsync();
+
+        if (!_form.IsValid || classs == null)
+            return;
+
+        await ClassService.UpdateClassAsync(new UpdateClassDTO
+        {
+            Id = classs.Id,
+            Name = classs.Name,
+            FaculityId = classs.FaculityId,
+            EducationLevelId = classs.EducationLevelId
+        });
+
+        MudDialog?.Close(DialogResult.Ok(classs));
+        StateHasChanged();
+    }
+
+    private void Cancel()
+    {
+        MudDialog?.Cancel();
+    }
+}
