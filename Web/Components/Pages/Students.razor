@@ -77,7 +77,7 @@
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
                 <PropertyColumn Property="x => x.Status" Title="Status"  />
-                <TemplateColumn Title="Actions">
+                <TemplateColumn Title="Actions">    
                 <CellTemplate>
                         <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" @onclick="() => ViewStudentAsync(context.Item)" />
                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" @onclick="() => EditStudentAsync(context.Item)" />

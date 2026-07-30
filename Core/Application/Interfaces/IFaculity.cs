@@ -1,8 +1,9 @@
 using Domain.Entities;
+using Application.DTOs;
 namespace Application.Interfaces
 {
     public interface IFaculity
     {
-        public List<Faculity>GetFaculities();
+        Task<List<GetFaculityDTO>> GetFaculitiesAsync();
     }
 }

@@ -1,5 +1,6 @@
 using Domain.Entities;
 using Application.Interfaces;
+using Application.DTOs;
 namespace Application.Services.FaculityServices
 {
     public class FaculityService:IFaculityService
@@ -10,9 +11,9 @@ namespace Application.Services.FaculityServices
         {
             _faculity=faculities;
         }
-        public List<Faculity> GetFaculities()
+        public async Task<List<GetFaculityDTO>> GetFaculitiesAsync()
         {
-            return _faculity.GetFaculities();
+            return await _faculity.GetFaculitiesAsync();
         }
     }
 }

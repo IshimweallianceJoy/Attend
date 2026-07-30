@@ -18,7 +18,11 @@ namespace Application.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
         public string Sex { get; set; }
-        public string Adress { get; set; }
+        public string Phone { get; set; }
+          public string Adress { get; set; }
+        public string ParentNames { get; set; }
+        public string ParentPhone { get; set; }
+       
         
     }
        public class DeleteStudentDTO

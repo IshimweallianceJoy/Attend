@@ -1,8 +1,9 @@
 using Domain.Entities;
+using Application.DTOs;
 namespace Application.Interfaces
 {
     public interface IEducationLevel
     {
-        public List<EducationLevel>GetEducationLevels();
+        Task<List<GetEducationLevelDTO>> GetEducationLevelsAsync();
     }
 }

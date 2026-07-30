@@ -1,6 +1,8 @@
 using Domain.Entities;
 using Application.Interfaces;
 using Infrastructure.Data;
+using Application.DTOs;
+using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Repositories
 {
     public class EducationLevelRepository:IEducationLevel
@@ -13,9 +15,16 @@ namespace Infrastructure.Repositories
         }
 
 
-        public List<EducationLevel> GetEducationLevels()
+        public async Task<List<GetEducationLevelDTO>> GetEducationLevelsAsync()
         {
-            return _dbcontext.EducationLevels.ToList();
+            return await _dbcontext.EducationLevels.Select(edl =>  new GetEducationLevelDTO
+            {
+                Id = edl.Id,
+                Name = edl.Name,
+                UserAdded= edl.UserAdded,
+                DateAdded= edl.DateAdded,
+                Status= edl.Status,
+            }).ToListAsync();
         }
     }
 }

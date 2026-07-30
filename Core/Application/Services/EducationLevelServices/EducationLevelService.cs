@@ -1,5 +1,6 @@
 using Domain.Entities;
 using Application.Interfaces;
+using Application.DTOs;
 namespace Application.Services.EducationLevelServices
 {
     public class EducationLevelService:IEducationLevelService
@@ -10,9 +11,9 @@ namespace Application.Services.EducationLevelServices
         {
             _educationlevel=educationLevel;
         }
-        public List<EducationLevel> GetEducationLevels()
+        public async Task<List<GetEducationLevelDTO>> GetEducationLevelsAsync()
         {
-            return _educationlevel.GetEducationLevels();
+            return await _educationlevel.GetEducationLevelsAsync();
         }
     }
 }

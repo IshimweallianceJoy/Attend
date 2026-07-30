@@ -85,7 +85,10 @@ namespace Infrastructure.Repositories
                 ExistingStudent.Name = student.Name;
                 ExistingStudent.Sex = student.Sex;
                 ExistingStudent.Adress = student.Adress;
-                ExistingStudent.Phone = ExistingStudent.Phone;
+                ExistingStudent.Phone = student.Phone;
+                ExistingStudent.ParentNames = student.ParentNames;
+                ExistingStudent.ParentPhone = student.ParentPhone;
+                
 
               await  _dbcontext.SaveChangesAsync();
         }    }
