@@ -23,121 +23,121 @@ build_property.TargetFrameworkVersion = v10.0
 build_property.EntryPointFilePath = 
 build_property.RootNamespace = Web
 build_property.RootNamespace = Web
-build_property.ProjectDir = C:\Users\Alliance\source\repos\Attend\Web\
+build_property.ProjectDir = C:\Users\KEVINE\Documents\Attend\Web\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 10.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Alliance\source\repos\Attend\Web
+build_property.MSBuildProjectDirectory = C:\Users\KEVINE\Documents\Attend\Web
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/App.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/App.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/AddAttendence.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/AddAttendence.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZGRBdHRlbmRlbmNlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/AddClass.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/AddClass.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZGRDbGFzcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/AddClassStudent.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/AddClassStudent.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZGRDbGFzc1N0dWRlbnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/AddStudent.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/AddStudent.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZGRTdHVkZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Attendences.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/Attendences.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBdHRlbmRlbmNlcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/ClassDetailDialog.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/ClassDetailDialog.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDbGFzc0RldGFpbERpYWxvZy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/ClassEditDialog.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/ClassEditDialog.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDbGFzc0VkaXREaWFsb2cucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Classes.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/Classes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDbGFzc2VzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/ClassStudents.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/ClassStudents.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDbGFzc1N0dWRlbnRzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Counter.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/DeleteClass.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/DeleteClass.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEZWxldGVDbGFzcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/DeleteStudent.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/DeleteStudent.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEZWxldGVTdHVkZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Error.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Faculity.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/Faculity.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGYWN1bGl0eS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Home.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/NotFound.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/NotFound.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOb3RGb3VuZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/StudentDetailDialog.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/StudentDetailDialog.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdHVkZW50RGV0YWlsRGlhbG9nLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/StudentEditDialog.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/StudentEditDialog.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdHVkZW50RWRpdERpYWxvZy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Students.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/Students.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdHVkZW50cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/UpdateClass.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/UpdateClass.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xVcGRhdGVDbGFzcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Pages/Weather.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Pages/Weather.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Routes.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/_Imports.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Layout/MainLayout.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-739djkm78g
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Layout/NavMenu.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-rg61plsfb0
 
-[C:/Users/Alliance/source/repos/Attend/Web/Components/Layout/ReconnectModal.razor]
+[C:/Users/KEVINE/Documents/Attend/Web/Components/Layout/ReconnectModal.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcUmVjb25uZWN0TW9kYWwucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-mzcemie4t6

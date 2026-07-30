@@ -1,3 +1,4 @@
+using Domain.Entities;
 namespace Application.DTOs
 {
     public class AddClassDTO
@@ -23,9 +24,11 @@ namespace Application.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
         public int FaculityId { get; set; }
+        public Faculity Faculity { get; set; }
         public int EducationLevelId { get; set; }
-         public string UserAdded{get; set;}
-        public DateTime DateAdded{get; set;}
-        public string Status{get; set;}
+        public EducationLevel EducationLevel { get; set; }
+        public string UserAdded { get; set; }
+        public DateTime DateAdded { get; set; }
+        public string Status { get; set; }
     }
 }

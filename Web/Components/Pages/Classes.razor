@@ -70,8 +70,8 @@
                 <SelectColumn T="GetClassDTO" />
                 <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.Name" />
-                <PropertyColumn Property="x => x.FaculityId" SortBy="@_sortBy" />
-                <PropertyColumn Property="x => x.EducationLevelId" Title="Education Level" />  
+                <PropertyColumn Property="x => x.Faculity.Name" SortBy="@_sortBy" Title="Faculty" />
+                <PropertyColumn Property="x => x.EducationLevel.Name" Title="Education Level" />  
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />       
                 <PropertyColumn Property="x => x.Status" Title="Status" />
