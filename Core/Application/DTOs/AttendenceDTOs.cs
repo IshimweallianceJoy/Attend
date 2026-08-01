@@ -1,3 +1,5 @@
+using Domain.Entities;
+
 namespace Application.DTOs
 {
     public class AddAttendenceDTO
@@ -21,6 +23,7 @@ namespace Application.DTOs
         public int Id {get; set; }
     
         public int ClasssId {get; set;}
+        public Classs Classs{get; set;}
     
         public string UserAdded{get; set;}
         public DateTime DateAdded{get; set;}

@@ -1,10 +1,14 @@
 @using Application.Services.ClassServices
 @using Domain.Entities
 @using Application.DTOs
+@using Application.Services.FaculityServices
+@using Application.Services.EducationLevelServices
 
 @rendermode InteractiveServer
 @inject NavigationManager navigation
 @inject IClassService ClassService
+@inject IFaculityService FaculityService
+@inject IEducationLevelService EducationLevelService
 @page "/class/add"
 <MudDialog>
     <TitleContent>Add Class</TitleContent>
@@ -13,30 +17,60 @@
            <MudGrid>
             <MudItem xs="12">
                 <MudTextField 
+                 Adornment="Adornment.End"
+                 Label="Class Name"
+                Immediate="true"
+                 AdornmentIcon="@Icons.Material.Filled.DriveFileRenameOutline"
                 @bind-Value="classs.Name"
                 Margin="Margin.Dense"
                 Variant="Variant.Outlined"
-                Placeholder="Class Name">
+                Placeholder="Ex: S1 A">
                 </MudTextField>
             </MudItem>
             
            
             <MudItem xs="12">
-                <MudTextField 
-                @bind-Value="classs.FaculityId"
-                Margin="Margin.Dense"
-                Variant="Variant.Outlined"
-                Placeholder="Faculity ">
-                </MudTextField>
+                <MudSelect 
+                    Adornment="Adornment.End"
+                    Immediate="true"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    AdornmentIcon="@Icons.Material.Filled.LibraryBooks"
+                    Label="Faculty"
+                    @bind-value="classs.FaculityId">
+                        
+                        
+                        <MudSelectItem Value="0">--Select faculty--</MudSelectItem>
+                            @if (faculty != null)
+                            {
+                                foreach (var fac in faculty)
+                                {
+                                    <MudSelectItem Value="@fac.Id">@fac.Name</MudSelectItem>
+                                }
+                            }
+                </MudSelect>
             </MudItem>
            
             <MudItem xs="12">
-                <MudTextField 
-                @bind-Value="classs.EducationLevelId"
-                Margin="Margin.Dense"
+                <MudSelect 
+                Adornment="Adornment.End"
+                Immediate="true"
+                 AdornmentIcon="@Icons.Material.Filled.School"
+                Label="Education level"
                 Variant="Variant.Outlined"
-                Placeholder="Education Level">
-                </MudTextField>
+                 Margin="Margin.Dense"
+                 @bind-value="classs.EducationLevelId">
+                    
+                    <MudSelectItem Value="0" >--Select Education Level--</MudSelectItem>
+                         @if (educationlevel != null)
+                         {
+                            foreach (var edu  in educationlevel)
+                            {
+                                <MudSelectItem Value="@edu.Id">@edu.Name</MudSelectItem>
+                            }
+                         }
+                    
+                </MudSelect>
             </MudItem>
 
              <MudItem xs="12">
@@ -61,6 +95,27 @@
       [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; }
     private AddClassDTO classs = new ();
+    private List<GetFaculityDTO> faculty = new();
+    private List<GetEducationLevelDTO> educationlevel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+            var fac = await FaculityService.GetFaculitiesAsync();
+            if (faculty != null)
+            {
+            faculty=fac;
+            StateHasChanged();
+            }
+
+            var edu = await EducationLevelService.GetEducationLevelsAsync();
+            if (edu != null)
+            {
+            educationlevel=edu;
+            StateHasChanged();
+            }
+    }
     private async Task SaveClassAsync()
     {
        await ClassService.AddClassAsync(classs);

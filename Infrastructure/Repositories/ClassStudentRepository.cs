@@ -15,11 +15,16 @@ namespace Infrastructure.Repositories
         }
         public async Task <List<GetClassStudentDTO>> GetClassStudentsAsync()
         {
-           return await _dbcontext.ClassStudents.Select(cs =>  new GetClassStudentDTO
+           return await _dbcontext.ClassStudents
+                .Include(c => c.Classs)
+                .Include(c => c.Student)
+                .Select(cs => new GetClassStudentDTO
             {
                 Id= cs.Id,
                 ClasssId=cs.ClasssId,
+                Classs= cs.Classs,
                 StudentId= cs.StudentId,
+                Student= cs.Student,
                 UserAdded= cs.UserAdded,
                 DateAdded=cs.DateAdded,
                 Status= cs. Status,
@@ -40,11 +45,17 @@ namespace Infrastructure.Repositories
 
         public async Task <GetClassStudentDTO?> GetClassStudentByIdAsync(int id)
         {
-            return await _dbcontext.ClassStudents.Where(cs => cs.Id == id).Select( cs => new GetClassStudentDTO
+            return await _dbcontext.ClassStudents
+                .Where(cs => cs.Id == id)
+                .Include(c => c.Classs)
+                .Include(c => c.Student)
+                .Select(cs => new GetClassStudentDTO
             {
                   Id= cs.Id,
                 ClasssId=cs.ClasssId,
+                Classs= cs.Classs,
                 StudentId= cs.StudentId,
+                Student= cs.Student,
                 UserAdded= cs.UserAdded,
                 DateAdded=cs.DateAdded,
                 Status= cs. Status,

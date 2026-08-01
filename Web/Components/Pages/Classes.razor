@@ -70,15 +70,15 @@
                 <SelectColumn T="GetClassDTO" />
                 <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
                 <PropertyColumn Property="x => x.Name" />
-                <PropertyColumn Property="x => x.FaculityId" SortBy="@_sortBy" />
-                <PropertyColumn Property="x => x.EducationLevelId" Title="Education Level" />  
+                <PropertyColumn Property="x => x.Faculity.Name" SortBy="@_sortBy" Title="Faculty" />
+                <PropertyColumn Property="x => x.EducationLevel.Name" Title="Education Level" />  
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />       
                 <PropertyColumn Property="x => x.Status" Title="Status" />
                 <TemplateColumn CellClass="d-flex justify-end" Title="Actions">
                     <CellTemplate>
                         <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" OnClick="@(() => ViewClassAsync(context.Item))" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => EditClassAsync(context.Item))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => EditClassAsync(context.Item, _closeButton))" />
                     </CellTemplate>
                 </TemplateColumn>
             </Columns>
@@ -167,14 +167,14 @@
         var dialog = await DialogService.ShowAsync<ClassDetailDialog>("Class Details", parameters);
     }
 
-    private async Task EditClassAsync(GetClassDTO classs)
+    private async Task EditClassAsync(GetClassDTO classs, DialogOptions options)
     {
         var parameters = new DialogParameters
         {
             { nameof(ClassEditDialog.Id), classs.Id } // Pass the Id directly
         };
 
-        var dialog = await DialogService.ShowAsync<ClassEditDialog>("Edit Class", parameters);
+        var dialog = await DialogService.ShowAsync<ClassEditDialog>("Edit Class", parameters, options);
         var result = await dialog.Result;
 
         if (result is not null && !result.Canceled)

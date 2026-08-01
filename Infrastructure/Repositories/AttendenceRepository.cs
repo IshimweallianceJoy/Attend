@@ -17,10 +17,13 @@ namespace Infrastructure.Repositories
 
         public async Task <List<GetAttendenceDTO>> GetAttendencesAsync()
         {
-            return await _dbcontext.Attendences.Select( at => new GetAttendenceDTO
+              return await _dbcontext.Attendences
+                .Include(a => a.Classs)
+                .Select(at => new GetAttendenceDTO
             {
                 Id= at.Id,
                 ClasssId= at.ClasssId,
+                Classs= at.Classs,
                 UserAdded= at.UserAdded,
                 DateAdded= at.DateAdded,
                 Status= at.Status,
@@ -40,10 +43,14 @@ namespace Infrastructure.Repositories
         }
         public async Task<GetAttendenceDTO?> GetAttendenceByIdAsync(int id)
         {
-            return await _dbcontext.Attendences.Where(at => at.Id == id).Select( at => new GetAttendenceDTO
+              return await _dbcontext.Attendences
+                .Where(at => at.Id == id)
+                .Include(a => a.Classs)
+                .Select(at => new GetAttendenceDTO
             {
                  Id= at.Id,
                 ClasssId= at.ClasssId,
+                Classs= at.Classs,
                 UserAdded= at.UserAdded,
                 DateAdded= at.DateAdded,
                 Status= at.Status,

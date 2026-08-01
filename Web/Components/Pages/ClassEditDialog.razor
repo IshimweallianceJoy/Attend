@@ -1,7 +1,12 @@
 @using Application.DTOs
 @using Application.Services.ClassServices
+@using Application.Services.FaculityServices
+@using Application.Services.EducationLevelServices
 
-<MudDialog Style="overflow:hidden; max-width: 500px; width: 100%;">
+@inject IFaculityService FaculityService
+@inject IEducationLevelService EducationLevelService
+
+<MudDialog>
     <DialogContent>
         @if (isLoading)
         {
@@ -15,24 +20,61 @@
         {
             <MudText Typo="Typo.h6" Class="mb-4">@Title</MudText>
             <MudForm @ref="_form">
-                <MudTextField @bind-Value="classs.Name" Label="Name" Variant="Variant.Outlined" Required="true" RequiredError="Name is required." Class="mb-3" />
-                <MudNumericField @bind-Value="classs.FaculityId" Label="Faculty" Variant="Variant.Outlined" Required="true" RequiredError="Faculty ID is required." Class="mb-3" />
-                <MudNumericField @bind-Value="classs.EducationLevelId" Label="Education level" Variant="Variant.Outlined" Required="true" RequiredError="Education level ID is required." Class="mb-3" />
+                <MudGrid>
+                    <MudItem xs="12">
+
+                        <MudTextField @bind-Value="classs.Name" Label="Name" Variant="Variant.Outlined"
+                                      Margin="Margin.Dense" Required="true" RequiredError="Name is required." />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudSelect Adornment="Adornment.End" Immediate="true" Variant="Variant.Outlined"
+                                   Margin="Margin.Dense" AdornmentIcon="@Icons.Material.Filled.LibraryBooks" Label="Faculty"
+                                   @bind-value="classs.FaculityId">
+
+                        
+                            <MudSelectItem Value="0">--Select faculty--</MudSelectItem>
+                            @if (faculty != null)
+                            {
+                                foreach (var fac in faculty)
+                                {
+                                    <MudSelectItem Value="@fac.Id">@fac.Name</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12">
+                        <MudSelect Adornment="Adornment.End" Immediate="true" AdornmentIcon="@Icons.Material.Filled.School"
+                                   Label="Education level" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                   @bind-value="classs.EducationLevelId">
+
+                            <MudSelectItem Value="0">--Select Education Level--</MudSelectItem>
+                            @if (educationlevel != null)
+                            {
+                                foreach (var edu in educationlevel)
+                                {
+                                    <MudSelectItem Value="@edu.Id">@edu.Name</MudSelectItem>
+                                }
+                            }
+
+                        </MudSelect>
+
+                    </MudItem>
+
+                </MudGrid>
+                <MudButton OnClick="Save" Disabled="@isLoading" Color="Color.Primary" Variant="Variant.Filled"
+                           ButtonType="ButtonType.Submit">EDIT</MudButton>
             </MudForm>
         }
     </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Save" Disabled="@isLoading" Color="Color.Primary" Variant="Variant.Filled">Save</MudButton>
-        <MudButton OnClick="Cancel" Color="Color.Default" Variant="Variant.Text">Cancel</MudButton>
-    </DialogActions>
 </MudDialog>
 
-@code{
+@code {
     [CascadingParameter]
     public IMudDialogInstance? MudDialog { get; set; }
 
     [Inject]
-    public IClassService ClassService { get; set; } 
+    public IClassService ClassService { get; set; }
 
     [Parameter]
     public string? Title { get; set; }
@@ -54,6 +96,27 @@
         }
 
         isLoading = false;
+    }
+    private List<GetFaculityDTO> faculty = new();
+    private List<GetEducationLevelDTO> educationlevel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+        var fac = await FaculityService.GetFaculitiesAsync();
+        if (faculty != null)
+        {
+            faculty = fac;
+            StateHasChanged();
+        }
+
+        var edu = await EducationLevelService.GetEducationLevelsAsync();
+        if (edu != null)
+        {
+            educationlevel = edu;
+            StateHasChanged();
+        }
     }
 
     private async Task Save()

@@ -2,6 +2,8 @@
 @using Application.Services.AttendenceServices
 @using Application.DTOs;
 @using Domain.Entities;
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.EntityFrameworkCore;
 
 @inject IDialogService DialogService
 @inject IAttendenceService AttendenceService
@@ -29,14 +31,14 @@
                   </MudTextField>
                 </MudContainer>
 
-                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ml-4" @onclick="() => OpenDialogAsync(_closeButton)" >Add Class</MudButton>
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ml-4" @onclick="() => OpenDialogAsync(_closeButton)" >Add Attendence</MudButton>
             
             </ToolBarContent>
 
             <Columns>
                 <SelectColumn T="GetAttendenceDTO" />
                 <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
-                <PropertyColumn Property="x => x.ClasssId" Title="Class" />  
+                <PropertyColumn Property="x => x.Classs.Name" Title="Class" />  
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />       
                 <PropertyColumn Property="x => x.Status" Title="Status" />

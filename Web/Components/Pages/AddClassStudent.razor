@@ -1,8 +1,12 @@
 @using Application.Services.ClassStudentServices
 @using Application.DTOs
 @using Domain.Entities
+@using Application.Services.ClassServices
+@using Application.Services.StudentServices
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
+@inject IStudentService StudentService
+@inject IClassService ClassService
 @inject IClassStudentService ClassStudentService
 @page "/classStudent/add"
 
@@ -11,25 +15,45 @@
     <DialogContent>
         <EditForm Model="classstudent" OnValidSubmit="SaveClassStudentAsync">
            <MudGrid>
+              
             <MudItem xs="12">
-                <MudTextField 
-                label="Class"
-                @bind-Value="classstudent.ClasssId"
-                Margin="Margin.Dense"
-                Variant="Variant.Outlined"
-                Placeholder="Class">
-                </MudTextField>
+                <MudSelect
+                Adornment="Adornment.End"
+                Immediate="true"
+                 AdornmentIcon="@Icons.Material.Filled.Person"
+                 Label="Class"
+                  @bind-value="classstudent.ClasssId">
+                    
+                    
+                    <MudSelectItem Value="0" Label="Select Class"></MudSelectItem>
+                         @if (Classs != null)
+                         {
+                            foreach (var c in Classs)
+                            {
+                                <MudSelectItem Value="@c.Id">@c.Name</MudSelectItem>
+                            }
+                         }
+                </MudSelect>
             </MudItem>
-        
-
+           
             <MudItem xs="12">
-                <MudTextField 
-                label="Student"
-                @bind-Value="classstudent.StudentId"
-                Margin="Margin.Dense"
-                Variant="Variant.Outlined"
-                Placeholder="Student">
-                </MudTextField>
+                <MudSelect 
+                Adornment="Adornment.End"
+                Immediate="true"
+                 AdornmentIcon="@Icons.Material.Filled.PeopleAlt"
+                Label="Student" 
+                @bind-value="classstudent.StudentId">
+                    
+                    <MudSelectItem Value="0" Label="Select Student"></MudSelectItem>
+                         @if (Student != null)
+                         {
+                            foreach (var st  in Student)
+                            {
+                                <MudSelectItem Value="@st.Id">@st.Name</MudSelectItem>
+                            }
+                         }
+                    
+                </MudSelect>
             </MudItem>
 
 
@@ -54,6 +78,29 @@
       [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; }
     private AddClassStudentDTO classstudent = new ();
+
+        private List<GetClassDTO> Classs = new();
+    private List<GetStudentDTO> Student = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+            var c = await ClassService.GetClasssesAsync();
+            if (Classs != null)
+            {
+            Classs=c;
+            StateHasChanged();
+            }
+
+            var st = await StudentService.GetStudentsAsync();
+            if (st != null)
+            {
+            Student=st;
+            StateHasChanged();
+            }
+    }
+
 
     private async Task SaveClassStudentAsync()
     {

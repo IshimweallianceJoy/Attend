@@ -9,7 +9,6 @@ namespace Domain.Entities{
         public DateTime DateAdded{get; set;}
         public string Status{get; set;}
         
-        
          public Classs Classs{get; set;}
 
          

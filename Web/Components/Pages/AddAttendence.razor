@@ -1,0 +1,89 @@
+@using Application.Services.AttendenceServices
+@using Domain.Entities
+@using Application.DTOs
+@using Application.Services.ClassServices
+
+
+@rendermode InteractiveServer
+@inject NavigationManager navigation
+@inject IAttendenceService AttendenceService
+@inject IClassService ClassService
+
+@page "/attendence/add"
+<MudDialog>
+    <TitleContent>Add Attendence</TitleContent>
+    <DialogContent>
+        <EditForm Model="attendence" OnValidSubmit="SaveAttendenceAsync">
+           <MudGrid>
+           
+            
+           
+            <MudItem xs="12">
+                <MudSelect 
+                    Adornment="Adornment.End"
+                    Immediate="true"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    AdornmentIcon="@Icons.Material.Filled.LibraryBooks"
+                    Label="Class"
+                    @bind-value="attendence.ClasssId">
+                        
+                        
+                        <MudSelectItem Value="0">--Select Class--</MudSelectItem>
+                            @if (classs != null)
+                            {
+                                foreach (var cl in classs)
+                                {
+                                    <MudSelectItem Value="@cl.Id">@cl.Name</MudSelectItem>
+                                }
+                            }
+                </MudSelect>
+            </MudItem>
+           
+          
+
+             <MudItem xs="12">
+                <MudButton 
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                FullWidth="true" 
+                ButtonType="ButtonType.Submit">
+                SAVE
+                </MudButton>
+            </MudItem>
+
+           </MudGrid> 
+        </EditForm>
+
+    </DialogContent>
+    
+</MudDialog>
+    
+
+@code{
+      [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+    private AddAttendenceDTO attendence = new ();
+    private List<GetClassDTO> classs = new();
+   
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+            var cl = await ClassService.GetClasssesAsync();
+            if (classs != null)
+            {
+            classs=cl;
+            StateHasChanged();
+            }
+
+           
+    }
+    private async Task SaveAttendenceAsync()
+    {
+       await AttendenceService.AddAttendenceAsync(attendence);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+}

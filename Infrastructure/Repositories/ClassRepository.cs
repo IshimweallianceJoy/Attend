@@ -16,17 +16,22 @@ namespace Infrastructure.Repositories
 
         public async Task<List<GetClassDTO>> GetClasssesAsync()
         {
-            return await _dbcontext.Classes.Select(cc => new GetClassDTO
-            {
-                Id = cc.Id,
-                Name = cc.Name,
-                FaculityId= cc.FaculityId,
-                EducationLevelId= cc.EducationLevelId,
-                UserAdded= cc.UserAdded,
-                DateAdded= cc.DateAdded,
-                Status= cc.Status,
-
-            }).ToListAsync();
+            return await _dbcontext.Classes
+                .Include(c => c.Faculity)
+                .Include(c => c.EducationLevel)
+                .Select(cc => new GetClassDTO
+                {
+                    Id = cc.Id,
+                    Name = cc.Name,
+                    FaculityId = cc.FaculityId,
+                    Faculity = cc.Faculity,
+                    EducationLevelId = cc.EducationLevelId,
+                    EducationLevel = cc.EducationLevel,
+                    UserAdded = cc.UserAdded,
+                    DateAdded = cc.DateAdded,
+                    Status = cc.Status,
+                })
+                .ToListAsync();
         }
         public async Task AddClassAsync(AddClassDTO classs)
         {
@@ -43,17 +48,23 @@ namespace Infrastructure.Repositories
         }
         public async Task <GetClassDTO?> GetClasssByIdAsync(int id)
         {
-            return await _dbcontext.Classes.Where(cc => cc.Id == id).Select( cc => new GetClassDTO
-            {
-                
-                Id = cc.Id,
-                Name = cc.Name,
-                FaculityId= cc.FaculityId,
-                EducationLevelId= cc.EducationLevelId,
-                UserAdded= cc.UserAdded,
-                DateAdded= cc.DateAdded,
-                Status= cc.Status,
-            }).FirstOrDefaultAsync();
+            return await _dbcontext.Classes
+                .Where(cc => cc.Id == id)
+                .Include(c => c.Faculity)
+                .Include(c => c.EducationLevel)
+                .Select(cc => new GetClassDTO
+                {
+                    Id = cc.Id,
+                    Name = cc.Name,
+                    FaculityId = cc.FaculityId,
+                    Faculity = cc.Faculity,
+                    EducationLevelId = cc.EducationLevelId,
+                    EducationLevel = cc.EducationLevel,
+                    UserAdded = cc.UserAdded,
+                    DateAdded = cc.DateAdded,
+                    Status = cc.Status,
+                })
+                .FirstOrDefaultAsync();
         }
         public async Task UpdateClassAsync(UpdateClassDTO classs)
         {
