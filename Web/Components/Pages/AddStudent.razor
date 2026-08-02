@@ -1,6 +1,7 @@
 @using Application.Services.StudentServices
 @using Application.DTOs
 @using Domain.Entities
+@using Domain.ValueObject
 
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
@@ -139,6 +140,25 @@
                 SAVE
                 </MudButton>
             </MudItem>
+
+             <MudItem  xs="12">
+                    <MudSelect T="StudentStatus"
+                            Label="Status"
+                            @bind-Value="student.Status"
+                            Variant="Variant.Outlined"
+                            Dense="true"
+                            Margin="Margin.Dense"
+                            AdornmentIcon="@Icons.Material.Filled.Category"
+                            AdornmentColor="Color.Primary">
+
+                        <MudSelectItem T="StudentStatus">--Select Student Status--</MudSelectItem>
+
+                        @foreach (StudentStatus status in Enum.GetValues(typeof(StudentStatus)))
+                        {
+                            <MudSelectItem T="StudentStatus" Value="status">@status.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
 
            </MudGrid> 
         </EditForm>

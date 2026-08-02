@@ -225,9 +225,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserAdded")
                         .IsRequired()
@@ -319,7 +318,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.StudentAttendence", b =>
                 {
-                    b.HasOne("Domain.Entities.Attendence", "attendence")
+                    b.HasOne("Domain.Entities.Attendence", "Attendence")
                         .WithMany()
                         .HasForeignKey("AttendenceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -331,9 +330,9 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Student");
+                    b.Navigation("Attendence");
 
-                    b.Navigation("attendence");
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.Classs", b =>

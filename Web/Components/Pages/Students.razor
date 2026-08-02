@@ -76,7 +76,15 @@
                 <PropertyColumn Property="x => x.Phone" Title="Phone" />
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
-                <PropertyColumn Property="x => x.Status" Title="Status"  />
+                <TemplateColumn Title="Status">
+                 <CellTemplate>
+                    <MudChip T="String"
+                    Size="Size.Small"
+                    Variant="Variant.Text">
+                    @context.Item.Status
+                    </MudChip>
+                 </CellTemplate>
+                </TemplateColumn>
                 <TemplateColumn Title="Actions">    
                 <CellTemplate>
                         <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" @onclick="() => ViewStudentAsync(context.Item)" />

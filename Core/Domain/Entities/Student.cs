@@ -1,3 +1,4 @@
+using Domain.ValueObject;
 namespace Domain.Entities
 {
      public class Student
@@ -14,7 +15,7 @@ namespace Domain.Entities
         public string ParentPhone { get; set; }
         public string UserAdded { get; set; }
         public DateTime DateAdded { get; set; }
-        public string Status { get; set; } = "Active";
+        public StudentStatus Status { get; set; } 
 
           //Navigation Property: One Education Level can have many Classes
         

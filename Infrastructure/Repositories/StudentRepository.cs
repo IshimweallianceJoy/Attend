@@ -50,7 +50,7 @@ namespace Infrastructure.Repositories
                ParentPhone = student.ParentPhone,
                UserAdded = "Joy",
                DateAdded = DateTime.UtcNow,
-               Status = "Active"
+               Status = student.Status,
             });
            await _dbcontext.SaveChangesAsync();
         }
@@ -97,7 +97,7 @@ namespace Infrastructure.Repositories
             var ExistingStudent = await _dbcontext.Students.FirstOrDefaultAsync(ss => ss.Id == student.Id);
             if(ExistingStudent != null)
             {
-                ExistingStudent.Status = "Deleted";
+                ExistingStudent.Status =student.Status;
 
                 await _dbcontext.SaveChangesAsync();
             }
