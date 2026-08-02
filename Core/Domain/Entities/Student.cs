@@ -17,7 +17,7 @@ namespace Domain.Entities
         public DateTime DateAdded { get; set; }
         public StudentStatus Status { get; set; } 
 
-          //Navigation Property: One Education Level can have many Classes
+          //Navigation Property: One Education Level can has many Classes
         
         
     }

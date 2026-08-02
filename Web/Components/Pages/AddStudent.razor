@@ -131,17 +131,9 @@
                 </MudTextField>
             </MudItem>
 
-            <MudItem xs="12">
-                <MudButton 
-                Variant="Variant.Filled"
-                Color="Color.Primary"
-                FullWidth="true" 
-                ButtonType="ButtonType.Submit">
-                SAVE
-                </MudButton>
-            </MudItem>
+          
 
-             <MudItem  xs="12">
+             <MudItem  xs="6">
                     <MudSelect T="StudentStatus"
                             Label="Status"
                             @bind-Value="student.Status"
@@ -159,6 +151,16 @@
                         }
                     </MudSelect>
                 </MudItem>
+
+                  <MudItem xs="12">
+                <MudButton 
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                FullWidth="true" 
+                ButtonType="ButtonType.Submit">
+                SAVE
+                </MudButton>
+            </MudItem>
 
            </MudGrid> 
         </EditForm>

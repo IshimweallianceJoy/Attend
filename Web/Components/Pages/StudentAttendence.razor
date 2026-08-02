@@ -1,17 +1,17 @@
-@page "/attendence"
-@using Application.Services.AttendenceServices
+@page "/Stattendence"
+@using Application.Services.StudentAttendenceServices
 @using Application.DTOs;
 @using Domain.Entities;
 @using Microsoft.AspNetCore.Components;
 @using Microsoft.EntityFrameworkCore;
 
 @inject IDialogService DialogService
-@inject IAttendenceService AttendenceService
+@inject IStudentAttendenceService StudentAttendenceService
 
 
 
   <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4" >
-        <MudDataGrid T="GetAttendenceDTO" MultiSelection="true" Items="@attendences" SortMode="SortMode.Multiple" Filterable="true" 
+        <MudDataGrid T="GetStudentAttendenceDTO" MultiSelection="true" Items="@stattendences" SortMode="SortMode.Multiple" Filterable="true" 
             Hideable="true" RowClick="@RowClicked" RowContextMenuClick="RowRightClicked" SelectedItemsChanged="@SelectedItemsChanged">
             
             <ToolBarContent>
@@ -36,16 +36,33 @@
             </ToolBarContent>
 
             <Columns>
-                <SelectColumn T="GetAttendenceDTO" />
-                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
-                <PropertyColumn Property="x => x.Classs.Name" Title="Class" />  
-                <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
-                <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />       
-                <PropertyColumn Property="x => x.Status" Title="Status" />
+                <SelectColumn T="GetStudentAttendenceDTO" />
+                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" /> 
+                 <PropertyColumn Property="x => x.Student.Name" Title="Student" />  
+                 <PropertyColumn Property="x => x.Attendence.Classs" Title="Class" />    
+                 <PropertyColumn Property="x => x.Attendence.UserAdded" Title="Done By" />  
+                 <PropertyColumn Property="x => x.Date" Title="Attendence Date " />
+                <TemplateColumn Title="Status">
+                 <CellTemplate>
+                    <MudChip T="String"
+                    Size="Size.Small"
+                    Variant="Variant.Text">
+                    @context.Item.Status
+                    </MudChip>
+                 </CellTemplate>
+                </TemplateColumn>
+                  @* <TemplateColumn Title="Actions">    
+                <CellTemplate>
+                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" @onclick="() => ViewStudentAsync(context.Item)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" @onclick="() => EditStudentAsync(context.Item)" />
+                    </CellTemplate>
+                </TemplateColumn> *@
+
+                
             </Columns>
 
             <PagerContent>
-                <MudDataGridPager T="GetAttendenceDTO" />
+                <MudDataGridPager T="GetStudentAttendenceDTO" />
             </PagerContent>
 
         </MudDataGrid>
@@ -57,17 +74,17 @@
         private bool _sortNameByLength;
         private List<string> _events = new();
 
-        void RowClicked(DataGridRowClickEventArgs<GetAttendenceDTO> args)
+        void RowClicked(DataGridRowClickEventArgs<GetStudentAttendenceDTO> args)
         {
             _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
         }
         
-        void RowRightClicked(DataGridRowClickEventArgs<GetAttendenceDTO> args)
+        void RowRightClicked(DataGridRowClickEventArgs<GetStudentAttendenceDTO> args)
         {
             _events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
         }
 
-        void SelectedItemsChanged(HashSet<GetAttendenceDTO> items)
+        void SelectedItemsChanged(HashSet<GetStudentAttendenceDTO> items)
         {
             _events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
         }
@@ -98,21 +115,21 @@
             return false;
         }; *@
    
-    private List<GetAttendenceDTO> attendences= new List<GetAttendenceDTO>();
+    private List<GetStudentAttendenceDTO> stattendences= new List<GetStudentAttendenceDTO>();
     protected override async Task OnInitializedAsync()
     {
-        attendences = await AttendenceService.GetAttendencesAsync();
+        stattendences = await StudentAttendenceService.GetStudentAttendencesAsync();
     }
     private readonly DialogOptions _closeButton = new() { CloseButton = true };
         private async Task OpenDialogAsync(DialogOptions options)
         {
-            var dialog = await DialogService.ShowAsync<AddAttendence>("Add New Attendence", options);
+            var dialog = await DialogService.ShowAsync<AddStAttendence>("Add New Attendence", options);
                 
             var result = await dialog.Result;
 
             if (result is not null && !result.Canceled) 
             {
-                attendences = await AttendenceService.GetAttendencesAsync();
+                stattendences = await StudentAttendenceService.GetStudentAttendencesAsync();
             }
         }
 

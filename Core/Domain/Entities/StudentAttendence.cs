@@ -1,3 +1,4 @@
+using Domain.ValueObject;
 namespace Domain.Entities
 {
     public class StudentAttendence
@@ -6,7 +7,10 @@ namespace Domain.Entities
         public int StudentId{get; set;}
         public int AttendenceId{get; set;}
         public  DateTime Date{get; set;}
-        public string Status{get; set;}
+        //Enum Status
+        public AttendenceStatus Status{get; set;}
+
+        //Navigation Properties for Relationships 
         public Attendence Attendence{get; set;}
         public Student Student{get; set;}
 

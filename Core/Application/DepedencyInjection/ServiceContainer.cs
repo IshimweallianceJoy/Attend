@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Application.Services.StudentServices;
 using Application.Services.ClassServices;
 using Application.Services.AttendenceServices;
+using Application.Services.StudentAttendenceServices;
 using Application.Services.ClassStudentServices;
 using Application.Services.FaculityServices;
 using Application.Services.EducationLevelServices;
@@ -16,10 +17,10 @@ namespace Application.DependencyInjection
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IClassService, ClassService>();
             services.AddScoped<IClassStudentService, ClassStudentService>();
-            // services.AddScoped<IAttendenceService, AttendenceService>();
-            // services.AddScoped<IFaculityService, FaculityService>();
-           
-            // services.AddScoped<IEducationLevelService, EducationLevelService>();
+            services.AddScoped<IAttendenceService, AttendenceService>();
+            services.AddScoped<IStudentAttendenceService, StudentAttendenceService>();
+            services.AddScoped<IFaculityService, FaculityService>();
+            services.AddScoped<IEducationLevelService, EducationLevelService>();
 
             
             return services;

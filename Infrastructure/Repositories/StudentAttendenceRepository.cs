@@ -69,6 +69,7 @@ namespace Infrastructure.Repositories
                 ExistingAttendence.Id = stattendence.Id;
                 ExistingAttendence.StudentId = stattendence.StudentId;
                 ExistingAttendence.AttendenceId = stattendence.AttendenceId;
+                ExistingAttendence.Status = stattendence.Status;
                 
               } await _dbcontext.SaveChangesAsync();
         
@@ -78,7 +79,7 @@ namespace Infrastructure.Repositories
             var ExistingAttendence = await _dbcontext.StudentAttendences.FirstOrDefaultAsync(at => at.Id == stattendence.Id);
              if(ExistingAttendence != null )
             {
-                ExistingAttendence.Status= "Deleted";
+                ExistingAttendence.Status= stattendence.Status;
             } await _dbcontext.SaveChangesAsync();
         }
     }

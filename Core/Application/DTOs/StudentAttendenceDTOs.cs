@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.ValueObject;
 
 namespace Application.DTOs
 {
@@ -7,7 +8,7 @@ namespace Application.DTOs
       
         public int StudentId{get; set;}
         public int AttendenceId{get; set;}
-         public string Status{get; set;}
+         public AttendenceStatus Status{get; set;}
 
        
     }
@@ -16,10 +17,12 @@ namespace Application.DTOs
          public int Id{get; set;}
         public int StudentId{get; set;}
         public int AttendenceId{get; set;}
+        public AttendenceStatus Status{get; set;}
     }
     public class DeleteStudentAttedenceDTO
     {
          public int Id{get; set;}
+         public AttendenceStatus Status{get; set;}
         
     }
     public class GetStudentAttendenceDTO
@@ -30,7 +33,7 @@ namespace Application.DTOs
         public int AttendenceId{get; set;}
         public Attendence Attendence{get; set;}
         public  DateTime Date{get; set;}
-        public string Status{get; set;}
+       public AttendenceStatus Status{get; set;}
        
     }
 

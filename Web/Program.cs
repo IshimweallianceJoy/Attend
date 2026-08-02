@@ -1,8 +1,5 @@
 using Application.Interfaces;
-using Application.Services.StudentServices;
-using Application.Services.ClassServices;
-using Application.Services.ClassStudentServices;
-using Application.Services.AttendenceServices;
+
 using Domain.Entities;
 using Web.Components;
 using Infrastructure.Repositories;

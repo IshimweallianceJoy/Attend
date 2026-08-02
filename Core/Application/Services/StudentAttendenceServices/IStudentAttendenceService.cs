@@ -1,9 +1,11 @@
 using Application.DTOs;
 using Domain.Entities;
-namespace Application.Interfaces
+
+namespace Application.Services.StudentAttendenceServices
 {
-    public interface IStudentAttendence
+    public interface IStudentAttendenceService
     {
+        
          Task <List<GetStudentAttendenceDTO>>GetStudentAttendencesAsync();
         Task AddStudentAttendenceAsync(AddStudentAttendenceDTO stattendence);
         Task <GetStudentAttendenceDTO?> GetStudentAttendenceByIdAsync(int id);

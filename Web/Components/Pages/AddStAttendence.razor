@@ -1,0 +1,167 @@
+@using Application.Services.StudentAttendenceServices
+@using Domain.Entities
+@using Application.DTOs
+@using Application.Services.AttendenceServices
+@using Application.Services.StudentServices
+@using Domain.ValueObject
+
+
+
+@rendermode InteractiveServer
+@inject NavigationManager navigation
+@inject IStudentAttendenceService StudentAttendenceService
+@inject IAttendenceService AttendenceService
+@inject IStudentService StudentService
+
+@page "/Stattendence/add"
+<MudDialog>
+    <TitleContent>Add Attendence</TitleContent>
+    <DialogContent>
+        <EditForm Model="stattendence" OnValidSubmit="SavestAttendenceAsync">
+           <MudGrid>
+           
+            
+           
+            <MudItem xs="12">
+                <MudSelect 
+                    Adornment="Adornment.End"
+                    Immediate="true"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    AdornmentIcon="@Icons.Material.Filled.LibraryBooks"
+                    Label="Class"
+                    @bind-value="stattendence.AttendenceId">
+                        
+                        
+                        <MudSelectItem Value="0">--Select Class--</MudSelectItem>
+                            @if (attendence != null)
+                            {
+                                foreach (var cl in attendence)
+                                {
+                                    <MudSelectItem Value="@cl.Id">@cl.Classs</MudSelectItem>
+                                }
+                            }
+                </MudSelect>
+            </MudItem>
+
+             <MudItem xs="12">
+                <MudSelect 
+                    Adornment="Adornment.End"
+                    Immediate="true"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    AdornmentIcon="@Icons.Material.Filled.LibraryBooks"
+                    Label="Student"
+                    @bind-value="stattendence.StudentId">
+                        
+                        
+                        <MudSelectItem Value="0">--Select Student--</MudSelectItem>
+                            @if (student != null)
+                            {
+                                foreach (var st in student)
+                                {
+                                    <MudSelectItem Value="@st.Id">@st.Name</MudSelectItem>
+                                }
+                            }
+                </MudSelect>
+            </MudItem>
+
+             <MudItem  xs="12">
+                    <MudSelect T="AttendenceStatus"
+                            Label="Status"
+                            @bind-Value="stattendence.Status"
+                            Variant="Variant.Outlined"
+                            Dense="true"
+                            Margin="Margin.Dense"
+                            AdornmentIcon="@Icons.Material.Filled.Category"
+                            AdornmentColor="Color.Primary">
+
+                        <MudSelectItem T="StudentStatus">--Select Attendence Status--</MudSelectItem>
+
+                        @foreach (StudentStatus status in Enum.GetValues(typeof(StudentStatus)))
+                        {
+                            <MudSelectItem T="StudentStatus" Value="status">@status.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12">
+                <MudSelect 
+                    Adornment="Adornment.End"
+                    Immediate="true"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    AdornmentIcon="@Icons.Material.Filled.LibraryBooks"
+                    Label="Teacher"
+                    @bind-value="stattendence.AttendenceId">
+                        
+                        
+                        <MudSelectItem Value="0">--Select --</MudSelectItem>
+                            @if (attendence != null)
+                            {
+                                foreach (var cl in attendence)
+                                {
+                                    <MudSelectItem Value="@cl.Id">@cl.UserAdded</MudSelectItem>
+                                }
+                            }
+                </MudSelect>
+            </MudItem>
+           
+          
+
+             <MudItem xs="12">
+                <MudButton 
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                FullWidth="true" 
+                ButtonType="ButtonType.Submit">
+                SAVE
+                </MudButton>
+            </MudItem>
+
+           </MudGrid> 
+        </EditForm>
+
+    </DialogContent>
+    
+</MudDialog>
+    
+
+@code{
+      [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+    private AddStudentAttendenceDTO stattendence = new ();
+    private List<GetAttendenceDTO> attendence = new();
+
+        private List<GetStudentDTO> student = new();
+   
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+            var at = await AttendenceService.GetAttendencesAsync();
+            if (attendence != null)
+            {
+            attendence=at;
+            StateHasChanged();
+            }
+
+            var st = await StudentService.GetStudentsAsync();
+            if (attendence != null)
+            {
+            student=st;
+            StateHasChanged();
+            }
+
+           
+    }
+
+    
+    private async Task SavestAttendenceAsync()
+    {
+       await StudentAttendenceService.AddStudentAttendenceAsync(stattendence);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+}

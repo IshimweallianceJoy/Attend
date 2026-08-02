@@ -22,9 +22,9 @@
                 <MudSelectItem Value="@("Male")">Male</MudSelectItem>
                 <MudSelectItem Value="@("Female")">Female</MudSelectItem>
             </MudSelect>
-             <MudTextField @bind-Value="student.Name" Label="Phone" Variant="Variant.Outlined" Required="true" RequiredError="Phone Number is required." Class="mb-3" />
-             <MudTextField @bind-Value="student.Name" Label="ParentNames" Variant="Variant.Outlined" Required="true" RequiredError="Parent Names is required." Class="mb-3" />
-              <MudTextField @bind-Value="student.Name" Label="ParentPhone" Variant="Variant.Outlined" Required="true" RequiredError="Parent Phone is required." Class="mb-3" />
+             <MudTextField @bind-Value="student.Phone" Label="Phone" Variant="Variant.Outlined" Required="true" RequiredError="Phone Number is required." Class="mb-3" />
+             <MudTextField @bind-Value="student.ParentNames" Label="ParentNames" Variant="Variant.Outlined" Required="true" RequiredError="Parent Names is required." Class="mb-3" />
+              <MudTextField @bind-Value="student.ParentPhone" Label="ParentPhone" Variant="Variant.Outlined" Required="true" RequiredError="Parent Phone is required." Class="mb-3" />
             <MudTextField @bind-Value="student.Adress" Label="Adress" Variant="Variant.Outlined" Required="true" RequiredError="Address is required." Class="mb-3" />
         </MudForm>
         }
@@ -78,7 +78,10 @@
             Id = student.Id,
             Name = student.Name,
             Sex = student.Sex,
-            Adress = student.Adress
+            Adress = student.Adress,
+            Phone = student.Phone,
+            ParentNames = student.ParentNames,
+            ParentPhone = student.ParentPhone
         });
 
         MudDialog?.Close(DialogResult.Ok(student));
