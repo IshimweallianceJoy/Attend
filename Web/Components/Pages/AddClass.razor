@@ -38,39 +38,34 @@
                     AdornmentIcon="@Icons.Material.Filled.LibraryBooks"
                     Label="Faculty"
                     @bind-value="classs.FaculityId">
-                        
-                        
-                        <MudSelectItem Value="0">--Select faculty--</MudSelectItem>
-                            @if (faculty != null)
-                            {
-                                foreach (var fac in faculty)
-                                {
-                                    <MudSelectItem Value="@fac.Id">@fac.Name</MudSelectItem>
-                                }
-                            }
+                    <MudSelectItem Value="0">--Select faculty--</MudSelectItem>
+                    @if (faculty != null)
+                    {
+                        foreach (var fac in faculty)
+                        {
+                            <MudSelectItem Value="@fac.Id">@fac.Name</MudSelectItem>
+                        }
+                    }
                 </MudSelect>
             </MudItem>
            
             <MudItem xs="12">
                 <MudSelect 
-                Adornment="Adornment.End"
-                Immediate="true"
-                 AdornmentIcon="@Icons.Material.Filled.School"
-                Label="Education level"
-                Variant="Variant.Outlined"
-                 Margin="Margin.Dense"
-                 @bind-value="classs.EducationLevelId">
-                    
-                    <MudSelectItem Value="0" >--Select Education Level--</MudSelectItem>
-                         @if (educationlevel != null)
-                         {
-                            foreach (var edu  in educationlevel)
-                            {
-                                <MudSelectItem Value="@edu.Id">@edu.Name</MudSelectItem>
-                            }
-                         }
-                    
-                </MudSelect>
+                    Adornment="Adornment.End"
+                    Immediate="true"
+                    AdornmentIcon="@Icons.Material.Filled.School"
+                    Label="Education level"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    @bind-value="classs.EducationLevelId">
+                    <MudSelectItem Value="0">--Select Education Level--</MudSelectItem>
+                    @if (educationlevel != null)
+                    {
+                        foreach (var edu in educationlevel)
+                        {
+                            <MudSelectItem Value="@edu.Id">@edu.Name</MudSelectItem>
+                        }
+                    }
             </MudItem>
 
              <MudItem xs="12">
