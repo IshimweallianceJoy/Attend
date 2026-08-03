@@ -1,11 +1,11 @@
 
 @using Application.DTOs
-@using Application.Services.ClassStudentServices
+@using Application.Services.AttendenceServices
 @using Application.Services.ClassServices
-@using Application.Services.StudentServices
+
 
 @inject IClassService ClassService
-@inject IStudentService StudentService
+
 
 <MudDialog>
     <DialogContent>
@@ -13,7 +13,7 @@
         {
             <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
         }
-        else if (classs == null)
+        else if (attend == null)
         {
             <MudText Typo="Typo.body1" Color="Color.Error">Class details could not be found.</MudText>
         }
@@ -26,7 +26,7 @@
                     <MudItem xs="12">
                         <MudSelect Adornment="Adornment.End" Immediate="true" Variant="Variant.Outlined"
                                    Margin="Margin.Dense" AdornmentIcon="@Icons.Material.Filled.LibraryBooks" Label="Class"
-                                   @bind-value="classst.ClasssId">
+                                   @bind-value="attend.ClasssId">
 
                         
                             <MudSelectItem Value="0">--Select Class--</MudSelectItem>
@@ -40,27 +40,11 @@
                         </MudSelect>
                     </MudItem>
 
-                    <MudItem xs="12">
-                        <MudSelect Adornment="Adornment.End" Immediate="true" AdornmentIcon="@Icons.Material.Filled.Person"
-                                   Label="Student" Variant="Variant.Outlined" Margin="Margin.Dense"
-                                   @bind-value="classst.StudentId">
-
-                            <MudSelectItem Value="0">--Select Student--</MudSelectItem>
-                            @if (student != null)
-                            {
-                                foreach (var st in student)
-                                {
-                                    <MudSelectItem Value="@st.Id">@st.Name</MudSelectItem>
-                                }
-                            }
-
-                        </MudSelect>
-
-                    </MudItem>
 
                 </MudGrid>
                 <MudButton OnClick="Save" Disabled="@isLoading" Color="Color.Primary" Variant="Variant.Filled"
                            ButtonType="ButtonType.Submit">EDIT</MudButton>
+                           
             </MudForm>
         }
     </DialogContent>
@@ -71,7 +55,7 @@
     public IMudDialogInstance? MudDialog { get; set; }
 
     [Inject]
-    public IClassStudentService ClassStudentService { get; set; }
+    public IAttendenceService AttendenceService { get; set; }
 
     [Parameter]
     public string? Title { get; set; }
@@ -80,7 +64,7 @@
     public int Id { get; set; }
 
     private bool isLoading = true;
-    private GetClassStudentDTO? classst;
+    private GetAttendenceDTO? attend;
     private MudForm? _form;
 
     protected override async Task OnParametersSetAsync()
@@ -89,13 +73,14 @@
 
         if (Id > 0)
         {
-            classst = await ClassStudentService.GetClassStudentByIdAsync(Id);
+            attend = await AttendenceService.GetAttendenceByIdAsync(Id);
         }
 
         isLoading = false;
     }
+    private readonly DialogOptions _closeButton = new() { CloseButton = true };
     private List<GetClassDTO> classs = new();
-    private List<GetStudentDTO> student = new();
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -108,12 +93,7 @@
             StateHasChanged();
         }
 
-        var st = await StudentService.GetStudentsAsync();
-        if (st != null)
-        {
-            student = st;
-            StateHasChanged();
-        }
+   
     }
 
     private async Task Save()
@@ -123,18 +103,18 @@
 
         await _form.ValidateAsync();
 
-        if (!_form.IsValid || classst == null)
+        if (!_form.IsValid || attend == null)
             return;
 
-        await ClassStudentService.UpdateClassStudentAsync(new UpdateClassStudentDTO
+        await AttendenceService.UpdateAttendenceAsync(new UpdateAttendenceDTO
         {
-            Id = classst.Id,
-            ClasssId = classst.ClasssId,
-            StudentId = classst.StudentId,
+            Id = attend.Id,
+            ClasssId = attend.ClasssId,
+            
             
         });
 
-        MudDialog?.Close(DialogResult.Ok(classst));
+        MudDialog?.Close(DialogResult.Ok(attend));
         StateHasChanged();
     }
 

@@ -42,6 +42,13 @@
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />       
                 <PropertyColumn Property="x => x.Status" Title="Status" />
+
+                 <TemplateColumn Title="Actions">    
+                <CellTemplate>
+                         <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" OnClick="@(() => ViewAttendenceAsync(context.Item))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary"  OnClick="@(() => EditAttendenceAsync(context.Item, _closeButton))" />
+                    </CellTemplate>
+                </TemplateColumn>
             </Columns>
 
             <PagerContent>
@@ -115,5 +122,32 @@
                 attendences = await AttendenceService.GetAttendencesAsync();
             }
         }
+
+         private async Task ViewAttendenceAsync(GetAttendenceDTO attendence)
+    {
+        var parameters = new DialogParameters
+        {
+            { nameof(AttendenceDetails.Id), attendence.Id } // Pass the Id directly
+        };
+
+        var dialog = await DialogService.ShowAsync<AttendenceDetails>("Attendence Details", parameters);
+    }
+
+             private async Task EditAttendenceAsync(GetAttendenceDTO attendence, DialogOptions options)
+    {
+        var parameters = new DialogParameters
+        {
+            { nameof(AttendenceEdit.Id), attendence.Id } // Pass the Id directly
+        };
+
+        var dialog = await DialogService.ShowAsync<AttendenceEdit>("Edit Attendence", parameters, options);
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            attendences = await AttendenceService.GetAttendencesAsync();
+            StateHasChanged();
+        }
+    }
 
 }

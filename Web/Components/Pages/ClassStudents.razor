@@ -51,12 +51,19 @@
 
             <Columns>
                 <SelectColumn T="GetClassStudentDTO" />
-                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
+                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" /> 
                 <PropertyColumn Property="x => x.Classs.Name" Title="Class" />
                 <PropertyColumn Property="x => x.Student.Name" Title="Student" />
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
                 <PropertyColumn Property="x => x.Status" Title="Status" />
+
+                <TemplateColumn CellClass="d-flex justify-end" Title="Actions">
+                  <CellTemplate>
+                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" OnClick="@(() => ViewClassStudentAsync(context.Item, _closeButton))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => EditClassStudentAsync(context.Item, _closeButton))" />
+                    </CellTemplate>
+                </TemplateColumn>
             </Columns>
 
             <PagerContent>
@@ -127,6 +134,36 @@
                 classstudents = await ClassStudentService.GetClassStudentsAsync();
             }
         }
+
+          private async Task ViewClassStudentAsync(GetClassStudentDTO clssstudent, DialogOptions options)
+            {
+                var parameters = new DialogParameters
+                {
+                    { nameof(ClassStudentDitails.Id), clssstudent.Id } // Pass the Id directly
+                };
+
+                var dialog = await DialogService.ShowAsync<ClassStudentDitails>("Class_Student Details", parameters, options);
+            }
+
+            private async Task EditClassStudentAsync(GetClassStudentDTO clssstudent, DialogOptions options)
+            {
+                var parameters = new DialogParameters
+                {
+                    { nameof(ClassStudentEdit.Id), clssstudent.Id } // Pass the Id directly
+                };
+
+                var dialog = await DialogService.ShowAsync<ClassStudentEdit>("Edit Class_Student", parameters, options);
+                
+                var result = await dialog.Result;
+
+                if (result is not null && !result.Canceled)
+                {
+                    classstudents = await ClassStudentService.GetClassStudentsAsync();
+                    StateHasChanged();
+                }
+            }
+    
+}
 
 }
 

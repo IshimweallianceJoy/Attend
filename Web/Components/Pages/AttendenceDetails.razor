@@ -1,0 +1,79 @@
+@using Application.DTOs
+@using Application.Services.AttendenceServices
+
+@inject NavigationManager NavigationManager
+@inject IAttendenceService AttendenceService
+
+ <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="BackToList" StartIcon="@Icons.Material.Filled.ArrowBack">Back to List</MudButton>
+<MudDialog>
+
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-2"/> Attendence Details
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (isLoading)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else if (attend == null)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Error">Class details could not be found.</MudText>
+        }
+        else
+        {
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Class ID</MudText>
+                    <MudText Typo="Typo.body1">@attend.Id</MudText>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Class</MudText>
+                    <MudText Typo="Typo.body1">@attend.Classs.Name</MudText>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Instractor Name</MudText>
+                    <MudText Typo="Typo.body1">@attend.UserAdded</MudText>
+                </MudItem>
+            </MudGrid>
+        }
+    </DialogContent>
+
+       <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Close">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] 
+    IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter] 
+    public int Id { get; set; } 
+
+    private bool isLoading = true;
+    private GetAttendenceDTO attend;
+
+    protected override async Task OnParametersSetAsync()
+    { 
+        isLoading = true;
+        try
+        {
+            if (Id > 0)
+            {
+                attend = await AttendenceService.GetAttendenceByIdAsync(Id);
+            }
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    } 
+
+     private void Close() => MudDialog.Close();
+     private void BackToList()
+    {
+        NavigationManager.NavigateTo("/attendence");
+    }
+}

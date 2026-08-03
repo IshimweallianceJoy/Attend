@@ -1,10 +1,9 @@
-
 @using Application.DTOs
-@using Application.Services.ClassStudentServices
-@using Application.Services.ClassServices
+@using Application.Services.StudentAttendenceServices
+@using Application.Services.AttendenceServices
 @using Application.Services.StudentServices
 
-@inject IClassService ClassService
+@inject IAttendenceService AttendenceService
 @inject IStudentService StudentService
 
 <MudDialog>
@@ -13,7 +12,7 @@
         {
             <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
         }
-        else if (classs == null)
+        else if (attend == null)
         {
             <MudText Typo="Typo.body1" Color="Color.Error">Class details could not be found.</MudText>
         }
@@ -22,35 +21,35 @@
             <MudText Typo="Typo.h6" Class="mb-4">@Title</MudText>
             <MudForm @ref="_form">
                 <MudGrid>
-                 
+                  
                     <MudItem xs="12">
                         <MudSelect Adornment="Adornment.End" Immediate="true" Variant="Variant.Outlined"
-                                   Margin="Margin.Dense" AdornmentIcon="@Icons.Material.Filled.LibraryBooks" Label="Class"
-                                   @bind-value="classst.ClasssId">
+                                   Margin="Margin.Dense" AdornmentIcon="@Icons.Material.Filled.Person" Label="Student"
+                                   @bind-value="attend.StudentId">
 
                         
-                            <MudSelectItem Value="0">--Select Class--</MudSelectItem>
-                            @if (classs != null)
-                            {
-                                foreach (var c in classs)
-                                {
-                                    <MudSelectItem Value="@c.Id">@c.Name</MudSelectItem>
-                                }
-                            }
-                        </MudSelect>
-                    </MudItem>
-
-                    <MudItem xs="12">
-                        <MudSelect Adornment="Adornment.End" Immediate="true" AdornmentIcon="@Icons.Material.Filled.Person"
-                                   Label="Student" Variant="Variant.Outlined" Margin="Margin.Dense"
-                                   @bind-value="classst.StudentId">
-
                             <MudSelectItem Value="0">--Select Student--</MudSelectItem>
                             @if (student != null)
                             {
                                 foreach (var st in student)
                                 {
                                     <MudSelectItem Value="@st.Id">@st.Name</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12">
+                        <MudSelect Adornment="Adornment.End" Immediate="true" AdornmentIcon="@Icons.Material.Filled.School"
+                                   Label="Class" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                   @bind-value="attend.AttendenceId">
+
+                            <MudSelectItem Value="0">--Select Class--</MudSelectItem>
+                            @if (attendence != null)
+                            {
+                                foreach (var at in attendence)
+                                {
+                                    <MudSelectItem Value="@at.Id">@at.Classs.Name</MudSelectItem>
                                 }
                             }
 
@@ -71,7 +70,7 @@
     public IMudDialogInstance? MudDialog { get; set; }
 
     [Inject]
-    public IClassStudentService ClassStudentService { get; set; }
+    public IStudentAttendenceService StudentAttendenceService { get; set; }
 
     [Parameter]
     public string? Title { get; set; }
@@ -80,7 +79,7 @@
     public int Id { get; set; }
 
     private bool isLoading = true;
-    private GetClassStudentDTO? classst;
+    private GetStudentAttendenceDTO? attend;
     private MudForm? _form;
 
     protected override async Task OnParametersSetAsync()
@@ -89,22 +88,22 @@
 
         if (Id > 0)
         {
-            classst = await ClassStudentService.GetClassStudentByIdAsync(Id);
+            attend = await StudentAttendenceService.GetStudentAttendenceByIdAsync(Id);
         }
 
         isLoading = false;
     }
-    private List<GetClassDTO> classs = new();
+    private List<GetAttendenceDTO> attendence = new();
     private List<GetStudentDTO> student = new();
 
     protected override async Task OnInitializedAsync()
     {
 
 
-        var c = await ClassService.GetClasssesAsync();
-        if (classs != null)
+        var at = await AttendenceService.GetAttendencesAsync();
+        if (attendence != null)
         {
-            classs = c;
+            attendence = at;
             StateHasChanged();
         }
 
@@ -123,23 +122,20 @@
 
         await _form.ValidateAsync();
 
-        if (!_form.IsValid || classst == null)
+        if (!_form.IsValid || attend == null)
             return;
 
-        await ClassStudentService.UpdateClassStudentAsync(new UpdateClassStudentDTO
+        await StudentAttendenceService.UpdateStudentAttendenceAsync(new UpdateStudentAttendenceDTO
         {
-            Id = classst.Id,
-            ClasssId = classst.ClasssId,
-            StudentId = classst.StudentId,
+            Id = attend.Id,
+            StudentId = attend.StudentId,
+            AttendenceId = attend.AttendenceId,
             
         });
 
-        MudDialog?.Close(DialogResult.Ok(classst));
+        MudDialog?.Close(DialogResult.Ok(attend));
         StateHasChanged();
     }
 
-    private void Cancel()
-    {
-        MudDialog?.Cancel();
-    }
+   
 }

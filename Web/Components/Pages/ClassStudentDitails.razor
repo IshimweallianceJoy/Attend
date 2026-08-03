@@ -1,0 +1,80 @@
+@using Application.DTOs
+@using Application.Services.ClassStudentServices
+
+@inject NavigationManager NavigationManager
+@inject IClassStudentService ClassStudentService
+
+ <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="BackToList" StartIcon="@Icons.Material.Filled.ArrowBack">Back to List</MudButton>
+<MudDialog>
+
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-2"/> Class Details
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (isLoading)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else if (classst == null)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Error">Class details could not be found.</MudText>
+        }
+        else
+        {
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Class_Student ID</MudText>
+                    <MudText Typo="Typo.body1">@classst.Id</MudText>
+                </MudItem>
+                
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Class</MudText>
+                    <MudText Typo="Typo.body1">@classst.Classs.Name</MudText>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Student</MudText>
+                    <MudText Typo="Typo.body1">@classst.Student.Name</MudText>
+                </MudItem>
+            </MudGrid>
+        }
+    </DialogContent>
+
+       <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Close">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] 
+    IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter] 
+    public int Id { get; set; } 
+
+    private bool isLoading = true;
+    private GetClassStudentDTO classst;
+
+    protected override async Task OnParametersSetAsync()
+    { 
+        isLoading = true;
+        try
+        {
+            if (Id > 0)
+            {
+                classst = await ClassStudentService.GetClassStudentByIdAsync(Id);
+            }
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    } 
+
+     private void Close() => MudDialog.Close();
+     private void BackToList()
+    {
+        NavigationManager.NavigateTo("/classStudent");
+    }
+}

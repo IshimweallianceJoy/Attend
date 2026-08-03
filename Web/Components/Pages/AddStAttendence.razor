@@ -3,6 +3,7 @@
 @using Application.DTOs
 @using Application.Services.AttendenceServices
 @using Application.Services.StudentServices
+@using Application.Services.ClassServices
 @using Domain.ValueObject
 
 
@@ -12,6 +13,7 @@
 @inject IStudentAttendenceService StudentAttendenceService
 @inject IAttendenceService AttendenceService
 @inject IStudentService StudentService
+@inject IClassService ClassService
 
 @page "/Stattendence/add"
 <MudDialog>
@@ -38,7 +40,7 @@
                             {
                                 foreach (var cl in attendence)
                                 {
-                                    <MudSelectItem Value="@cl.Id">@cl.Classs</MudSelectItem>
+                                    <MudSelectItem Value="@cl.Id">@cl.Classs.Name</MudSelectItem>
                                 }
                             }
                 </MudSelect>
@@ -50,7 +52,7 @@
                     Immediate="true"
                     Variant="Variant.Outlined"
                     Margin="Margin.Dense"
-                    AdornmentIcon="@Icons.Material.Filled.LibraryBooks"
+                    AdornmentIcon="@Icons.Material.Filled.Person"
                     Label="Student"
                     @bind-value="stattendence.StudentId">
                         
@@ -78,9 +80,9 @@
 
                         <MudSelectItem T="StudentStatus">--Select Attendence Status--</MudSelectItem>
 
-                        @foreach (StudentStatus status in Enum.GetValues(typeof(StudentStatus)))
+                        @foreach (AttendenceStatus status in Enum.GetValues(typeof(AttendenceStatus)))
                         {
-                            <MudSelectItem T="StudentStatus" Value="status">@status.ToString()</MudSelectItem>
+                            <MudSelectItem T="AttendenceStatus" Value="status">@status.ToString()</MudSelectItem>
                         }
                     </MudSelect>
                 </MudItem>
@@ -91,7 +93,7 @@
                     Immediate="true"
                     Variant="Variant.Outlined"
                     Margin="Margin.Dense"
-                    AdornmentIcon="@Icons.Material.Filled.LibraryBooks"
+                    AdornmentIcon="@Icons.Material.Filled.ManageAccounts"
                     Label="Teacher"
                     @bind-value="stattendence.AttendenceId">
                         
@@ -148,7 +150,7 @@
             }
 
             var st = await StudentService.GetStudentsAsync();
-            if (attendence != null)
+            if (student != null)
             {
             student=st;
             StateHasChanged();

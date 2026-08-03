@@ -39,7 +39,7 @@
                 <SelectColumn T="GetStudentAttendenceDTO" />
                 <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" /> 
                  <PropertyColumn Property="x => x.Student.Name" Title="Student" />  
-                 <PropertyColumn Property="x => x.Attendence.Classs" Title="Class" />    
+                 <PropertyColumn Property="x => x.Attendence.Classs.Name" Title="Class" />    
                  <PropertyColumn Property="x => x.Attendence.UserAdded" Title="Done By" />  
                  <PropertyColumn Property="x => x.Date" Title="Attendence Date " />
                 <TemplateColumn Title="Status">
@@ -51,12 +51,12 @@
                     </MudChip>
                  </CellTemplate>
                 </TemplateColumn>
-                  @* <TemplateColumn Title="Actions">    
+                  <TemplateColumn Title="Actions">    
                 <CellTemplate>
-                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" @onclick="() => ViewStudentAsync(context.Item)" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" @onclick="() => EditStudentAsync(context.Item)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" @onclick="() => ViewStudentAttendenceAsync(context.Item)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" @onclick="() => EditStudentAttendenceAsync(context.Item)" />
                     </CellTemplate>
-                </TemplateColumn> *@
+                </TemplateColumn>
 
                 
             </Columns>
@@ -132,5 +132,33 @@
                 stattendences = await StudentAttendenceService.GetStudentAttendencesAsync();
             }
         }
+
+         private async Task ViewStudentAttendenceAsync(GetStudentAttendenceDTO stattendence)
+            {
+                var parameters = new DialogParameters
+                {
+                    { nameof(StAttendenceDetails.Id), stattendence.Id } // Pass the Id directly
+                };
+
+                var dialog = await DialogService.ShowAsync<StAttendenceDetails>("Student_Attendence Details", parameters);
+            }
+
+            private async Task EditStudentAttendenceAsync(GetStudentAttendenceDTO stattendence)
+            {
+                var parameters = new DialogParameters
+                {
+                    { nameof(StAttendenceEdit.Id), stattendence.Id } // Pass the Id directly
+                };
+
+                var dialog = await DialogService.ShowAsync<StAttendenceEdit>("Edit Student_Attendence", parameters);
+                
+                var result = await dialog.Result;
+
+                if (result is not null && !result.Canceled)
+                {
+                    stattendences = await StudentAttendenceService.GetStudentAttendencesAsync();
+                    StateHasChanged();
+                }
+            }
 
 }
