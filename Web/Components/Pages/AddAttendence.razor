@@ -39,6 +39,32 @@
                             }
                 </MudSelect>
             </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField 
+                 Adornment="Adornment.End"
+                 Label="Instructor Name"
+                Immediate="true"
+                 AdornmentIcon="@Icons.Material.Filled.DriveFileRenameOutline"
+                @bind-Value="attendence.UserAdded"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Placeholder="Instructor Name">
+                </MudTextField>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudDatePicker 
+                label="Date of Birth"
+                Date="attendence.DateAdded"
+                DateChanged="date => attendence.DateAdded = date ?? default"
+                Margin="Margin.Dense"
+                DateFormat="yyyy-MM-dd"
+                Variant="Variant.Outlined"
+               
+                Placeholder="dd/mm/yyyy">
+                </MudDatePicker>
+            </MudItem>
            
           
 

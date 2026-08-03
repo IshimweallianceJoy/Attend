@@ -35,12 +35,12 @@
                     @bind-value="stattendence.AttendenceId">
                         
                         
-                        <MudSelectItem Value="0">--Select Class--</MudSelectItem>
-                            @if (attendence != null)
+                        <MudSelectItem Value="0">--Select Attendence--</MudSelectItem>
+                            @if (attendences != null)
                             {
-                                foreach (var cl in attendence)
+                                foreach (var attendence in attendences)
                                 {
-                                    <MudSelectItem Value="@cl.Id">@cl.Classs.Name</MudSelectItem>
+                                    <MudSelectItem Value="@attendence.Id">@attendence.Classs.Name - @attendence.UserAdded - @attendence.DateAdded</MudSelectItem>
                                 }
                             }
                 </MudSelect>
@@ -87,27 +87,7 @@
                     </MudSelect>
                 </MudItem>
 
-                <MudItem xs="12">
-                <MudSelect 
-                    Adornment="Adornment.End"
-                    Immediate="true"
-                    Variant="Variant.Outlined"
-                    Margin="Margin.Dense"
-                    AdornmentIcon="@Icons.Material.Filled.ManageAccounts"
-                    Label="Teacher"
-                    @bind-value="stattendence.AttendenceId">
-                        
-                        
-                        <MudSelectItem Value="0">--Select --</MudSelectItem>
-                            @if (attendence != null)
-                            {
-                                foreach (var cl in attendence)
-                                {
-                                    <MudSelectItem Value="@cl.Id">@cl.UserAdded</MudSelectItem>
-                                }
-                            }
-                </MudSelect>
-            </MudItem>
+               
            
           
 
@@ -133,7 +113,7 @@
       [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; }
     private AddStudentAttendenceDTO stattendence = new ();
-    private List<GetAttendenceDTO> attendence = new();
+    private List<GetAttendenceDTO> attendences = new();
 
         private List<GetStudentDTO> student = new();
    
@@ -143,9 +123,9 @@
 
 
             var at = await AttendenceService.GetAttendencesAsync();
-            if (attendence != null)
+            if (attendences != null)
             {
-            attendence=at;
+            attendences=at;
             StateHasChanged();
             }
 

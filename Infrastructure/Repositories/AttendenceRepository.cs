@@ -35,8 +35,8 @@ namespace Infrastructure.Repositories
             _dbcontext.Attendences.Add( new Attendence
             {
                   ClasssId= attendence.ClasssId,
-                UserAdded= "Joy",
-                DateAdded= DateTime.UtcNow,
+                UserAdded= attendence.UserAdded,
+                DateAdded= attendence.DateAdded,
                 Status= "Active",
             });
           await  _dbcontext.SaveChangesAsync();

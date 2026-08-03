@@ -54,7 +54,7 @@
                   <TemplateColumn Title="Actions">    
                 <CellTemplate>
                         <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" @onclick="() => ViewStudentAttendenceAsync(context.Item)" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" @onclick="() => EditStudentAttendenceAsync(context.Item)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() =>  EditStudentAttendenceAsync(context.Item, _closeButton))" />
                     </CellTemplate>
                 </TemplateColumn>
 
@@ -143,14 +143,14 @@
                 var dialog = await DialogService.ShowAsync<StAttendenceDetails>("Student_Attendence Details", parameters);
             }
 
-            private async Task EditStudentAttendenceAsync(GetStudentAttendenceDTO stattendence)
+            private async Task EditStudentAttendenceAsync(GetStudentAttendenceDTO stattendence, DialogOptions options)
             {
                 var parameters = new DialogParameters
                 {
                     { nameof(StAttendenceEdit.Id), stattendence.Id } // Pass the Id directly
                 };
 
-                var dialog = await DialogService.ShowAsync<StAttendenceEdit>("Edit Student_Attendence", parameters);
+                var dialog = await DialogService.ShowAsync<StAttendenceEdit>("Edit Student_Attendence", parameters, options);
                 
                 var result = await dialog.Result;
 

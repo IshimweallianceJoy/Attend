@@ -85,10 +85,11 @@
                     </MudChip>
                  </CellTemplate>
                 </TemplateColumn>
-                <TemplateColumn Title="Actions">    
-                <CellTemplate>
-                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" @onclick="() => ViewStudentAsync(context.Item)" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" @onclick="() => EditStudentAsync(context.Item)" />
+
+                <TemplateColumn CellClass="d-flex justify-end" Title="Actions">
+                    <CellTemplate>
+                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" OnClick="@(() => ViewStudentAsync(context.Item))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => EditStudentAsync(context.Item, _closeButton))" />
                     </CellTemplate>
                 </TemplateColumn>
 
@@ -187,14 +188,14 @@
                 var dialog = await DialogService.ShowAsync<StudentDetailDialog>("Student Details", parameters);
             }
 
-            private async Task EditStudentAsync(GetStudentDTO student)
+            private async Task EditStudentAsync(GetStudentDTO student, DialogOptions options)
             {
                 var parameters = new DialogParameters
                 {
                     { nameof(StudentEditDialog.Id), student.Id } // Pass the Id directly
                 };
 
-                var dialog = await DialogService.ShowAsync<StudentEditDialog>("Edit Student", parameters);
+                var dialog = await DialogService.ShowAsync<StudentEditDialog>("Edit Student", parameters, options);
                 
                 var result = await dialog.Result;
 

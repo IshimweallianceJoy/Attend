@@ -15,24 +15,41 @@
         }
         else
         {
+        <MudText Typo="Typo.h6" Class="mb-4">@Title</MudText>
         <MudForm @ref="_form">
-            <MudNumericField @bind-Value="student.Id" Label="Id" Variant="Variant.Outlined" Required="true" RequiredError="Faculty ID is required." Class="mb-3" />
-            <MudTextField @bind-Value="student.Name" Label="Name" Variant="Variant.Outlined" Required="true" RequiredError="Name is required." Class="mb-3" />
-            <MudSelect T="string" label="Sex" @bind-Value="student.Sex" Margin="Margin.Dense" Variant="Variant.Outlined" Placeholder="select sex">
+          <MudGrid>
+            <MudItem xs="12">
+            <MudNumericField  @bind-Value="student.Id" Label="Id" Variant="Variant.Outlined" Required="true" Margin="Margin.Dense" RequiredError="Faculty ID is required." Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12">
+            <MudTextField @bind-Value="student.Name" Label="Name" Variant="Variant.Outlined" Required="true" Margin="Margin.Dense" RequiredError="Name is required." Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12">
+            <MudSelect T="string" label="Sex" @bind-Value="student.Sex" Margin="Margin.Dense" Variant="Variant.Outlined"  Placeholder="select sex">
                 <MudSelectItem Value="@("Male")">Male</MudSelectItem>
                 <MudSelectItem Value="@("Female")">Female</MudSelectItem>
             </MudSelect>
-             <MudTextField @bind-Value="student.Phone" Label="Phone" Variant="Variant.Outlined" Required="true" RequiredError="Phone Number is required." Class="mb-3" />
-             <MudTextField @bind-Value="student.ParentNames" Label="ParentNames" Variant="Variant.Outlined" Required="true" RequiredError="Parent Names is required." Class="mb-3" />
-              <MudTextField @bind-Value="student.ParentPhone" Label="ParentPhone" Variant="Variant.Outlined" Required="true" RequiredError="Parent Phone is required." Class="mb-3" />
-            <MudTextField @bind-Value="student.Adress" Label="Adress" Variant="Variant.Outlined" Required="true" RequiredError="Address is required." Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12">
+             <MudTextField @bind-Value="student.Phone" Label="Phone" Variant="Variant.Outlined" Required="true" Margin="Margin.Dense" RequiredError="Phone Number is required." Class="mb-3" />
+             </MudItem>
+             <MudItem xs="12">
+             <MudTextField @bind-Value="student.ParentNames" Label="ParentNames" Variant="Variant.Outlined" Margin="Margin.Dense" Required="true" RequiredError="Parent Names is required." Class="mb-3" />
+             </MudItem>
+             <MudItem xs="12">
+              <MudTextField @bind-Value="student.ParentPhone" Label="ParentPhone" Variant="Variant.Outlined" Margin="Margin.Dense" Required="true" RequiredError="Parent Phone is required." Class="mb-3" />
+              </MudItem>
+              <MudItem xs="12">
+            <MudTextField @bind-Value="student.Adress" Label="Adress" Variant="Variant.Outlined" Required="true" Margin="Margin.Dense" RequiredError="Address is required." Class="mb-3" />
+            </MudItem>
+         </MudGrid>
+         <MudButton  OnClick="Save" xs="12" Disabled="@isLoading" Color="Color.Primary" Variant="Variant.Filled"
+                           ButtonType="ButtonType.Submit">EDIT</MudButton>
         </MudForm>
+         
         }
     </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Save" Disabled="@isLoading" Color="Color.Primary" Variant="Variant.Filled">Save</MudButton>
-        <MudButton OnClick="Cancel" Color="Color.Default" Variant="Variant.Text">Cancel</MudButton>
-    </DialogActions>
+        
 </MudDialog>
 
 @code{
