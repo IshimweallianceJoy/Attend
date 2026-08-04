@@ -13,7 +13,7 @@ namespace Application.DTOs
         public string Adress { get; set; }
         public string ParentNames { get; set; }
         public string ParentPhone { get; set; }
-        public StudentStatus Status{get; set;}
+        
         
     }
     public class UpdateStudentDTO
@@ -46,7 +46,7 @@ namespace Application.DTOs
         public string Adress { get; set; }
         public string ParentNames { get; set; }
         public string ParentPhone { get; set; }
-            public string UserAdded { get; set; } 
+         public string UserAdded { get; set; } 
         public DateTime DateAdded { get; set; } 
         public StudentStatus Status{get; set;}
 }    }

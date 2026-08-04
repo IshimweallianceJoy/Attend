@@ -1,12 +1,14 @@
-@using Application.Services.ClassServices
-@using Domain.Entities
+@using System.Xml.Schema
 @using Application.DTOs
-@using Application.Services.FaculityServices
+@using Application.Services.ClassServices
 @using Application.Services.EducationLevelServices
+@using Application.Services.FaculityServices
+@using Domain.Entities
 
 @rendermode InteractiveServer
 @inject NavigationManager navigation
 @inject IClassService ClassService
+@inject ISnackbar Snackbar
 @inject IFaculityService FaculityService
 @inject IEducationLevelService EducationLevelService
 @page "/class/add"
@@ -69,6 +71,8 @@
                 </MudSelect>
             </MudItem>
 
+            
+
              <MudItem xs="12">
                 <MudButton 
                 Variant="Variant.Filled"
@@ -94,6 +98,8 @@
     private List<GetFaculityDTO> faculty = new();
     private List<GetEducationLevelDTO> educationlevel = new();
 
+
+
     protected override async Task OnInitializedAsync()
     {
 
@@ -114,8 +120,16 @@
     }
     private async Task SaveClassAsync()
     {
-       await ClassService.AddClassAsync(classs);
+       try{
+        await ClassService.AddClassAsync(classs);
         MudDialog.Close(DialogResult.Ok(true));
+        Snackbar.Add("Class Added Successfully" , Severity.Success);
+       }
+       catch(Exception error){
+        Snackbar.Add(error.Message, Severity.Error);
+
+       }
+
     }
 
 }

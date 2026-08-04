@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Data;
 using Application.DTOs;
+using Domain.ValueObject;
 using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Repositories
 {
@@ -35,6 +36,11 @@ namespace Infrastructure.Repositories
         }
         public async Task AddClassAsync(AddClassDTO classs)
         {
+            var existingdata= await _dbcontext.Classes.AnyAsync(c => c.Name == classs.Name && c.FaculityId == classs.FaculityId && c.EducationLevelId == classs.EducationLevelId);
+            if(existingdata)
+            {
+                throw new InvalidCastException("this class with same level already axists");
+            }
             _dbcontext.Classes.Add( new Classs
             {
                 Name= classs.Name,
@@ -42,7 +48,7 @@ namespace Infrastructure.Repositories
                 EducationLevelId= classs.EducationLevelId,
                 UserAdded= "Joy",
                 DateAdded= DateTime.UtcNow,
-                Status= "Active",
+                Status= ClassStatus.Active,
             });
            await _dbcontext.SaveChangesAsync();
         }
@@ -83,7 +89,7 @@ namespace Infrastructure.Repositories
             var ExistingClass = await _dbcontext.Classes.FirstOrDefaultAsync(cc => cc.Id == classs.Id);
              if(ExistingClass != null )
             {
-                ExistingClass.Status= "Deleted";
+                ExistingClass.Status= classs.Status;
             } await _dbcontext.SaveChangesAsync();
         }
     } 

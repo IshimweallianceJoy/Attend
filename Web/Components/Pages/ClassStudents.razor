@@ -2,6 +2,7 @@
 @using Application.Services.ClassStudentServices
 @using Application.DTOs;
 @using Domain.Entities;
+@using Domain.ValueObject;
 
 @inject IDialogService DialogService
 @inject IClassStudentService ClassStudentService
@@ -53,10 +54,23 @@
                 <SelectColumn T="GetClassStudentDTO" />
                 <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" /> 
                 <PropertyColumn Property="x => x.Classs.Name" Title="Class" />
+                <PropertyColumn Property="x => x.Classs.Faculity.Name" Title="  Faculity" />
                 <PropertyColumn Property="x => x.Student.Name" Title="Student" />
-                <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
+                <PropertyColumn Property="x => x.StartDate" Title="Academic year 
+                Start Date" />
+                <PropertyColumn Property="x => x.EndDate" Title="Academic year
+                 End Date" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
-                <PropertyColumn Property="x => x.Status" Title="Status" />
+                 <TemplateColumn Title="Status">
+                 <CellTemplate>
+                    <MudChip T="String"
+                    Size="Size.Medium"
+                    Variant="Variant.Filled"
+                    Color="@GetStatusColor(context.Item.Status)">
+                    @context.Item.Status
+                    </MudChip>
+                 </CellTemplate>
+                </TemplateColumn>
 
                 <TemplateColumn CellClass="d-flex justify-end" Title="Actions">
                   <CellTemplate>
@@ -78,6 +92,15 @@
       private string _searchString;
         private bool _sortNameByLength;
         private List<string> _events = new();
+            
+             private static Color GetStatusColor(ClassStudentStatus status) => status switch
+        {
+            ClassStudentStatus.Active => Color.Success,
+            @* ClassStudentStatus.Full => Color.Warning,
+            ClassStudentStatus.Ongoing => Color.Info, *@
+            ClassStudentStatus.Deleted => Color.Error,
+            _ => Color.Default
+        };
 
         void RowClicked(DataGridRowClickEventArgs<GetClassStudentDTO> args)
         {

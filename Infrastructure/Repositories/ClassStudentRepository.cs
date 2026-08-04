@@ -2,6 +2,7 @@ using Domain.Entities;
 using Application.Interfaces;
 using Infrastructure.Data;
 using Application.DTOs;
+using Domain.ValueObject;
 using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Repositories
 {
@@ -25,6 +26,8 @@ namespace Infrastructure.Repositories
                 Classs= cs.Classs,
                 StudentId= cs.StudentId,
                 Student= cs.Student,
+                 StartDate= cs.StartDate,
+                EndDate= cs.EndDate,
                 UserAdded= cs.UserAdded,
                 DateAdded=cs.DateAdded,
                 Status= cs. Status,
@@ -32,13 +35,21 @@ namespace Infrastructure.Repositories
         }
         public async Task AddClassStudentAsync(AddClassStudentDTO classStudent)
         {
+             var existingdata= await _dbcontext.ClassStudents.AnyAsync(c => c.ClasssId == classStudent.ClasssId && c.StudentId == classStudent.StudentId );
+            if(existingdata)
+            {
+                throw new InvalidCastException("this class with same Student already axists");
+            }
             _dbcontext.ClassStudents.Add(new ClassStudent
             {
                 ClasssId= classStudent.ClasssId,
                 StudentId= classStudent.StudentId,
+                
+                StartDate = classStudent.StartDate ?? DateOnly.FromDateTime(DateTime.Today),
+                 EndDate = classStudent.EndDate ?? DateOnly.FromDateTime(DateTime.Today),
                 UserAdded="Joy",
                 DateAdded= DateTime.UtcNow,
-                Status="Active",
+                Status=ClassStudentStatus.Active,
             });
            await _dbcontext.SaveChangesAsync();
         }
@@ -56,6 +67,8 @@ namespace Infrastructure.Repositories
                 Classs= cs.Classs,
                 StudentId= cs.StudentId,
                 Student= cs.Student,
+                StartDate= cs.StartDate,
+                EndDate= cs.EndDate,
                 UserAdded= cs.UserAdded,
                 DateAdded=cs.DateAdded,
                 Status= cs. Status,
@@ -79,7 +92,7 @@ namespace Infrastructure.Repositories
             var ExistingClassStudent= await _dbcontext.ClassStudents.FirstOrDefaultAsync(cs => cs.Id == clssstudent.Id);
             if(ExistingClassStudent != null)
             {
-                ExistingClassStudent.Status="Deleted";
+                ExistingClassStudent.Status=clssstudent.Status;
             }
           await  _dbcontext.SaveChangesAsync();
         }

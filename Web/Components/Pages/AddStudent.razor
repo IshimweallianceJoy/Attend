@@ -131,26 +131,7 @@
                 </MudTextField>
             </MudItem>
 
-          
-
-             <MudItem  xs="6">
-                    <MudSelect T="StudentStatus"
-                            Label="Status"
-                            @bind-Value="student.Status"
-                            Variant="Variant.Outlined"
-                            Dense="true"
-                            Margin="Margin.Dense"
-                            AdornmentIcon="@Icons.Material.Filled.Category"
-                            AdornmentColor="Color.Primary">
-
-                        <MudSelectItem T="StudentStatus">--Select Student Status--</MudSelectItem>
-
-                        @foreach (StudentStatus status in Enum.GetValues(typeof(StudentStatus)))
-                        {
-                            <MudSelectItem T="StudentStatus" Value="status">@status.ToString()</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudItem>
+        
 
                   <MudItem xs="12">
                 <MudButton 

@@ -4,6 +4,7 @@
 @using Domain.Entities;
 @using Microsoft.AspNetCore.Components;
 @using Microsoft.EntityFrameworkCore;
+@using Domain.ValueObject;
 
 @inject IDialogService DialogService
 @inject IStudentAttendenceService StudentAttendenceService
@@ -45,8 +46,9 @@
                 <TemplateColumn Title="Status">
                  <CellTemplate>
                     <MudChip T="String"
-                    Size="Size.Small"
-                    Variant="Variant.Text">
+                    Size="Size.Medium"
+                    Variant="Variant.Filled"
+                    Color="@GetStatusColor(context.Item.Status)">
                     @context.Item.Status
                     </MudChip>
                  </CellTemplate>
@@ -73,6 +75,14 @@
       private string _searchString;
         private bool _sortNameByLength;
         private List<string> _events = new();
+                 private static Color GetStatusColor(AttendenceStatus status) => status switch
+        {
+            AttendenceStatus.Present => Color.Success,
+            AttendenceStatus.Absent => Color.Warning,
+            @* AttendenceStatus.Ongoing => Color.Info, *@
+            AttendenceStatus.Deleted => Color.Error,
+            _ => Color.Default
+        };
 
         void RowClicked(DataGridRowClickEventArgs<GetStudentAttendenceDTO> args)
         {

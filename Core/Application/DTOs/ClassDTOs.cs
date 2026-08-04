@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.ValueObject;
 namespace Application.DTOs
 {
     public class AddClassDTO
@@ -6,6 +7,9 @@ namespace Application.DTOs
         public string Name { get; set; }
         public int FaculityId { get; set; }
         public int EducationLevelId { get; set; }
+         
+
+        
     
     }
     public class UpdateClassDTO
@@ -18,6 +22,7 @@ namespace Application.DTOs
     public class DeleteClassDTO
     {
         public int Id { get; set; }
+         public ClassStatus Status{get; set;}
     }
     public class GetClassDTO
     {
@@ -29,6 +34,6 @@ namespace Application.DTOs
         public EducationLevel EducationLevel { get; set; }
         public string UserAdded { get; set; }
         public DateTime DateAdded { get; set; }
-        public string Status { get; set; }
+        public ClassStatus Status { get; set;}
     }
 }

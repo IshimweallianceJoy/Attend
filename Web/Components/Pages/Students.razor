@@ -2,6 +2,7 @@
 @using Application.Services.StudentServices
 @using Domain.Entities;
 @using Application.DTOs;
+@using Domain.ValueObject;
 
 @inject IDialogService DialogService
  @inject IStudentService StudentService
@@ -79,8 +80,9 @@
                 <TemplateColumn Title="Status">
                  <CellTemplate>
                     <MudChip T="String"
-                    Size="Size.Small"
-                    Variant="Variant.Text">
+                    Size="Size.Medium"
+                    Variant="Variant.Filled"
+                    Color="@GetStatusColor(context.Item.Status)">
                     @context.Item.Status
                     </MudChip>
                  </CellTemplate>
@@ -127,6 +129,14 @@
         {
             _events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
         }
+             private static Color GetStatusColor(StudentStatus status) => status switch
+        {
+            StudentStatus.Active => Color.Success,
+            @* StudentStatus.Full => Color.Warning,
+            StudentStatus.Ongoing => Color.Info, *@
+            StudentStatus.Deleted => Color.Error,
+            _ => Color.Default
+        };
 
 
         private Func<GetStudentDTO, object> _sortBy => x =>

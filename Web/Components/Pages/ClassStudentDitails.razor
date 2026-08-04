@@ -1,7 +1,8 @@
 @using Application.DTOs
 @using Application.Services.ClassStudentServices
-
+@using Application.Services.ClassServices
 @inject NavigationManager NavigationManager
+@inject IClassService ClassService
 @inject IClassStudentService ClassStudentService
 
  <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="BackToList" StartIcon="@Icons.Material.Filled.ArrowBack">Back to List</MudButton>
@@ -31,11 +32,28 @@
                 
                 <MudItem xs="12" sm="6">
                     <MudText Typo="Typo.h6">Class</MudText>
-                    <MudText Typo="Typo.body1">@classst.Classs.Name</MudText>
+                    <MudText Typo="Typo.body1"
+                    @bind-value=classst.ClasssId>
+                         @if (Classs != null)
+                         {
+                            foreach (var c in Classs)
+                            {
+                                <MudSelectItem Value="@c.Id">@c.Name - @c.Faculity.Name </MudSelectItem>
+                            }
+                         }
+                    </MudText>
                 </MudItem>
                 <MudItem xs="12" sm="6">
                     <MudText Typo="Typo.h6">Student</MudText>
                     <MudText Typo="Typo.body1">@classst.Student.Name</MudText>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">Start Date</MudText>
+                    <MudText Typo="Typo.body1">@classst.StartDate</MudText>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.h6">End Date</MudText>
+                    <MudText Typo="Typo.body1">@classst.EndDate</MudText>
                 </MudItem>
             </MudGrid>
         }
@@ -56,6 +74,7 @@
     private bool isLoading = true;
     private GetClassStudentDTO classst;
 
+private List<GetClassDTO> Classs = new();
     protected override async Task OnParametersSetAsync()
     { 
         isLoading = true;
@@ -71,6 +90,19 @@
             isLoading = false;
         }
     } 
+     protected override async Task OnInitializedAsync()
+    {
+
+
+            var c = await ClassService.GetClasssesAsync();
+            if (Classs != null)
+            {
+            Classs=c;
+            StateHasChanged();
+            }
+
+           
+    }
 
      private void Close() => MudDialog.Close();
      private void BackToList()

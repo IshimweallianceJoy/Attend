@@ -1,3 +1,4 @@
+using Domain.ValueObject;
 namespace Domain.Entities{
      public class Classs
     {
@@ -9,7 +10,7 @@ namespace Domain.Entities{
         public int EducationLevelId{get;set;}
         public string UserAdded{get; set;}
         public DateTime DateAdded{get; set;}
-        public string Status{get; set;}
+        public ClassStatus Status{get; set;}
 
 
         //Nagivation properties

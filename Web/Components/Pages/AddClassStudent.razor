@@ -7,108 +7,148 @@
 @inject NavigationManager Navigation
 @inject IStudentService StudentService
 @inject IClassService ClassService
+@inject ISnackbar Snackbar
 @inject IClassStudentService ClassStudentService
 @page "/classStudent/add"
 
- <MudDialog>
+<MudDialog>
     <TitleContent>Add Class_Student</TitleContent>
     <DialogContent>
         <EditForm Model="classstudent" OnValidSubmit="SaveClassStudentAsync">
-           <MudGrid>
+            <MudGrid>
               
-            <MudItem xs="12">
-                <MudSelect
-                Adornment="Adornment.End"
-                Immediate="true"
-                 Margin="Margin.Dense"
-                Variant="Variant.Outlined"
-                 AdornmentIcon="@Icons.Material.Filled.Person"
-                 Label="Class"
-                  @bind-value="classstudent.ClasssId">
-                    
-                    
-                    <MudSelectItem Value="0" Label="Select Class"></MudSelectItem>
-                         @if (Classs != null)
-                         {
+                <MudItem xs="12">
+                    <MudSelect Adornment="Adornment.End"
+                               Immediate="true"
+                               Margin="Margin.Dense"
+                               Variant="Variant.Outlined"
+                               AdornmentIcon="@Icons.Material.Filled.Person"
+                               Label="Class"
+                               @bind-Value="classstudent.ClasssId">
+                                
+                        <MudSelectItem Value="0">Select Class</MudSelectItem>
+                        @if (Classs != null)
+                        {
                             foreach (var c in Classs)
                             {
-                                <MudSelectItem Value="@c.Id">@c.Name</MudSelectItem>
+                                <MudSelectItem Value="@c.Id">@c.Name - @c.Faculity?.Name</MudSelectItem>
                             }
-                         }
-                </MudSelect>
-            </MudItem>
+                        }
+                    </MudSelect>
+                </MudItem>
            
-            <MudItem xs="12">
-                <MudSelect 
-                Adornment="Adornment.End"
-                Immediate="true"
-                 AdornmentIcon="@Icons.Material.Filled.Person"
-                  Margin="Margin.Dense"
-                Variant="Variant.Outlined"
-                Label="Student" 
-                @bind-value="classstudent.StudentId">
-                    
-                    <MudSelectItem Value="0" Label="Select Student"></MudSelectItem>
-                         @if (Student != null)
-                         {
-                            foreach (var st  in Student)
-                            {
-                                <MudSelectItem Value="@st.Id">@st.Name</MudSelectItem>
-                            }
-                         }
-                    
-                </MudSelect>
-            </MudItem>
+                <MudItem xs="12">
+                    <MudAutocomplete Value="@GetStudentName(classstudent.StudentId)"
+                                     SearchFunc="Search"
+                                     T="string"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     Label="Student"
+                                     ValueChanged="OnStudentSelected"
+                                     ToStringFunc="@(s => s ?? string.Empty)"/>
+                </MudItem>
 
+                <MudItem xs="12">
+                    <MudDatePicker Label="Start Date"
+                                   @bind-Date="StartDate"
+                                   Margin="Margin.Dense"
+                                   DateFormat="dd-MM-yyyy"
+                                   Variant="Variant.Outlined"
+                                   Placeholder="dd-mm-yyyy" />
+                </MudItem>
 
-            <MudItem xs="12">
-                <MudButton 
-                Variant="Variant.Filled"
-                Color="Color.Primary"
-                FullWidth="true" 
-                ButtonType="ButtonType.Submit">
-                SAVE
-                </MudButton>
-            </MudItem>
+                <MudItem xs="12">
+                    <MudDatePicker Label="End Date"
+                                   @bind-Date="EndDate"
+                                   Margin="Margin.Dense"
+                                   DateFormat="dd-MM-yyyy"
+                                   Variant="Variant.Outlined"
+                                   Placeholder="dd-mm-yyyy" />
+                </MudItem>
 
-           </MudGrid> 
+                <MudItem xs="12">
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               FullWidth="true" 
+                               ButtonType="ButtonType.Submit">
+                        SAVE
+                    </MudButton>
+                </MudItem>
+
+            </MudGrid> 
         </EditForm>
-
     </DialogContent>
-    
 </MudDialog>
-@code
-    {
-      [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
-    private AddClassStudentDTO classstudent = new ();
 
-        private List<GetClassDTO> Classs = new();
+@code
+{
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = null!;
+
+    private AddClassStudentDTO classstudent = new();
+
+    private List<GetClassDTO> Classs = new();
     private List<GetStudentDTO> Student = new();
+
+    private DateTime? StartDate
+    {
+        get => classstudent.StartDate.HasValue ? classstudent.StartDate.Value.ToDateTime(TimeOnly.MinValue) : null;
+        set => classstudent.StartDate = value.HasValue ? DateOnly.FromDateTime(value.Value) : null;
+    }
+
+    private DateTime? EndDate
+    {
+        get => classstudent.EndDate.HasValue ? classstudent.EndDate.Value.ToDateTime(TimeOnly.MinValue) : null;
+        set => classstudent.EndDate = value.HasValue ? DateOnly.FromDateTime(value.Value) : null;
+    }
 
     protected override async Task OnInitializedAsync()
     {
+        var c = await ClassService.GetClasssesAsync();
+        if (c != null)
+        {
+            Classs = c;
+        }
 
-
-            var c = await ClassService.GetClasssesAsync();
-            if (Classs != null)
-            {
-            Classs=c;
-            StateHasChanged();
-            }
-
-            var st = await StudentService.GetStudentsAsync();
-            if (st != null)
-            {
-            Student=st;
-            StateHasChanged();
-            }
+        var st = await StudentService.GetStudentsAsync();
+        if (st != null)
+        {
+            Student = st;
+        }
     }
 
+    private string GetStudentName(int studentId) => Student.FirstOrDefault(s => s.Id == studentId)?.Name ?? string.Empty;
+
+    private Task OnStudentSelected(string? studentName)
+    {
+        var selectedStudent = Student.FirstOrDefault(s => s.Name == studentName);
+        classstudent.StudentId = selectedStudent?.Id ?? 0;
+        return Task.CompletedTask;
+    }
+
+    private async Task<IEnumerable<string>> Search(string value, CancellationToken token)
+    {
+        await Task.Delay(5, token);
+
+        if (string.IsNullOrEmpty(value))
+        {
+            return Student.Select(s => s.Name);
+        }
+
+        return Student.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Name);
+    }
 
     private async Task SaveClassStudentAsync()
     {
-        await ClassStudentService.AddClassStudentAsync(classstudent);
-        MudDialog.Close(DialogResult.Ok(true));
+        try
+        {
+            await ClassStudentService.AddClassStudentAsync(classstudent);
+            MudDialog.Close(DialogResult.Ok(true));
+            Snackbar.Add("Class_Student Added Successfully", Severity.Success);
+        }
+        catch (Exception error)
+        {
+            Snackbar.Add(error.Message, Severity.Error);
+        }
     }
 }

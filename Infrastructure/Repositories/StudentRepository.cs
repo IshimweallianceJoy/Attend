@@ -3,6 +3,7 @@ using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Application.DTOs;
+using Domain.ValueObject;
 namespace Infrastructure.Repositories
 {
     public class StudentRepository : IStudent
@@ -50,7 +51,7 @@ namespace Infrastructure.Repositories
                ParentPhone = student.ParentPhone,
                UserAdded = "Joy",
                DateAdded = DateTime.UtcNow,
-               Status = student.Status,
+               Status = StudentStatus.Active,
             });
            await _dbcontext.SaveChangesAsync();
         }

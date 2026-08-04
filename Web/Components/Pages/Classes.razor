@@ -4,6 +4,7 @@
 @using Domain.Entities;
 @using Microsoft.AspNetCore.Components;
 @using Microsoft.EntityFrameworkCore;
+@using Domain.ValueObject;
 
 @inject IDialogService DialogService
 @inject IClassService ClassService
@@ -74,7 +75,16 @@
                 <PropertyColumn Property="x => x.EducationLevel.Name" Title="Education Level" />  
                 <PropertyColumn Property="x => x.UserAdded" Title="User Added" />
                 <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />       
-                <PropertyColumn Property="x => x.Status" Title="Status" />
+                 <TemplateColumn Title="Status">
+                 <CellTemplate>
+                    <MudChip T="String"
+                    Size="Size.Medium"
+                    Variant="Variant.Filled"
+                    Color="@GetStatusColor(context.Item.Status)">
+                    @context.Item.Status
+                    </MudChip>
+                 </CellTemplate>
+                </TemplateColumn>
                 <TemplateColumn CellClass="d-flex justify-end" Title="Actions">
                     <CellTemplate>
                         <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" OnClick="@(() => ViewClassAsync(context.Item))" />
@@ -110,7 +120,16 @@
     {
         _events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
     }
+            private static Color GetStatusColor(ClassStatus status) => status switch
+        {
+            ClassStatus.Active => Color.Success,
+            @* ClassStatus.Full => Color.Warning,
+            ClassStatus.Ongoing => Color.Info, *@
+            ClassStatus.Deleted => Color.Error,
+            _ => Color.Default
+        };
 
+    
 
     private Func<GetClassDTO, object> _sortBy => x =>
     {
