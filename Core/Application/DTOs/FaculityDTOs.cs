@@ -1,3 +1,4 @@
+// using Domain.ValueObject;
 namespace Application.DTOs
 {
     public class GetFaculityDTO
@@ -7,6 +8,7 @@ namespace Application.DTOs
         public string UserAdded {get;set;}
         public DateTime DateAdded {get;set;}
         public string Status {get;set;}
+        // public FaculityStatus Status {get;set;}
     }
     public class AddFaculityDTO
     {
@@ -21,5 +23,7 @@ namespace Application.DTOs
     public class DeleteFaculityDTO
     {
         public int Id {get;set;}
+        //  public FaculityStatus Status {get;set;}
+        
     }
 }

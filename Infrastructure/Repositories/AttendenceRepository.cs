@@ -42,7 +42,7 @@ namespace Infrastructure.Repositories
           await  _dbcontext.SaveChangesAsync();
         }
         public async Task<GetAttendenceDTO?> GetAttendenceByIdAsync(int id)
-        {
+        {   
               return await _dbcontext.Attendences
                 .Where(at => at.Id == id)
                 .Include(a => a.Classs)

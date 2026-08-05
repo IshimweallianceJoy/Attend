@@ -1,3 +1,4 @@
+// using Domain.ValueObject;
 namespace Application.DTOs
 {
     public class GetEducationLevelDTO
@@ -6,7 +7,8 @@ namespace Application.DTOs
         public string Name {get;set;}
         public string UserAdded {get;set;}
         public DateTime DateAdded {get;set;}
-        public string Status {get;set;}
+         public string Status {get;set;}
+        // public EducationLevelStatus Status {get;set;}
     }
     public class AddEducationLevelDTO
     {
@@ -21,5 +23,6 @@ namespace Application.DTOs
     public class DeleteEducationLevelDTO
     {
         public int Id {get; set;}
+        // public EducationLevelStatus Status {get;set;}
     }
 }

@@ -25,5 +25,17 @@ namespace Domain.ValueObject
             Deleted
             
         }
+         public enum FaculityStatus
+        {
+            Active, 
+            Deleted
+            
+        }
+        public enum EducationLevelStatus
+        {
+            Active, 
+            Deleted
+            
+        }
         
 }

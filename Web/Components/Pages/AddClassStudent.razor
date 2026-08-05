@@ -3,6 +3,7 @@
 @using Domain.Entities
 @using Application.Services.ClassServices
 @using Application.Services.StudentServices
+@using Domain.ValueObject;
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
 @inject IStudentService StudentService
@@ -12,30 +13,28 @@
 @page "/classStudent/add"
 
 <MudDialog>
-    <TitleContent>Add Class_Student</TitleContent>
+    <TitleContent>
+        <MudPaper Class="mb-3" Elevation="0">
+                <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center">
+                    <MudText Typo="Typo.h6">@selectedClass?.Name</MudText>
+                    @if (selectedClass is not null)
+                    {
+                        <MudChip T="string"
+                                 Size="Size.Small"
+                                 Variant="Variant.Filled"
+                                 Color="@GetStatusColor(selectedClass.Status)">
+                            @selectedClass.Status
+                        </MudChip>
+                    }
+                </MudStack>
+                <MudText Color="Color.Secondary" FontWeight="FontWeight.Bold" Typo="Typo.body2">@selectedClass?.Faculity?.Name | @selectedClass?.EducationLevel?.Name</MudText>
+            </MudPaper>
+    </TitleContent>
     <DialogContent>
         <EditForm Model="classstudent" OnValidSubmit="SaveClassStudentAsync">
             <MudGrid>
               
-                <MudItem xs="12">
-                    <MudSelect Adornment="Adornment.End"
-                               Immediate="true"
-                               Margin="Margin.Dense"
-                               Variant="Variant.Outlined"
-                               AdornmentIcon="@Icons.Material.Filled.Person"
-                               Label="Class"
-                               @bind-Value="classstudent.ClasssId">
-                                
-                        <MudSelectItem Value="0">Select Class</MudSelectItem>
-                        @if (Classs != null)
-                        {
-                            foreach (var c in Classs)
-                            {
-                                <MudSelectItem Value="@c.Id">@c.Name - @c.Faculity?.Name</MudSelectItem>
-                            }
-                        }
-                    </MudSelect>
-                </MudItem>
+               
            
                 <MudItem xs="12">
                     <MudAutocomplete Value="@GetStudentName(classstudent.StudentId)"
@@ -77,6 +76,54 @@
 
             </MudGrid> 
         </EditForm>
+         @* This is muddatagrid to display the class members of the selected class *@
+            <MudDataGrid T="GetClassStudentDTO" 
+                         Dense="true" 
+                         MultiSelection="true" 
+                         Items="@filteredClassStudent">
+            
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Class Member</MudText>
+            </ToolBarContent>
+
+            <Columns>
+               <SelectColumn T="GetClassStudentDTO" />
+                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" /> 
+                <PropertyColumn Property="x => x.Classs.Name" Title="Class" />
+                <PropertyColumn Property="x => x.Classs.Faculity.Name" Title="  Faculity" />
+                <PropertyColumn Property="x => x.Student.Name" Title="Student" />
+                <PropertyColumn Property="x => x.StartDate" Title="Academic year 
+                Start Date" />
+                <PropertyColumn Property="x => x.EndDate" Title="Academic year
+                 End Date" />
+                <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
+                 <TemplateColumn Title="Status">
+                 <CellTemplate>
+                    <MudChip T="String"
+                    Size="Size.Medium"
+                    Variant="Variant.Filled"
+                    Color="@GetStatusColor(context.Item.Status)">
+                    @context.Item.Status
+                    </MudChip>
+                 </CellTemplate>
+                </TemplateColumn>
+                <TemplateColumn>
+                    <CellTemplate>
+                     <MudMenu Icon="@Icons.Material.Filled.MoreVert" AriaLabel="Class Details Menu">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info">Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit">Edit</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit">Delete</MudMenuItem>
+                     </MudMenu>
+                    </CellTemplate>
+                </TemplateColumn>
+                
+                
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="GetClassStudentDTO" />
+            </PagerContent>
+
+        </MudDataGrid>
     </DialogContent>
 </MudDialog>
 
@@ -84,11 +131,31 @@
 {
     [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; } = null!;
+    [Parameter]
+    public GetClassDTO? selectedClass {get;set;}
 
     private AddClassStudentDTO classstudent = new();
+      private List <GetClassStudentDTO> classstudents = new();
+   
 
     private List<GetClassDTO> Classs = new();
     private List<GetStudentDTO> Student = new();
+     private List<GetClassStudentDTO> filteredClassStudent => classstudents.Where(r => selectedClass is null || r.ClasssId == selectedClass.Id)
+            .ToList();
+     private async Task SaveClassStudentAsync()
+    {
+        try
+        {
+            await ClassStudentService.AddClassStudentAsync(classstudent);
+            //Add this to bind datagrid so that when you save new registration displays automatically 
+            classstudents = await ClassStudentService.GetClassStudentsAsync();
+            Snackbar.Add("Student added successfully.", Severity.Success);
+        }
+        catch (InvalidOperationException ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
 
     private DateTime? StartDate
     {
@@ -104,6 +171,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+         classstudents = await ClassStudentService.GetClassStudentsAsync();
+        Student = await StudentService.GetStudentsAsync();
+       
+
         var c = await ClassService.GetClasssesAsync();
         if (c != null)
         {
@@ -114,6 +185,11 @@
         if (st != null)
         {
             Student = st;
+        }
+          //Add this to set the ClassId
+        if (selectedClass is not null)
+        {
+            classstudent.ClasssId = selectedClass.Id;
         }
     }
 
@@ -137,18 +213,22 @@
 
         return Student.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Name);
     }
+           private static Color GetStatusColor(ClassStudentStatus status) => status switch
+        {
+            ClassStudentStatus.Active => Color.Success,
+            @* ClassStudentStatus.Full => Color.Warning,
+            ClassStudentStatus.Ongoing => Color.Info, *@
+            ClassStudentStatus.Deleted => Color.Error,
+            _ => Color.Default
+        };
+        private static Color GetStatusColor(ClassStatus status) => status switch
+        {
+            ClassStatus.Active => Color.Success,
+            @* ClassStudentStatus.Full => Color.Warning,
+            ClassStudentStatus.Ongoing => Color.Info, *@
+            ClassStatus.Deleted => Color.Error,
+            _ => Color.Default
+        };
 
-    private async Task SaveClassStudentAsync()
-    {
-        try
-        {
-            await ClassStudentService.AddClassStudentAsync(classstudent);
-            MudDialog.Close(DialogResult.Ok(true));
-            Snackbar.Add("Class_Student Added Successfully", Severity.Success);
-        }
-        catch (Exception error)
-        {
-            Snackbar.Add(error.Message, Severity.Error);
-        }
-    }
+   
 }

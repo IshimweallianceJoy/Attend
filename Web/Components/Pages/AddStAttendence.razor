@@ -14,6 +14,7 @@
 @inject IAttendenceService AttendenceService
 @inject IStudentService StudentService
 @inject IClassService ClassService
+@inject ISnackbar Snackbar
 
 @page "/Stattendence/add"
 <MudDialog>
@@ -112,10 +113,16 @@
 @code{
       [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; }
+     [Parameter]
+    public GetAttendenceDTO? selectedAttendence {get;set;}
+     private List<GetStudentAttendenceDTO> stattendences = new();
+     
     private AddStudentAttendenceDTO stattendence = new ();
     private List<GetAttendenceDTO> attendences = new();
 
-        private List<GetStudentDTO> student = new();
+     private List<GetStudentDTO> student = new();
+    private List<GetStudentAttendenceDTO> filteredRegistration => stattendences.Where(r => selectedAttendence is null || r.AttendenceId == selectedAttendence.Id)
+            .ToList();
    
 
     protected override async Task OnInitializedAsync()
@@ -135,6 +142,11 @@
             student=st;
             StateHasChanged();
             }
+            
+             if (selectedAttendence is not null)
+        {
+            stattendence.AttendenceId = selectedAttendence.Id;
+        }
 
            
     }
@@ -142,8 +154,17 @@
     
     private async Task SavestAttendenceAsync()
     {
+          try
+        {
        await StudentAttendenceService.AddStudentAttendenceAsync(stattendence);
         MudDialog.Close(DialogResult.Ok(true));
+             stattendences = await StudentAttendenceService.GetStudentAttendencesAsync();
+            Snackbar.Add("Student added successfully.", Severity.Success);
+        }
+        catch (InvalidOperationException ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
     }
 
 }

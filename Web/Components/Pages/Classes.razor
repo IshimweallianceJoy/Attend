@@ -44,7 +44,7 @@
 
   <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4" >
         <MudDataGrid T="GetClassDTO" MultiSelection="true" Items="@classes" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
-            Hideable="true" RowClick="@RowClicked" RowContextMenuClick="RowRightClicked" SelectedItemsChanged="@SelectedItemsChanged">
+                     Hideable="true" RowClick="@RowClicked" RowContextMenuClick="RowRightClicked" SelectedItemsChanged="@SelectedItemsChanged">
             
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Classes</MudText>
@@ -87,8 +87,11 @@
                 </TemplateColumn>
                 <TemplateColumn CellClass="d-flex justify-end" Title="Actions">
                     <CellTemplate>
-                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" OnClick="@(() => ViewClassAsync(context.Item))" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => EditClassAsync(context.Item, _closeButton))" />
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert" AriaLabel="Class Details Menu">
+                            <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@(() => OnOpenRegistration(context.Item, _closeButton))" >Add Student</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.Edit" Color="Color.Info" OnClick="@(() => ViewClassAsync(context.Item))">Details</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.Edit"  Color="Color.Primary" OnClick="@(() => EditClassAsync(context.Item, _closeButton))">Edit</MudMenuItem>
+                        </MudMenu>
                     </CellTemplate>
                 </TemplateColumn>
             </Columns>
@@ -156,7 +159,7 @@
         return false;
     };
 
-    private List<GetClassDTO> classes= new List<GetClassDTO>();
+    private List<GetClassDTO> classes= new ();
     protected override async Task OnInitializedAsync()
     {
         classes = await ClassService.GetClasssesAsync();
@@ -202,6 +205,25 @@
             StateHasChanged();
         }
     }
+      private async Task OnOpenRegistration(GetClassDTO classss, DialogOptions options)
+        { 
+            //this is parameter which is passed to the Registration.razor page so that it can be used to get the classid of the selected class when you click the add student menuitem
+           var parameters = new DialogParameters
+            {
+                { nameof(AddClassStudent.selectedClass), classss }
+            };
+
+            var dialog = await DialogService.ShowAsync<AddClassStudent>("Add New Class", parameters, options);
+                
+            var result = await dialog.Result;
+
+            if (result is not null && !result.Canceled)
+            {
+
+            }
+        } 
+
+        
 
 
 }
