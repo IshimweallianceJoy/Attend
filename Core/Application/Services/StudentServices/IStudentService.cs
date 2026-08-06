@@ -9,5 +9,7 @@ namespace Application.Services.StudentServices
         Task<GetStudentDTO?> GetStudentByIdAsync(int id);
          Task UpdateStudentAsync(UpdateStudentDTO student);
          Task DeleteStusentAsync(DeleteStudentDTO student);
+         Task<List<GetStudentStatusCountDTO>> GetStudentStatusCountAsync();
+         Task<List<GetStudentSexCountDTO>> GetStudentSexCountAsync();
     }
 }

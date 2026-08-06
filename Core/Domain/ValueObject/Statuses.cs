@@ -37,5 +37,11 @@ namespace Domain.ValueObject
             Deleted
             
         }
+        public enum SexStatus
+        {
+            Male, 
+            Female
+            
+        }
         
 }

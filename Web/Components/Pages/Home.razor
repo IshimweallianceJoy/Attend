@@ -1,7 +1,83 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@using Application.DTOs
+@using Web.Components.SharedComps
+@using Application.Services.StudentServices
+@using Application.Services.ClassServices
+@using Domain.ValueObject
+@inject IClassService ClassService
+@inject IStudentService StudentService
+<PageTitle>Dashboard</PageTitle>
+<MudContainer Class="p-4">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="6" >
+            <Cards
+                      Title="Total Students"
+                      Value="@totalStudents"
+                      Icon="@Icons.Material.Filled.Person"
+                      ValueColor="Color.Success"
+                      IconColor="Color.Success"
+                      TitleColor="Color.Dark" />
+        </MudItem>
+        
+           @foreach( var classStatusCount in classStatusCounts){
+            <MudItem xs="12" sm="6" md="6">
+             <Cards  
+                       Title="@($"{classStatusCount.Status} Classes")"
+                       Value="@classStatusCount.Count"
+                       Icon="@Icons.Material.Filled.Person"
+                       ValueColor="@GetValueColor(classStatusCount.Status)"
+                       IconColor="@GetValueColor(classStatusCount.Status)" 
+                       TitleColor="Color.Dark"
+                   />
+            </MudItem>
+            }
 
-<h1>Hello, world!</h1>
+            @foreach( var studentSexCount in studentSexCounts){
+            <MudItem xs="12" sm="6" md="3">
+             <Cards  
+                       Title="@($"{studentSexCount.Sex} Students")"
+                       Value="@studentSexCount.Count"
+                       Icon="@Icons.Material.Filled.Person"
+                       ValueColor="@GetValuesColor(studentSexCount.Sex)"
+                       IconColor="@GetValuesColor(studentSexCount.Sex)" 
+                       TitleColor="Color.Dark"
+                   />
+            </MudItem>
+           }
+    </MudGrid>
+</MudContainer>
 
-Welcome to your new app.
+@code{
+    private List<GetStudentDTO> students = new();
+    private List<GetClassStatusCountDTO> classStatusCounts = new();    
+     private List<GetStudentSexCountDTO> studentSexCounts = new(); 
+    private int totalStudents => students.Count;  
+    protected override async Task OnInitializedAsync()
+    {
+        students= await StudentService.GetStudentsAsync();
+        classStatusCounts = await ClassService.GetClassStatusCountAsync();
+        studentSexCounts = await StudentService.GetStudentSexCountAsync();
+    }  
+    private Color GetValueColor(ClassStatus status)
+    {
+        return status switch
+        {
+            ClassStatus.Active => Color.Success,
+            ClassStatus.Deleted => Color.Error,
+            @* ClassStatus.Full => Color.Warning,
+            ClassStatus.Ongoing => Color.Warning, *@
+            _ => Color.Default
+        };
+    }
+    private Color GetValuesColor(SexStatus sex)
+    {
+        return sex switch
+        {
+            SexStatus.Male => Color.Primary,
+            SexStatus.Female => Color.Secondary,
+            _ => Color.Default
+           
+        };
+    }
+}

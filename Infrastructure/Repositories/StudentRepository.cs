@@ -103,5 +103,27 @@ namespace Infrastructure.Repositories
                 await _dbcontext.SaveChangesAsync();
             }
         }
+           public async Task<List<GetStudentStatusCountDTO>> GetStudentStatusCountAsync()
+        {
+           return await _dbcontext.Students
+           .GroupBy(c => c.Status)
+           .Select(c => new GetStudentStatusCountDTO
+           {
+               Status = c.Key,
+               Count = c.Count()
+           })
+           .ToListAsync();
+        }
+            public async Task<List<GetStudentSexCountDTO>> GetStudentSexCountAsync()
+        {
+           return await _dbcontext.Students
+           .GroupBy(c => c.Sex)
+           .Select(c => new GetStudentSexCountDTO
+           {
+               Sex = c.Key,
+               Count = c.Count()
+           })
+           .ToListAsync();
+        }
     } 
 }

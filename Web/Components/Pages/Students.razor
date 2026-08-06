@@ -155,7 +155,7 @@
             if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
                 return true;
 
-            if (x.Sex.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            if (x.Sex.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
                 return true;
 
             if ($"{x.Phone} {x.Email}".Contains(_searchString))

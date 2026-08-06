@@ -36,4 +36,9 @@ namespace Application.DTOs
         public DateTime DateAdded { get; set; }
         public ClassStatus Status { get; set;}
     }
+       public class GetClassStatusCountDTO
+    {
+        public ClassStatus Status{get; set;}
+        public int Count{get;set;}
+    }
 }

@@ -9,6 +9,7 @@ namespace Application.Interfaces
         Task< GetClassDTO?> GetClasssByIdAsync(int id);
         Task UpdateClassAsync(UpdateClassDTO classs);
         Task DeleteClassAsync(DeleteClassDTO classs);
+        Task<List<GetClassStatusCountDTO>> GetClassStatusCountAsync();
     }
 }
 
