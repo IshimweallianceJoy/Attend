@@ -42,7 +42,7 @@
                  <PropertyColumn Property="x => x.Student.Name" Title="Student" />  
                  <PropertyColumn Property="x => x.Attendence.Classs.Name" Title="Class" />    
                  <PropertyColumn Property="x => x.Attendence.UserAdded" Title="Done By" />  
-                 <PropertyColumn Property="x => x.Date" Title="Attendence Date " />
+                 
                 <TemplateColumn Title="Status">
                  <CellTemplate>
                     <MudChip T="String"
@@ -145,12 +145,12 @@
 
          private async Task ViewStudentAttendenceAsync(GetStudentAttendenceDTO stattendence)
             {
-                var parameters = new DialogParameters
+                @* var parameters = new DialogParameters
                 {
                     { nameof(StAttendenceDetails.Id), stattendence.Id } // Pass the Id directly
                 };
 
-                var dialog = await DialogService.ShowAsync<StAttendenceDetails>("Student_Attendence Details", parameters);
+                var dialog = await DialogService.ShowAsync<StAttendenceDetails>("Student_Attendence Details", parameters); *@
             }
 
             private async Task EditStudentAttendenceAsync(GetStudentAttendenceDTO stattendence, DialogOptions options)

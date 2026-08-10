@@ -1,73 +1,22 @@
-@page "/take-attendance"
+@* @page "/take-attendance" *@
 @using Application.Services.AttendenceServices
 @using Application.Services.ClassServices
 @using Application.DTOs
 @using Domain.ValueObject
 @using Application.Services.StudentAttendenceServices
+
+
 @inject NavigationManager Navigation
 @inject IDialogService DialogService
 @inject IAttendenceService AttendanceService
 @inject IStudentAttendenceService StudentAttendanceService
 @inject IClassService ClasssService
-@inject ISnackbar Snackbar
 
-<MudDialog MaxWidth="MaxWidth.ExtraLarge">
-    <TitleContent>
-         <MudText Typo="Typo.h6">Take Attendance</MudText>
-    </TitleContent>
-    <DialogContent>
-        <EditForm Model="attendance" OnValidSubmit="SaveAttendanceAsync">
-            <MudGrid>
-              
-               
-           
-               <MudItem xs="12">
-                        
-                    <MudTextField
-                                Label="Instructor Name"
-                                @bind-Value="attendance.InstructorName"
-                                Margin="Margin.Dense"
-                                Variant="Variant.Outlined"
-                                Placeholder="Instructor name">
-                    </MudTextField>
-                
-                    </MudItem>
- <MudItem xs="12">
-                         <MudAutocomplete T="GetClassDTO"
-                                            @bind-Value="selectedClass"
-                                            ToStringFunc="@(s => s?.Name ?? string.Empty)"
-                                            SearchFunc="Search"
-                                            Margin="Margin.Dense"
-                                            Variant="Variant.Outlined"
-                                            Label="Class"
-                                            Placeholder="Select Class" />
-                    </MudItem>
+ 
 
-                <MudItem xs="12">
-                        <MudDatePicker 
-                        Date="attendance.Date"
-                        DateChanged="date => attendance.Date = date ?? default"
-                        Margin="Margin.Dense"
-                        DateFormat="yyyy-MM-dd"
-                        Label="Date"
-                        Variant="Variant.Outlined"
-                        Placeholder="dd/mm/yyyy">
-                        </MudDatePicker>  
-                    </MudItem>
+<MudDialog>
 
-                <MudItem xs="12">
-                    <MudButton Variant="Variant.Filled"
-                               Color="Color.Primary"
-                               FullWidth="true" 
-                               ButtonType="ButtonType.Submit">
-                        SAVE
-                    </MudButton>
-                </MudItem>
-
-            </MudGrid> 
-        </EditForm>
-         @* This is muddatagrid to display the class members of the selected class *@
-            <MudDataGrid T="GetStudentAttendenceDTO" 
+      <MudDataGrid T="GetStudentAttendenceDTO" 
                          Dense="true" 
                          MultiSelection="true" 
                          Items="@studentAttendances">
@@ -108,10 +57,14 @@
             </PagerContent>
 
         </MudDataGrid>
-    </DialogContent>
 </MudDialog>
+  
+    
+
 @code{
+
     private List<GetStudentAttendenceDTO> studentAttendances = new();
+        private GetStudentAttendenceDTO? selectedAttendence;
     private AddAttendenceDTO attendance = new();
 
     // ----------------------------------------THIS IS FOR AUTO COMPLETE -------------------------------------
@@ -132,7 +85,13 @@
 
     protected async override Task OnInitializedAsync()
     {
+        studentAttendances = await StudentAttendanceService.GetStudentAttendencesAsync();
         Classs = await ClasssService.GetClasssesAsync();
+
+         if (selectedAttendence is not null)
+        {
+            studentAttendances.Attendence.ClasssId = selectedAttendence.Id;
+        }
     }
 
     private static Color GetStatusColor(AttendenceStatus status) => status switch
@@ -144,27 +103,6 @@
         _ => Color.Default
     };
 
-    private async Task SaveAttendanceAsync()
-    {
-        if (selectedClass == null)
-        {
-            Snackbar.Add("Please select a class before saving.", Severity.Warning);
-            return;
-        }
-
-        attendance.ClasssId = selectedClass.Id;
-
-        try
-        {
-            // ------------------------------------------THIS IS THE POINT TO TAKE INTO ACCOUNT AND CHANGE IT IN COMFORMITY WITH YOUR SERVICES
-            studentAttendances = await AttendanceService.AddAttendanceWithStudentAttendanceAsync(attendance);
-            Snackbar.Add("Attendance batch created successfully.", Severity.Success);
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add(ex.Message, Severity.Error);
-        }
-    }
 
 
 
@@ -172,7 +110,7 @@
     // -----------------------------------------THIS SERVICE IS CALLED FROM STUDENTATTENDANCE SERVICES AND STUDENTATTENDANCEREPOSITORY------------------------
     private async Task AddStudentAttendanceAsync(GetStudentAttendenceDTO item, AttendenceStatus status)
     {
-        try
+        @* try
         {
             await StudentAttendanceService.AddStudentAttendanceAsync(item.Id, status);
             item.Status = status;
@@ -184,8 +122,9 @@
         catch (Exception ex)
         {
             Snackbar.Add(ex.Message, Severity.Error);
-        }
+        } *@
     }
+    
 
     private Task OnPresent(GetStudentAttendenceDTO item) => AddStudentAttendanceAsync(item, AttendenceStatus.Present);
     private Task OnAbsent(GetStudentAttendenceDTO item) => AddStudentAttendanceAsync(item, AttendenceStatus.Absent);

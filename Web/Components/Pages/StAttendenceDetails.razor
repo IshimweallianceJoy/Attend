@@ -1,80 +1,234 @@
+@using Application.Services.ClassStudentServices
 @using Application.DTOs
-@using Application.Services.StudentAttendenceServices
+@using Domain.Entities
+@using Application.Services.ClassServices
+@using Application.Services.StudentServices
+@using Domain.ValueObject;
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject IStudentService StudentService
+@inject IClassService ClassService
+@inject ISnackbar Snackbar
+@inject IClassStudentService ClassStudentService
+@* @page "/classStudent/add" *@
 
-@inject NavigationManager NavigationManager
-@inject IStudentAttendenceService StudentAttendenceService
-
- <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="BackToList" StartIcon="@Icons.Material.Filled.ArrowBack">Back to List</MudButton>
 <MudDialog>
-
     <TitleContent>
-        <MudText Typo="Typo.h6">
-            <MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-2"/> Class Details
-        </MudText>
+        <MudPaper Class="mb-3" Elevation="0">
+                <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center">
+                    <MudText Typo="Typo.h6">@selectedClass?.Name</MudText>
+                    @if (selectedClass is not null)
+                    {
+                        <MudChip T="string"
+                                 Size="Size.Small"
+                                 Variant="Variant.Filled"
+                                 Color="@GetStatusColor(selectedClass.Status)">
+                            @selectedClass.Status
+                        </MudChip>
+                    }
+                </MudStack>
+                <MudText Color="Color.Secondary" FontWeight="FontWeight.Bold" Typo="Typo.body2">@selectedClass?.Faculity?.Name | @selectedClass?.EducationLevel?.Name</MudText>
+            </MudPaper>
     </TitleContent>
     <DialogContent>
-        @if (isLoading)
-        {
-            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-        }
-        else if (stattend == null)
-        {
-            <MudText Typo="Typo.body1" Color="Color.Error">Student_Attendence details could not be found.</MudText>
-        }
-        else
-        {
+        <EditForm Model="classstudent" OnValidSubmit="SaveClassStudentAsync">
             <MudGrid>
-                <MudItem xs="12" sm="6">
-                    <MudText Typo="Typo.h6">Class_Student ID</MudText>
-                    <MudText Typo="Typo.body1">@stattend.Id</MudText>
+              
+               
+           
+                <MudItem xs="12">
+                    <MudAutocomplete Value="@GetStudentName(classstudent.StudentId)"
+                                     SearchFunc="Search"
+                                     T="string"
+                                     Variant="Variant.Outlined"
+                                     Margin="Margin.Dense"
+                                     Label="Student"
+                                     ValueChanged="OnStudentSelected"
+                                     ToStringFunc="@(s => s ?? string.Empty)"/>
                 </MudItem>
-                
-                <MudItem xs="12" sm="6">
-                    <MudText Typo="Typo.h6">Class</MudText>
-                    <MudText Typo="Typo.body1">@stattend.Attendence.Classs.Name</MudText>
-                </MudItem>
-                <MudItem xs="12" sm="6">
-                    <MudText Typo="Typo.h6">Student</MudText>
-                    <MudText Typo="Typo.body1">@stattend.Student.Name</MudText>
-                </MudItem>
-            </MudGrid>
-        }
-    </DialogContent>
 
-       <DialogActions>
-        <MudButton Color="Color.Primary" OnClick="Close">Close</MudButton>
-    </DialogActions>
+                <MudItem xs="12">
+                    <MudDatePicker Label="Start Date"
+                                   @bind-Date="StartDate"
+                                   Margin="Margin.Dense"
+                                   DateFormat="dd-MM-yyyy"
+                                   Variant="Variant.Outlined"
+                                   Placeholder="dd-mm-yyyy" />
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudDatePicker Label="End Date"
+                                   @bind-Date="EndDate"
+                                   Margin="Margin.Dense"
+                                   DateFormat="dd-MM-yyyy"
+                                   Variant="Variant.Outlined"
+                                   Placeholder="dd-mm-yyyy" />
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               FullWidth="true" 
+                               ButtonType="ButtonType.Submit">
+                        SAVE
+                    </MudButton>
+                </MudItem>
+
+            </MudGrid> 
+        </EditForm>
+         @* This is muddatagrid to display the class members of the selected class *@
+            <MudDataGrid T="GetClassStudentDTO" 
+                         Dense="true" 
+                         MultiSelection="true" 
+                         Items="@filteredClassStudent">
+            
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Class Member</MudText>
+            </ToolBarContent>
+
+            <Columns>
+               <SelectColumn T="GetClassStudentDTO" />
+                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" /> 
+                <PropertyColumn Property="x => x.Classs.Name" Title="Class" />
+                <PropertyColumn Property="x => x.Classs.Faculity.Name" Title="  Faculity" />
+                <PropertyColumn Property="x => x.Student.Name" Title="Student" />
+                <PropertyColumn Property="x => x.StartDate" Title="Academic year 
+                Start Date" />
+                <PropertyColumn Property="x => x.EndDate" Title="Academic year
+                 End Date" />
+                <PropertyColumn Property="x => x.DateAdded" Title="Date Added" />
+                 <TemplateColumn Title="Status">
+                 <CellTemplate>
+                    <MudChip T="String"
+                    Size="Size.Medium"
+                    Variant="Variant.Filled"
+                    Color="@GetStatusColor(context.Item.Status)">
+                    @context.Item.Status
+                    </MudChip>
+                 </CellTemplate>
+                </TemplateColumn>
+                <TemplateColumn>
+                    <CellTemplate>
+                     <MudMenu Icon="@Icons.Material.Filled.MoreVert" AriaLabel="Class Details Menu">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info">Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit">Edit</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit">Delete</MudMenuItem>
+                     </MudMenu>
+                    </CellTemplate>
+                </TemplateColumn>
+                
+                
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="GetClassStudentDTO" />
+            </PagerContent>
+
+        </MudDataGrid>
+    </DialogContent>
 </MudDialog>
 
-@code {
-    [CascadingParameter] 
-    IMudDialogInstance MudDialog { get; set; }
+@code
+{
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = null!;
+    [Parameter]
+    public GetClassDTO? selectedClass {get;set;}
 
-    [Parameter] 
-    public int Id { get; set; } 
+    private AddClassStudentDTO classstudent = new();
+      private List <GetClassStudentDTO> classstudents = new();
+   
 
-    private bool isLoading = true;
-    private GetStudentAttendenceDTO stattend;
-
-    protected override async Task OnParametersSetAsync()
-    { 
-        isLoading = true;
+    private List<GetClassDTO> Classs = new();
+    private List<GetStudentDTO> Student = new();
+     private List<GetClassStudentDTO> filteredClassStudent => classstudents.Where(r => selectedClass is null || r.ClasssId == selectedClass.Id)
+            .ToList();
+     private async Task SaveClassStudentAsync()
+    {
         try
         {
-            if (Id > 0)
-            {
-                stattend = await StudentAttendenceService.GetStudentAttendenceByIdAsync(Id);
-            }
+            await ClassStudentService.AddClassStudentAsync(classstudent);
+            //Add this to bind datagrid so that when you save new registration displays automatically 
+            classstudents = await ClassStudentService.GetClassStudentsAsync();
+            Snackbar.Add("Student added successfully.", Severity.Success);
         }
-        finally
+        catch (InvalidOperationException ex)
         {
-            isLoading = false;
+            Snackbar.Add(ex.Message, Severity.Error);
         }
-    } 
-
-     private void Close() => MudDialog.Close();
-     private void BackToList()
-    {
-        NavigationManager.NavigateTo("/Stattendence");
     }
+
+    private DateTime? StartDate
+    {
+        get => classstudent.StartDate.HasValue ? classstudent.StartDate.Value.ToDateTime(TimeOnly.MinValue) : null;
+        set => classstudent.StartDate = value.HasValue ? DateOnly.FromDateTime(value.Value) : null;
+    }
+
+    private DateTime? EndDate
+    {
+        get => classstudent.EndDate.HasValue ? classstudent.EndDate.Value.ToDateTime(TimeOnly.MinValue) : null;
+        set => classstudent.EndDate = value.HasValue ? DateOnly.FromDateTime(value.Value) : null;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+         classstudents = await ClassStudentService.GetClassStudentsAsync();
+        Student = await StudentService.GetStudentsAsync();
+       
+
+        var c = await ClassService.GetClasssesAsync();
+        if (c != null)
+        {
+            Classs = c;
+        }
+
+        var st = await StudentService.GetStudentsAsync();
+        if (st != null)
+        {
+            Student = st;
+        }
+          //Add this to set the ClassId
+        if (selectedClass is not null)
+        {
+            classstudent.ClasssId = selectedClass.Id;
+        }
+    }
+
+    private string GetStudentName(int studentId) => Student.FirstOrDefault(s => s.Id == studentId)?.Name ?? string.Empty;
+
+    private Task OnStudentSelected(string? studentName)
+    {
+        var selectedStudent = Student.FirstOrDefault(s => s.Name == studentName);
+        classstudent.StudentId = selectedStudent?.Id ?? 0;
+        return Task.CompletedTask;
+    }
+
+    private async Task<IEnumerable<string>> Search(string value, CancellationToken token)
+    {
+        await Task.Delay(5, token);
+
+        if (string.IsNullOrEmpty(value))
+        {
+            return Student.Select(s => s.Name);
+        }
+
+        return Student.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Name);
+    }
+           private static Color GetStatusColor(ClassStudentStatus status) => status switch
+        {
+            ClassStudentStatus.Active => Color.Success,
+            @* ClassStudentStatus.Full => Color.Warning,
+            ClassStudentStatus.Ongoing => Color.Info, *@
+            ClassStudentStatus.Deleted => Color.Error,
+            _ => Color.Default
+        };
+        private static Color GetStatusColor(ClassStatus status) => status switch
+        {
+            ClassStatus.Active => Color.Success,
+            @* ClassStudentStatus.Full => Color.Warning,
+            ClassStudentStatus.Ongoing => Color.Info, *@
+            ClassStatus.Deleted => Color.Error,
+            _ => Color.Default
+        };
+
+   
 }

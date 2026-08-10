@@ -33,5 +33,9 @@ namespace Application.Services.AttendenceServices
         {
             await _attendence.DeleteAttendenceAsync(attendence);
         }
+             public async Task<List<GetStudentAttendenceDTO>> AddAttendanceWithStudentAttendanceAsync(AddAttendenceDTO attendance)
+        {
+            return await _attendence.AddAttendanceWithStudentAttendanceAsync(attendance);
+        }
     }
 }

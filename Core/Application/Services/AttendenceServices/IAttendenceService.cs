@@ -9,5 +9,6 @@ namespace Application.Services.AttendenceServices
         Task <GetAttendenceDTO?> GetAttendenceByIdAsync(int id);
         Task  UpdateAttendenceAsync(UpdateAttendenceDTO attendence);
         Task DeleteAttendenceAsync(DeleteAttendenceDTO attendence);
+        Task<List<GetStudentAttendenceDTO>> AddAttendanceWithStudentAttendanceAsync(AddAttendenceDTO attendance);
     }
 }

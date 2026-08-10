@@ -1,0 +1,178 @@
+@page "/attendance"
+@using Application.Services.AttendenceServices
+@using Application.DTOs
+@using Domain.ValueObject
+@using Application.Services.ClassServices
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+@inject IClassService ClassService
+@inject IAttendenceService AttendenceService
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4" >
+    <MudDataGrid 
+                 T="GetAttendenceDTO" MultiSelection="true" Items="@attendances" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+            Hideable="true" RowClick="@RowClicked" RowContextMenuClick="RowRightClicked" SelectedItemsChanged="@SelectedItemsChanged">
+            
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Attendence</MudText>
+                   <MudSpacer />
+                <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="d-none d-md-flex">
+                  <MudTextField 
+                    @bind-Value="_searchString" 
+                    Placeholder="Search" 
+                    Adornment="Adornment.Start" 
+                    Immediate="true"
+                    AdornmentIcon="@Icons.Material.Filled.Search" 
+                    IconSize="Size.Medium" 
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    Class="mt-1 w-100">
+                  </MudTextField>
+                </MudContainer>
+
+                <MudButton 
+                          Color="Color.Primary" 
+                          Variant="Variant.Filled" 
+                          Class="ml-4" @onclick="() => OpenDialogAsync(_closeButton)">
+                          Add Attendence</MudButton>
+            </ToolBarContent>
+
+            <Columns>
+                <SelectColumn T="GetAttendenceDTO" />
+                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
+                <PropertyColumn Property="x => x.Classs.Name" Title="Class" />
+                <PropertyColumn Property="x => x.Classs.EducationLevel.Name" Title="Education Level" />
+                <PropertyColumn Property="x => x.Classs.Faculity.Name" Title="Faculty" />
+                <PropertyColumn Property="x => x.InstructorName" Title="Instructor" />
+                <PropertyColumn Property="x => x.Date" Title="Date" Format="MM/dd/yyyy" />
+                <TemplateColumn Title="Status" >
+                    <CellTemplate>
+                        <MudChip T="string"
+                                 Size="Size.Small"
+                                 Variant="Variant.Filled"
+                                 Color="@GetStatusColor(context.Item.Status)">
+                            @context.Item.Status
+                        </MudChip>
+                    </CellTemplate>
+                </TemplateColumn>
+                <TemplateColumn CellClass="d-flex justify-end" Title="Actions">
+                    <CellTemplate>
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert" AriaLabel="Class Details Menu">
+                            @* <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@(() => OnOpenRegistration(context.Item, _closeButton))" >Add Student</MudMenuItem> *@
+                            @* <MudMenuItem Icon="@Icons.Material.Filled.Edit" Color="Color.Info" OnClick="@(() => ViewClassAsync(context.Item))">Details</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.Edit"  Color="Color.Primary" OnClick="@(() => EditClassAsync(context.Item, _closeButton))">Edit</MudMenuItem> *@
+                        </MudMenu>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+            
+
+            <PagerContent>
+                <MudDataGridPager T="GetAttendenceDTO" />
+            </PagerContent>
+
+        </MudDataGrid>
+</MudContainer>
+@code{
+    private string _searchString = string.Empty;
+    private bool _sortNameByLength;
+    private List<string> _events = new();
+    private List<GetClassDTO> classs = new List<GetClassDTO>();
+    private List<GetAttendenceDTO> attendances = new List<GetAttendenceDTO>();
+        void RowClicked(DataGridRowClickEventArgs<GetAttendenceDTO> args)
+    {
+        _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+    }
+    
+    void RowRightClicked(DataGridRowClickEventArgs<GetAttendenceDTO> args)
+    {
+        _events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+    }
+
+    void SelectedItemsChanged(HashSet<GetAttendenceDTO> items)
+    {
+        _events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
+    }
+    private Func<GetClassDTO, object> _sortBy => x =>
+    {
+        if (_sortNameByLength)
+            return x.Name.Length;
+        else
+            return x.Name;
+    };
+
+    private static Color GetStatusColor(AttendenceStatus status) => status switch
+    {
+        AttendenceStatus.Active => Color.Success,
+        AttendenceStatus.Deleted => Color.Error,
+        _ => Color.Default
+    };
+    // quick filter - filter globally across multiple columns with the same input
+    private Func<GetAttendenceDTO, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.Classs?.Name?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+            return true;
+
+        if (x.Classs?.EducationLevel?.Name?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+            return true;
+    
+        if (x.Classs?.Faculity?.Name?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+            return true;
+
+        if (x.InstructorName?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+            return true;
+
+        if (x.Date.ToString("MM/dd/yyyy").Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
+    
+    protected override async Task OnInitializedAsync()
+    {
+        attendances = await AttendenceService.GetAttendencesAsync();
+        classs = await ClassService.GetClasssesAsync();
+
+
+    }
+    //You may add more options to the Dialog: These last ones I added are intended to make the dialog of AddAttendance be quit large in width
+    private readonly DialogOptions _closeButton = new() 
+    {
+         CloseButton = true,
+         //options for enlarging Dialog
+         MaxWidth = MaxWidth.ExtraLarge,
+         FullWidth=true
+    };
+    private async Task OpenDialogAsync(DialogOptions options)
+    {
+        var dialog = await DialogService.ShowAsync<AddAttendence>("Add New Attendance", options);
+            
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            attendances = await AttendenceService.GetAttendencesAsync();
+            
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+    private async Task ViewStudentAttendenceAsync(GetAttendenceDTO attendence, DialogOptions options)
+    {
+        var parameters = new DialogParameters
+        {
+            { nameof(StudentAttendenceDetail.Id), attendence.Id } // Pass the Id directly
+        };
+
+        var dialog = await DialogService.ShowAsync<StudentAttendenceDetail>("Edit Class", parameters, options);
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            classes = await ClassService.GetClasssesAsync();
+            StateHasChanged();
+        }
+    }
+    
+}

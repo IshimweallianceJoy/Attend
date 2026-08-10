@@ -1,6 +1,7 @@
 using Domain.Entities;
 using Application.Interfaces;
 using Application.DTOs;
+using Domain.ValueObject;
 namespace Application.Services.StudentAttendenceServices
 {
     public class StudentAttendenceService : IStudentAttendenceService
@@ -17,9 +18,10 @@ namespace Application.Services.StudentAttendenceServices
         {
             return await _attendence.GetStudentAttendencesAsync();
         }
-        public async Task AddStudentAttendenceAsync(AddStudentAttendenceDTO stattendence)
+        // ------------------------CHANGES
+        public async Task AddStudentAttendanceAsync(int AttendanceId, AttendenceStatus status)
         {
-           await _attendence.AddStudentAttendenceAsync(stattendence);
+            await _attendence.AddStudentAttendanceAsync(AttendanceId, status);
         }
         public async Task <GetStudentAttendenceDTO?> GetStudentAttendenceByIdAsync(int id)
         {

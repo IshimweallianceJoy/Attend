@@ -32,7 +32,8 @@ namespace Application.DTOs
         public Student Student{get; set;}
         public int AttendenceId{get; set;}
         public Attendence Attendence{get; set;}
-        public  DateTime Date{get; set;}
+         public string UserAdded { get; set; }
+        public DateTime DateAdded { get; set; } = DateTime.UtcNow;
        public AttendenceStatus Status{get; set;}
        
     }

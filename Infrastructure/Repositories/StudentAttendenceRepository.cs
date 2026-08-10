@@ -2,6 +2,7 @@ using Infrastructure.Data;
 using Application.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
+using Domain.ValueObject;
 using Application.Interfaces;
 namespace Infrastructure.Repositories
 {
@@ -27,21 +28,22 @@ namespace Infrastructure.Repositories
                 Student= at.Student,
                  AttendenceId= at.AttendenceId,
                 Attendence= at.Attendence,
-                Date= at.Date,
+                
                 Status= at.Status,
 
             }).ToListAsync();
         }        
-         public async Task AddStudentAttendenceAsync(AddStudentAttendenceDTO stattendence)
+        // THIS WAS CHANGED FROM ADDing NEW ATTENDANCE RECORD TO UPDATING ATTENDANCESTATUS 
+
+        public async Task AddStudentAttendanceAsync(int AttendanceId, AttendenceStatus status)
         {
-            _dbcontext.StudentAttendences.Add( new StudentAttendence
+            var existing = await _dbcontext.StudentAttendences.FindAsync(AttendanceId);
+           if (existing == null)
             {
-                  StudentId= stattendence.StudentId,
-                  AttendenceId= stattendence.AttendenceId,
-                Date= DateTime.UtcNow,
-                Status=stattendence.Status ,
-            });
-          await  _dbcontext.SaveChangesAsync();
+                throw new InvalidOperationException("Student attendance record not found.");
+            }
+            existing.Status = status;
+            await _dbcontext.SaveChangesAsync();
         }
         public async Task<GetStudentAttendenceDTO?> GetStudentAttendenceByIdAsync(int id)
         {
@@ -56,7 +58,7 @@ namespace Infrastructure.Repositories
                 Student= at.Student,
                  AttendenceId= at.AttendenceId,
                 Attendence= at.Attendence,
-                Date= at.Date,
+               
                 Status= at.Status,
             }).FirstOrDefaultAsync();
            

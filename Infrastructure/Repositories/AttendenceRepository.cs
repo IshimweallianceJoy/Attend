@@ -2,6 +2,7 @@ using Domain.Entities;
 using Application.Interfaces;
 using Infrastructure.Data;
 using Application.DTOs;
+using Domain.ValueObject;
 using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Repositories
 {
@@ -32,12 +33,19 @@ namespace Infrastructure.Repositories
         }        
          public async Task AddAttendenceAsync(AddAttendenceDTO attendence)
         {
+              var existingdata= await _dbcontext.Attendences.AnyAsync(c => c.ClasssId == attendence.ClasssId);
+            if(existingdata)
+            {
+                throw new InvalidCastException("this class already axists");
+            }
             _dbcontext.Attendences.Add( new Attendence
             {
-                  ClasssId= attendence.ClasssId,
-                UserAdded= attendence.UserAdded,
-                DateAdded= attendence.DateAdded,
-                Status= "Active",
+               InstructorName = attendence.InstructorName,
+                    ClasssId = attendence.ClasssId,
+                    Status = AttendenceStatus.Active,
+                    Date = attendence.Date,
+                    UserAdded = "Joy",
+                    DateAdded = DateTime.UtcNow
             });
           await  _dbcontext.SaveChangesAsync();
         }
@@ -65,7 +73,7 @@ namespace Infrastructure.Repositories
                 ExistingAttendence.Id = attendence.Id;
                 ExistingAttendence.ClasssId = attendence.ClasssId;
                 
-              } await _dbcontext.SaveChangesAsync();
+              } await _dbcontext.SaveChangesAsync(); 
         
         } 
         public async Task DeleteAttendenceAsync(DeleteAttendenceDTO attendence)
@@ -73,8 +81,69 @@ namespace Infrastructure.Repositories
             var ExistingAttendence = await _dbcontext.Attendences.FirstOrDefaultAsync(at => at.Id == attendence.Id);
              if(ExistingAttendence != null )
             {
-                ExistingAttendence.Status= "Deleted";
+                ExistingAttendence.Status= attendence.Status;
             } await _dbcontext.SaveChangesAsync();
+        }
+
+          public async Task<List<GetStudentAttendenceDTO>> AddAttendanceWithStudentAttendanceAsync(AddAttendenceDTO attendance)
+        {
+             var existingdata= await _dbcontext.Attendences.AnyAsync(c => c.ClasssId == attendance.ClasssId);
+            if(existingdata)
+            {
+                throw new InvalidCastException("this class already axists");
+            }
+            ///Insert into attendance
+            var attendanceEntity = new Attendence
+            {
+                ClasssId= attendance.ClasssId,
+                InstructorName = attendance. InstructorName,
+                Date = attendance.Date,
+                UserAdded =attendance.InstructorName,
+                DateAdded = DateTime.UtcNow,
+                Status= AttendenceStatus.Active
+            };
+            await _dbcontext.Attendences.AddAsync(attendanceEntity);
+            await _dbcontext.SaveChangesAsync();
+
+            // -----------------------------END---------------------------
+            //-----------------------------------FIND ACTIVE STUDENTS IN SELECTED-----------------------------------------
+
+            var activeStudentIds = await _dbcontext.ClassStudents
+            .Where(r => r.ClasssId == attendance.ClasssId && r.Status == ClassStudentStatus.Active)
+            .Select(r => r.StudentId)
+            .ToListAsync();
+            //--------------------------------------------------------INSERT INTO STUDENT ATTENDANCE------------------------------------------
+
+            var studentAttendanceEntity = activeStudentIds.Select(studentIds => new StudentAttendence
+            {
+               StudentId = studentIds,
+               Attendence = attendanceEntity,
+               Status = AttendenceStatus.UnTaken,
+               DateAdded= DateTime.UtcNow,
+               UserAdded= "Admin",
+               
+            }).ToList();
+            await _dbcontext.StudentAttendences.AddRangeAsync(studentAttendanceEntity);
+            await _dbcontext.SaveChangesAsync();
+            //-------------------------------------------------------END---------------------------------------
+            //----------------------------------------FETCH SAVE STUDENTATTENDANCES FOR ONLY ONE CLASS/ATTENDANCE----------------------
+
+            return await _dbcontext.StudentAttendences
+                .Include(sa => sa.Student)
+                .Include(sa => sa.Attendence)
+                .Where(sa => sa.AttendenceId == attendanceEntity.Id)
+                .Select(sa => new GetStudentAttendenceDTO
+                {
+                    Id = sa.Id,
+                    Student = sa.Student,
+                    StudentId = sa.StudentId,
+                    Attendence = sa.Attendence,
+                    AttendenceId = sa.AttendenceId,
+                    Status = sa.Status,
+                    UserAdded = sa.UserAdded,
+                    DateAdded = sa.DateAdded
+                })
+                .ToListAsync();
         }
     }
 }

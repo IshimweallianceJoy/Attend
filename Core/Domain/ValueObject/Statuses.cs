@@ -2,9 +2,13 @@ namespace Domain.ValueObject
 {
     public enum AttendenceStatus
     {
-        Present,
-        Absent,
-        Deleted
+            Active,
+            Present,
+            Absent,
+            
+            Excused,
+            Deleted,
+            UnTaken
 
     }
     public enum StudentStatus

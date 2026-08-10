@@ -1,5 +1,5 @@
 using Application.DTOs;
-using Domain.Entities;
+using Domain.ValueObject;
 
 namespace Application.Services.StudentAttendenceServices
 {
@@ -7,7 +7,7 @@ namespace Application.Services.StudentAttendenceServices
     {
         
          Task <List<GetStudentAttendenceDTO>>GetStudentAttendencesAsync();
-        Task AddStudentAttendenceAsync(AddStudentAttendenceDTO stattendence);
+        Task AddStudentAttendanceAsync(int AttendanceId, AttendenceStatus Status);
         Task <GetStudentAttendenceDTO?> GetStudentAttendenceByIdAsync(int id);
         Task  UpdateStudentAttendenceAsync(UpdateStudentAttendenceDTO stattendence);
         Task DeleteStudentAttendenceAsync(DeleteStudentAttedenceDTO stattendence);
