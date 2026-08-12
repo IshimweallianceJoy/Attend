@@ -1,6 +1,8 @@
 ﻿<MudNavMenu>
     <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
     <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All"  >Dashboard</MudNavLink>
+
+
    
     <MudNavLink  Href="/Students" Icon="@Icons.Material.Filled.Group" Match="NavLinkMatch.Prefix">Students</MudNavLink>
      <MudNavLink Href="/Class" Icon="@Icons.Material.Filled.Class" Match="NavLinkMatch.Prefix">Class</MudNavLink>
@@ -10,7 +12,7 @@
       
     <MudNavGroup Title="Settings" Expanded="true">
         
-        <MudNavLink Href="/users"  Match="NavLinkMatch.Prefix">Users</MudNavLink>
+        <MudNavLink Href="/identity"  Icon="@Icons.Material.Filled.SupervisedUserCircle" Match="NavLinkMatch.Prefix">Users</MudNavLink>
         <MudNavLink Href="/security"  Match="NavLinkMatch.Prefix">Security</MudNavLink>
     </MudNavGroup>
     <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>

@@ -47,5 +47,11 @@ namespace Domain.ValueObject
             Female
             
         }
+         public enum IdentityStatus
+        {
+            Active, 
+            Deleted
+            
+        }
         
 }

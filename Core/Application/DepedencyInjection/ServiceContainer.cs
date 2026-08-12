@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Application.Services.StudentServices;
 using Application.Services.ClassServices;
+using Application.Services.IdentityServices;
 using Application.Services.AttendenceServices;
 using Application.Services.StudentAttendenceServices;
 using Application.Services.ClassStudentServices;
@@ -21,6 +22,7 @@ namespace Application.DependencyInjection
             services.AddScoped<IStudentAttendenceService, StudentAttendenceService>();
             services.AddScoped<IFaculityService, FaculityService>();
             services.AddScoped<IEducationLevelService, EducationLevelService>();
+            services.AddScoped<IIdentityService, IdentityService>();
 
             
             return services;

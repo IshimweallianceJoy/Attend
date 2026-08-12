@@ -1,0 +1,159 @@
+@using Application.Services.IdentityServices
+@using Application.DTOs
+@using Domain.Entities
+@using Domain.ValueObject
+
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject ISnackbar Snackbar
+@inject IIdentityService IdentityService
+@page "/identity/add"
+
+ <MudDialog>
+    <TitleContent>Add User</TitleContent>
+    <DialogContent>
+        <EditForm Model="identity" OnValidSubmit="SaveIdentityAsync">
+           <MudGrid>
+            <MudItem xs="6">
+                <MudTextField 
+                label="Fullname"
+                @bind-Value="identity.FirstName"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Adornment="Adornment.End"
+                Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.Person"
+                Placeholder="First Name">
+
+                </MudTextField>
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudTextField 
+                label="Fullname"
+                @bind-Value="identity.LastName"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                Adornment="Adornment.End"
+                Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.Person"
+                Placeholder="Last Name">
+
+                </MudTextField>
+            </MudItem>
+            
+
+            
+            
+            <MudItem xs="6">
+                <MudTextField 
+                label="Email"
+                @bind-Value="identity.Email"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                 Adornment="Adornment.End"
+                Immediate="true"
+                 AdornmentIcon="@Icons.Material.Filled.Email"
+                Placeholder="mellissa@gmail.com">
+                </MudTextField>
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField 
+                label="Phone Number"
+                @bind-Value="identity.PhoneName"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                 Adornment="Adornment.End"
+                Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.Phone"
+                Placeholder="078 2828 2828">
+                </MudTextField>
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudTextField 
+                label="role"
+                @bind-Value="identity.Role"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                 Adornment="Adornment.End"
+                Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.Phone"
+                Placeholder="Role">
+                </MudTextField>
+            </MudItem>
+
+            
+            <MudItem xs="6">
+                <MudTextField 
+                label="Password"
+                @bind-Value="identity.Password"
+                Margin="Margin.Dense"
+                Variant="Variant.Outlined"
+                InputType="@PasswordInput"
+                Adornment="Adornment.End" 
+                AdornmentIcon="@PasswordInputIcon"
+                OnAdornmentClick="TogglePasswordVisibility" 
+                AdornmentAriaLabel="Show Password"
+                Placeholder="Password">
+                </MudTextField>
+            </MudItem>
+
+           
+
+                  <MudItem xs="12">
+                <MudButton 
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                FullWidth="true" 
+                ButtonType="ButtonType.Submit">
+                SAVE
+                </MudButton>
+            </MudItem>
+
+           </MudGrid> 
+        </EditForm>
+
+    </DialogContent>
+    
+</MudDialog>
+@code
+    {
+      [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+    private RegisterUserDTO identity = new ();
+
+    private async Task SaveIdentityAsync()
+    {
+       try{
+        await IdentityService.RegisterUserAsync(identity);
+        MudDialog.Close(DialogResult.Ok(true));
+         Snackbar.Add("User Added Successfully" , Severity.Success);
+         }
+       catch(Exception error){
+        Snackbar.Add(error.Message, Severity.Error);
+
+       }
+    }
+
+     private bool _isShow;
+    private InputType PasswordInput = InputType.Password;
+    private string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    private void TogglePasswordVisibility()
+    {
+        if (_isShow)
+        {
+            _isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            _isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+}
+    

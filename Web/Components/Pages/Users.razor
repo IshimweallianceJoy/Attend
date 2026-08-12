@@ -1,0 +1,185 @@
+@page "/identity"
+@using Application.Services.IdentityServices
+@using Domain.Entities;
+@using Application.DTOs;
+@using Domain.ValueObject;
+
+@inject IDialogService DialogService
+ @inject IIdentityService IdentityService
+   
+
+ 
+  <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4" >
+        <MudDataGrid T="GetUserDTO" MultiSelection="true" Items="@users" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+            Hideable="true" RowClick="@RowClicked" RowContextMenuClick="RowRightClicked" SelectedItemsChanged="@SelectedItemsChanged">
+            
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Users</MudText>
+                <MudSpacer />
+                <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="d-none d-md-flex">
+                  <MudTextField 
+                    @bind-Value="_searchString" 
+                    Placeholder="Search" 
+                    Adornment="Adornment.Start" 
+                    Immediate="true"
+                    AdornmentIcon="@Icons.Material.Filled.Search" 
+                    IconSize="Size.Medium" 
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    Class="mt-1 w-100">
+                  </MudTextField>
+                </MudContainer>
+
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ml-4" @onclick="() => OpenDialogAsync(_closeButton)" >Add User</MudButton>
+            
+            </ToolBarContent>
+          
+            <Columns>
+                <SelectColumn T="GetUserDTO" />
+                <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
+                <PropertyColumn Property="x => x.FirstName" Title="First Name"/>
+                <PropertyColumn Property="x => x.LastName" Title="Last Name"/>
+                <PropertyColumn Property="x => x.Email" SortBy="@_sortBy" Title="Email"/>
+                <PropertyColumn Property="x => x.PhoneName" Title="Phone Number" />
+                <PropertyColumn Property="x => x.UserName" Title="User Name" />
+                
+                
+                <TemplateColumn Title="Status">
+                 <CellTemplate>
+                    <MudChip T="String"
+                    Size="Size.Medium"
+                    Variant="Variant.Filled"
+                    Color="@GetStatusColor(context.Item.Status)">
+                    @context.Item.Status
+                    </MudChip>
+                 </CellTemplate>
+                </TemplateColumn>
+
+                @* <TemplateColumn CellClass="d-flex justify-end" Title="Actions">
+                    <CellTemplate>
+                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" OnClick="@(() => ViewStudentAsync(context.Item))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => EditStudentAsync(context.Item, _closeButton))" />
+                    </CellTemplate>
+                </TemplateColumn> *@
+
+            
+            </Columns>
+           
+            
+
+            <PagerContent>
+                <MudDataGridPager T="GetUserDTO" />
+            </PagerContent>
+
+        </MudDataGrid>
+</MudContainer>
+
+@code{
+    
+
+      private string _searchString;
+        private bool _sortNameByLength;
+        private List<string> _events = new();
+        protected IDialogReference dialogReference;
+
+        void RowClicked(DataGridRowClickEventArgs<GetUserDTO> args)
+        {
+            _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        }
+        
+        void RowRightClicked(DataGridRowClickEventArgs<GetUserDTO> args)
+        {
+            _events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+        }
+
+        void SelectedItemsChanged(HashSet<GetUserDTO> items)
+        {
+            _events.Insert(0, $"Event = SelectedItemsChanged, Data = {System.Text.Json.JsonSerializer.Serialize(items)}");
+        }
+             private static Color GetStatusColor(IdentityStatus status) => status switch
+        {
+            IdentityStatus.Active => Color.Success,
+            @* StudentStatus.Full => Color.Warning,
+            StudentStatus.Ongoing => Color.Info, *@
+            IdentityStatus.Deleted => Color.Error,
+            _ => Color.Default
+        };
+
+
+        private Func<GetUserDTO, object> _sortBy => x =>
+        {
+            if (_sortNameByLength)
+                return x.FirstName.Length;
+            else
+                return x.FirstName;
+        };
+        // quick filter - filter globally across multiple columns with the same input
+        private Func<GetUserDTO, bool> _quickFilter => x =>
+        {
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+
+            if (x.FirstName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            
+
+            if ($"{x.PhoneName} {x.Email}".Contains(_searchString))
+                return true;
+
+            return false;
+        };
+    
+       private List<GetUserDTO> users  = new List<GetUserDTO>();
+        
+        protected override async Task OnInitializedAsync()
+        {
+            users= await IdentityService.GetAllUsersAsync();
+
+        }
+        
+        private readonly DialogOptions _closeButton = new() { CloseButton = true };
+        private async Task OpenDialogAsync(DialogOptions options)
+        {
+            var dialog = await DialogService.ShowAsync<AddIdentity>("Add New User", options);
+                
+            var result = await dialog.Result;
+
+            if (result is not null && !result.Canceled)
+            {
+                users = await IdentityService.GetAllUsersAsync();
+            }
+
+
+
+        }
+
+            @* private async Task ViewStudentAsync(GetStudentDTO student)
+            {
+                var parameters = new DialogParameters
+                {
+                    { nameof(StudentDetailDialog.Id), student.Id } // Pass the Id directly
+                };
+
+                var dialog = await DialogService.ShowAsync<StudentDetailDialog>("Student Details", parameters);
+            } *@
+
+            @* private async Task EditStudentAsync(GetStudentDTO student, DialogOptions options)
+            {
+                var parameters = new DialogParameters
+                {
+                    { nameof(StudentEditDialog.Id), student.Id } // Pass the Id directly
+                };
+
+                var dialog = await DialogService.ShowAsync<StudentEditDialog>("Edit Student", parameters, options);
+                
+                var result = await dialog.Result;
+
+                if (result is not null && !result.Canceled)
+                {
+                    students = await StudentService.GetStudentsAsync();
+                    StateHasChanged();
+                }
+            } *@
+    
+}
