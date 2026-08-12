@@ -4,61 +4,94 @@
 @using Web.Components.SharedComps
 @using Application.Services.StudentServices
 @using Application.Services.ClassServices
+@using Application.Services.AttendenceServices
 @using Domain.ValueObject
 @inject IClassService ClassService
+@inject IAttendenceService AttendenceService
 @inject IStudentService StudentService
 <PageTitle>Dashboard</PageTitle>
 <MudContainer Class="p-4">
     <MudGrid>
-        <MudItem xs="12" sm="6" md="6" >
-            <Cards
-                      Title="Total Students"
-                      Value="@totalStudents"
-                      Icon="@Icons.Material.Filled.Person"
-                      ValueColor="Color.Success"
-                      IconColor="Color.Success"
-                      TitleColor="Color.Dark" />
+        <MudItem xs="12" sm="6" md="6">
+            <Cards Title="Total Students" Value="@totalStudents" Icon="@Icons.Material.Filled.Person"
+                   ValueColor="Color.Success" IconColor="Color.Success" TitleColor="Color.Dark" />
         </MudItem>
-        
-           @foreach( var classStatusCount in classStatusCounts){
-            <MudItem xs="12" sm="6" md="6">
-             <Cards  
-                       Title="@($"{classStatusCount.Status} Classes")"
-                       Value="@classStatusCount.Count"
-                       Icon="@Icons.Material.Filled.Person"
-                       ValueColor="@GetValueColor(classStatusCount.Status)"
-                       IconColor="@GetValueColor(classStatusCount.Status)" 
-                       TitleColor="Color.Dark"
-                   />
-            </MudItem>
-            }
 
-            @foreach( var studentSexCount in studentSexCounts){
-            <MudItem xs="12" sm="6" md="3">
-             <Cards  
-                       Title="@($"{studentSexCount.Sex} Students")"
-                       Value="@studentSexCount.Count"
-                       Icon="@Icons.Material.Filled.Person"
-                       ValueColor="@GetValuesColor(studentSexCount.Sex)"
-                       IconColor="@GetValuesColor(studentSexCount.Sex)" 
-                       TitleColor="Color.Dark"
-                   />
+        @foreach (var classStatusCount in classStatusCounts)
+        {
+            <MudItem xs="12" sm="6" md="6">
+                <Cards Title="@($"{classStatusCount.Status} Classes")" Value="@classStatusCount.Count"
+                       Icon="@Icons.Material.Filled.Person" ValueColor="@GetValueColor(classStatusCount.Status)"
+                       IconColor="@GetValueColor(classStatusCount.Status)" TitleColor="Color.Dark" />
             </MudItem>
-           }
+        }
+
+        @foreach (var studentSexCount in studentSexCounts)
+        {
+            <MudItem xs="12" sm="6" md="3">
+                <Cards Title="@($"{studentSexCount.Sex} Students")" Value="@studentSexCount.Count"
+                       Icon="@Icons.Material.Filled.Person" ValueColor="@GetValuesColor(studentSexCount.Sex)"
+                       IconColor="@GetValuesColor(studentSexCount.Sex)" TitleColor="Color.Dark" />
+            </MudItem>
+        }
+
+        <MudGrid Class="mt-5">
+            <MudItem xs="6">
+                <MudCard>
+                    <MudCardContent>
+                        <MudText Typo="Typo.h6">Students by Gender</MudText>
+                        <MudChart T="double" ChartType="ChartType.Bar" ChartOptions="_axisChartOptions"
+                                  ChartSeries="@_series" ChartLabels="@_xAxisLabels" Width="100%px" Height="300px">
+                        </MudChart>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid Class="mt-5">
+            <MudItem xs="6">
+                <MudCard>
+                    <MudCardContent>
+                        <MudText Typo="Typo.h6">Number of Class by Faculity</MudText>
+                        <MudChart T="double" ChartType="ChartType.Bar" ChartOptions="_axissChartOptions"
+                                  ChartSeries="@_seriess" ChartLabels="@_xAxisLabelss" Width="100%" Height="300px">
+                        </MudChart>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+             <MudItem xs="6">
+            <MudCard>
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">Attendance by Month</MudText>
+                    <MudChart T="double" ChartType="ChartType.Line" ChartOptions="_attendancechartoptions"
+                              ChartSeries="@_attendanceseries" ChartLabels="@_attendanceAxisLabels" Width="100%"
+                              Height="300px">
+                    </MudChart>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        </MudGrid>
     </MudGrid>
 </MudContainer>
 
-@code{
+@code {
     private List<GetStudentDTO> students = new();
-    private List<GetClassStatusCountDTO> classStatusCounts = new();    
-     private List<GetStudentSexCountDTO> studentSexCounts = new(); 
-    private int totalStudents => students.Count;  
+    private List<GetClassDTO> classesss = new();
+        
+    private List<GetAttendenceDTO> attendances = new();
+    private List<GetClassStatusCountDTO> classStatusCounts = new();
+    private List<GetStudentSexCountDTO> studentSexCounts = new();
+    private int totalStudents => students.Count;
     protected override async Task OnInitializedAsync()
     {
-        students= await StudentService.GetStudentsAsync();
+        students = await StudentService.GetStudentsAsync();
+        classesss= await ClassService.GetClasssesAsync();
         classStatusCounts = await ClassService.GetClassStatusCountAsync();
         studentSexCounts = await StudentService.GetStudentSexCountAsync();
-    }  
+        StudentBySexChart();
+        ClassBySexChart();
+         await BoundattendancechartAsync();
+    }
     private Color GetValueColor(ClassStatus status)
     {
         return status switch
@@ -77,7 +110,95 @@
             SexStatus.Male => Color.Primary,
             SexStatus.Female => Color.Secondary,
             _ => Color.Default
-           
+
         };
     }
+
+    private List<ChartSeries<double>> _series = new();
+    private string[] _xAxisLabels = Array.Empty<string>();
+    private BarChartOptions _axisChartOptions = new BarChartOptions()
+    {
+        XAxisTitle = "Sex",
+        YAxisTitle = "Students",
+        FixedBarWidth = 50,
+        ChartPalette = new string[] { "#1976D2", "#E91E63", "#4CAF50", "#FF9800", "#9C27B0" }
+    };
+
+    private LineChartOptions _attendancechartoptions = new LineChartOptions();
+    private void StudentBySexChart()
+    {
+        var studentsbysex = students
+        .GroupBy(s => s.Sex.ToString())
+        .Select(g => new
+        {
+            Sex = g.Key,
+            Count = (double)g.Count()
+        }).ToList();
+        _series = studentsbysex.Select(g => new ChartSeries<double>
+        {
+            Name = g.Sex,
+            Data = new double[] { g.Count }
+        }).ToList();
+
+        _xAxisLabels = new string[] { "Sex" };
+
+    }
+    private List<ChartSeries<double>> _seriess = new();
+    private string[] _xAxisLabelss = Array.Empty<string>();
+    private BarChartOptions _axissChartOptions = new BarChartOptions()
+    {
+        XAxisTitle = "Faculity",
+        YAxisTitle = "Classes",
+        FixedBarWidth = 50,
+        ChartPalette = new string[] { "#1976D2", "#E91E63", "#4CAF50", "#FF9800", "#9C27B0" }
+    };
+    private void ClassBySexChart()
+    {
+        var classesbyfaculity = classesss
+        .GroupBy(s => s.Faculity.Name.ToString())
+        .Select(g => new
+        {
+            Faculity = g.Key,
+            Count = (double)g.Count()
+        }).ToList();
+        _seriess = classesbyfaculity.Select(g => new ChartSeries<double>
+        {
+            Name = g.Faculity,
+            Data = new double[] { g.Count }
+        }).ToList();
+
+        _xAxisLabelss = new string[] { "Faculity" };
+
+    }
+    private List<ChartSeries<double>> _attendanceseries = new();
+    private async Task BoundattendancechartAsync()
+    {
+        double[] monthlyCounts = new double[12];
+        foreach (var attendance in attendances)
+        {
+            if (attendance.Date != default)
+            {
+                int monthIndex = attendance.Date.Month - 1;
+                if (monthIndex >= 0 && monthIndex < 12)
+                {
+                    monthlyCounts[monthIndex]++;
+                }
+            }
+        }
+
+        _attendanceseries = new List<ChartSeries<double>>
+        {
+            new ChartSeries<double>
+            {
+                Name = "Attendances",
+                Data = monthlyCounts
+            }
+        };
+    }
+    private string[] _attendanceAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug","Sep","Oct","Nov","Dec"};
+
+
+
+    
 }
+

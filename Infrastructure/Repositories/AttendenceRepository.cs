@@ -23,6 +23,7 @@ namespace Infrastructure.Repositories
                 .Select(at => new GetAttendenceDTO
             {
                 Id= at.Id,
+                InstructorName = at.InstructorName,
                 ClasssId= at.ClasssId,
                 Classs= at.Classs,
                 UserAdded= at.UserAdded,
@@ -33,11 +34,7 @@ namespace Infrastructure.Repositories
         }        
          public async Task AddAttendenceAsync(AddAttendenceDTO attendence)
         {
-              var existingdata= await _dbcontext.Attendences.AnyAsync(c => c.ClasssId == attendence.ClasssId);
-            if(existingdata)
-            {
-                throw new InvalidCastException("this class already axists");
-            }
+           
             _dbcontext.Attendences.Add( new Attendence
             {
                InstructorName = attendence.InstructorName,
@@ -87,16 +84,12 @@ namespace Infrastructure.Repositories
 
           public async Task<List<GetStudentAttendenceDTO>> AddAttendanceWithStudentAttendanceAsync(AddAttendenceDTO attendance)
         {
-             var existingdata= await _dbcontext.Attendences.AnyAsync(c => c.ClasssId == attendance.ClasssId);
-            if(existingdata)
-            {
-                throw new InvalidCastException("this class already axists");
-            }
+           
             ///Insert into attendance
             var attendanceEntity = new Attendence
             {
                 ClasssId= attendance.ClasssId,
-                InstructorName = attendance. InstructorName,
+                InstructorName = attendance.InstructorName,
                 Date = attendance.Date,
                 UserAdded =attendance.InstructorName,
                 DateAdded = DateTime.UtcNow,

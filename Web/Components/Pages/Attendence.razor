@@ -1,11 +1,11 @@
 @page "/attendance"
 @using Application.Services.AttendenceServices
 @using Application.DTOs
-@using Domain.ValueObject
 @using Application.Services.ClassServices
+@using Domain.ValueObject
 @inject NavigationManager Navigation
-@inject IDialogService DialogService
 @inject IClassService ClassService
+@inject IDialogService DialogService
 @inject IAttendenceService AttendenceService
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4" >
     <MudDataGrid 
@@ -57,9 +57,9 @@
                 <TemplateColumn CellClass="d-flex justify-end" Title="Actions">
                     <CellTemplate>
                         <MudMenu Icon="@Icons.Material.Filled.MoreVert" AriaLabel="Class Details Menu">
-                            @* <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@(() => OnOpenRegistration(context.Item, _closeButton))" >Add Student</MudMenuItem> *@
-                            @* <MudMenuItem Icon="@Icons.Material.Filled.Edit" Color="Color.Info" OnClick="@(() => ViewClassAsync(context.Item))">Details</MudMenuItem>
-                            <MudMenuItem Icon="@Icons.Material.Filled.Edit"  Color="Color.Primary" OnClick="@(() => EditClassAsync(context.Item, _closeButton))">Edit</MudMenuItem> *@
+                            
+                            @* <MudMenuItem Icon="@Icons.Material.Filled.Edit" Color="Color.Info" OnClick="@(() => ViewClassAsync(context.Item))">Details</MudMenuItem> *@
+                            <MudMenuItem Icon="@Icons.Material.Filled.Edit"  Color="Color.Primary" OnClick="@(() => ViewAttendanceAsync(context.Item, _closeButton))">Edit</MudMenuItem>
                         </MudMenu>
                     </CellTemplate>
                 </TemplateColumn>
@@ -130,11 +130,12 @@
         return false;
     };
     
+    
     protected override async Task OnInitializedAsync()
     {
         attendances = await AttendenceService.GetAttendencesAsync();
+       
         classs = await ClassService.GetClasssesAsync();
-
 
     }
     //You may add more options to the Dialog: These last ones I added are intended to make the dialog of AddAttendance be quit large in width
@@ -154,25 +155,18 @@
         if (result is not null && !result.Canceled)
         {
             attendances = await AttendenceService.GetAttendencesAsync();
-            
             await InvokeAsync(StateHasChanged);
         }
     }
-    private async Task ViewStudentAttendenceAsync(GetAttendenceDTO attendence, DialogOptions options)
+    
+    private async Task ViewAttendanceAsync(GetAttendenceDTO attended, DialogOptions options)
     {
         var parameters = new DialogParameters
-        {
-            { nameof(StudentAttendenceDetail.Id), attendence.Id } // Pass the Id directly
-        };
+    {
+        { nameof(AttendanceDetails.SelectedAttendance), attended } // Pass the Id directly
+    };
 
-        var dialog = await DialogService.ShowAsync<StudentAttendenceDetail>("Edit Class", parameters, options);
-        var result = await dialog.Result;
-
-        if (result is not null && !result.Canceled)
-        {
-            classes = await ClassService.GetClasssesAsync();
-            StateHasChanged();
-        }
+        var dialog = await DialogService.ShowAsync<AttendanceDetails>("Attendance Details", parameters, options);
     }
-    
+   
 }

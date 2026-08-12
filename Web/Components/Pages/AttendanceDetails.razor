@@ -1,0 +1,85 @@
+@using Application.DTOs
+@using Application.Services.AttendenceServices
+@using Application.Services.StudentAttendenceServices
+@using Domain.ValueObject
+@inject IAttendenceService AttendenceService
+@inject IStudentAttendenceService StudentAttendenceService
+
+<MudDialog MaxWidth="MaxWidth.ExtraLarge" FullWidth="true">
+    <TitleContent>
+                <MudPaper Class="mb-3" Elevation="0">
+                    <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center">
+                        <MudText Typo="Typo.h6">@SelectedAttendance?.Classs.Name</MudText>
+                        @if (SelectedAttendance is not null)
+                        {
+                            <MudChip T="string" Size="Size.Small" Variant="Variant.Filled"
+                                     Color="@GetStatusColor(SelectedAttendance.Status)">
+                                @SelectedAttendance.Status
+                            </MudChip>
+                        }
+                    </MudStack>
+                    <MudText Color="Color.Secondary" FontWeight="FontWeight.Bold" Typo="Typo.body2">
+                        @SelectedAttendance?.Classs.Faculity?.Name | @SelectedAttendance?.Classs.EducationLevel?.Name</MudText>
+                    </MudPaper>
+            </TitleContent>
+            <DialogContent>
+
+                <MudGrid>
+                    <MudDataGrid T="GetStudentAttendenceDTO" Dense="true" MultiSelection="true" Items="@filteredStudentAttendence">
+
+                        <ToolBarContent>
+                            <MudText Typo="Typo.h6">Class Member</MudText>
+                        </ToolBarContent>
+
+                        <Columns>
+                            <SelectColumn T="GetStudentAttendenceDTO" />
+                            <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="true" Filterable="false" />
+                            <PropertyColumn Property="x => x.Student.Id" Title="Student ID" />
+                            <PropertyColumn Property="x => x.Student.Name" Title="Student Name" />
+                            <PropertyColumn Property="x => x.Attendence.InstructorName" Title="Instructor"/>
+                            <TemplateColumn Title="Status">
+                                <CellTemplate>
+                                    <MudChip T="string" Size="Size.Small" Variant="Variant.Filled"
+                                             Color="@GetStatusColor(context.Item.Status)">
+                                        @context.Item.Status
+                                    </MudChip>
+                                </CellTemplate>
+                            </TemplateColumn>
+                        </Columns>
+                        <PagerContent>
+                            <MudDataGridPager T="GetStudentAttendenceDTO" />
+                        </PagerContent>
+
+                    </MudDataGrid>
+                </MudGrid>
+            
+        </DialogContent>
+    </MudDialog>
+
+@code {
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public GetAttendenceDTO? SelectedAttendance { get; set; }
+
+    private bool isLoading = true;
+    private List<GetAttendenceDTO> attendances = new();
+    private List<GetStudentAttendenceDTO> studentattendance = new();
+        private List<GetStudentAttendenceDTO> filteredStudentAttendence => studentattendance.Where(r => SelectedAttendance is null || r.AttendenceId == SelectedAttendance.Id)
+            .ToList();
+
+    protected async override Task OnInitializedAsync()
+    {
+        studentattendance = await StudentAttendenceService.GetStudentAttendencesAsync();  
+    }
+    private static Color GetStatusColor(AttendenceStatus status) => status switch
+    {
+        AttendenceStatus.Present => Color.Success,
+        AttendenceStatus.Absent => Color.Warning,
+        AttendenceStatus.Excused => Color.Info,
+        AttendenceStatus.Deleted => Color.Error,
+        AttendenceStatus.UnTaken => Color.Error,
+        _ => Color.Default
+    };
+}

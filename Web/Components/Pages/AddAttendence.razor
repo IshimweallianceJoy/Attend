@@ -6,12 +6,13 @@
 @using Application.Services.StudentAttendenceServices
 @inject NavigationManager Navigation
 @inject IDialogService DialogService
+
 @inject IAttendenceService AttendanceService
 @inject IStudentAttendenceService StudentAttendanceService
 @inject IClassService ClasssService
 @inject ISnackbar Snackbar
 
-<MudDialog MaxWidth="MaxWidth.ExtraLarge">
+<MudDialog MaxWidth="MaxWidth.Small">
     <TitleContent>
          <MudText Typo="Typo.h6">Take Attendance</MudText>
     </TitleContent>
@@ -111,11 +112,15 @@
     </DialogContent>
 </MudDialog>
 @code{
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = null!;
+
     private List<GetStudentAttendenceDTO> studentAttendances = new();
     private AddAttendenceDTO attendance = new();
 
     // ----------------------------------------THIS IS FOR AUTO COMPLETE -------------------------------------
     private List<GetClassDTO> Classs = new();
+    private List<GetAttendenceDTO> attendences = new();
     private GetClassDTO? selectedClass;
 
     private async Task<IEnumerable<GetClassDTO>> Search(string value, CancellationToken token)
@@ -148,7 +153,7 @@
     {
         if (selectedClass == null)
         {
-            Snackbar.Add("Please select a class before saving.", Severity.Warning);
+            Snackbar.Add("Please select a class before saving.", Severity.Warning); 
             return;
         }
 
@@ -159,6 +164,8 @@
             // ------------------------------------------THIS IS THE POINT TO TAKE INTO ACCOUNT AND CHANGE IT IN COMFORMITY WITH YOUR SERVICES
             studentAttendances = await AttendanceService.AddAttendanceWithStudentAttendanceAsync(attendance);
             Snackbar.Add("Attendance batch created successfully.", Severity.Success);
+            attendences = await AttendanceService.GetAttendencesAsync();
+            MudDialog.Close(DialogResult.Ok(true));
         }
         catch (Exception ex)
         {
@@ -177,7 +184,7 @@
             await StudentAttendanceService.AddStudentAttendanceAsync(item.Id, status);
             item.Status = status;
 
-            Snackbar.Add($"Status updated to {status}.", Severity.Success);
+            Snackbar.Add($"Status updated to= {status}.", Severity.Success);
 
             await InvokeAsync(StateHasChanged);
         }
