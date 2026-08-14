@@ -9,6 +9,7 @@ using Application.Services.ClassStudentServices;
 using Application.Services.FaculityServices;
 using Application.Services.EducationLevelServices;
 using Domain.Entities;
+
 namespace Application.DependencyInjection
 {
     public static class ServiceContainer

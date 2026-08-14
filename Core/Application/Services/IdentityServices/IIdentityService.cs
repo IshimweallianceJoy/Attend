@@ -6,6 +6,8 @@ namespace Application.Services.IdentityServices
     {
          Task<List<GetUserDTO>> GetAllUsersAsync();
          Task RegisterUserAsync(RegisterUserDTO register);
+          Task<bool>LoginAsync(LoginDTO login);
+        Task LogOutAsync();
          
     }
 }

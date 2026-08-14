@@ -3,6 +3,8 @@
 @using Application.DTOs
 @using Application.Services.ClassServices
 @using Domain.ValueObject
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 @inject NavigationManager Navigation
 @inject IClassService ClassService
 @inject IDialogService DialogService

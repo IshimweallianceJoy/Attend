@@ -18,6 +18,14 @@ namespace Application.Services.IdentityServices
         {
             await _identity.RegisterUserAsync(register);
         }
+          public async Task<bool> LoginAsync(LoginDTO login)
+        {
+            return await _identity.LoginAsync(login);
+        }
+        public async Task LogOutAsync()
+        {
+            await _identity.LogoutAsync();
+        }
     }
     
 }

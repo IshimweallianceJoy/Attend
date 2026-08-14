@@ -3,6 +3,8 @@
 @using Application.DTOs
 @using Domain.Entities
 @rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 @inject NavigationManager Navigation    
 @inject IStudentService StudentService
 <div class="container mt-5 flex justify-content-center shadow-sm border-0 p-6" >

@@ -2,7 +2,10 @@
 @using Application.Services.IdentityServices
 @using Domain.Entities;
 @using Application.DTOs;
+@using Web.Components.SharedComps;
 @using Domain.ValueObject;
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 
 @inject IDialogService DialogService
  @inject IIdentityService IdentityService

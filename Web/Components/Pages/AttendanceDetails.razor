@@ -2,6 +2,8 @@
 @using Application.Services.AttendenceServices
 @using Application.Services.StudentAttendenceServices
 @using Domain.ValueObject
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 @inject IAttendenceService AttendenceService
 @inject IStudentAttendenceService StudentAttendenceService
 

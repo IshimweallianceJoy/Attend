@@ -24,12 +24,27 @@ namespace Infrastructure.Identity
                 options.Password.RequiredLength = 10;
                 options.Password.RequireUppercase = true;
                 options.User.RequireUniqueEmail = true;
+
+                options.Lockout.MaxFailedAccessAttempts = 3;
             })
-            
             .AddRoles<IdentityRole<int>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddSignInManager()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>();
+
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                options.TokenLifespan = TimeSpan.FromDays(6);
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "Attend";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+            });
             
             return services;
 

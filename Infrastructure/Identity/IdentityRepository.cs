@@ -9,13 +9,14 @@ namespace Infrastructure.Identity
     public class IdentityRepository:IIdentity
     {
         private readonly ApplicationDbContext _dbcontext;
-        // public readonly SignInManager<User> _signinManager;
+         public readonly SignInManager<User> _signInManager;
         public readonly UserManager<User> _userManager;
         public readonly RoleManager<IdentityRole<int>> _roleManager;
 
-        public IdentityRepository(ApplicationDbContext dbContext,  UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
+        public IdentityRepository(ApplicationDbContext dbContext,  UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, SignInManager<User> signInManager)
         {
             _dbcontext=dbContext;
+             _signInManager =signInManager;
             _userManager = userManager;
             _roleManager= roleManager;
         }
@@ -58,6 +59,52 @@ namespace Infrastructure.Identity
             {
                 await _userManager.AddToRoleAsync(newuser, register.Role);
             }
+        }
+          public async Task<bool> LoginAsync(LoginDTO dto)
+            {
+            //      // Load default roles if no roles exist
+            // if (!await _roleManager.Roles.AnyAsync())
+            // {
+            //     await _roleManager.CreateAsync(new IdentityRole<int> { Name = UserRole.Admin.ToString() });
+            //     await _roleManager.CreateAsync(new IdentityRole<int> { Name = UserRole.Customer.ToString() });
+            // }
+
+
+            // // Load Sample data if no users exist
+            // var AdminUser = new User()
+            // {
+            //     FirstName = "Admin",
+            //     LastName = "User",
+            //     Email = "admin@example.com",
+            //     PhoneNumber = "1234567890",
+            //     UserName = "admin@example.com",
+            //     EmailConfirmed = true,
+            // };
+
+            // var existing = await _userManager.FindByEmailAsync(AdminUser.Email);
+            // if (existing == null)
+            // {
+            //     await _userManager.CreateAsync(AdminUser, "Admin@123");
+            // }
+
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(
+                user.UserName ?? dto.Email,
+                dto.Password,
+                dto.RememberMe,
+                lockoutOnFailure: true
+            );
+
+            return result.Succeeded;
+            }
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }

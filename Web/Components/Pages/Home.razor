@@ -6,6 +6,8 @@
 @using Application.Services.ClassServices
 @using Application.Services.AttendenceServices
 @using Domain.ValueObject
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 @inject IClassService ClassService
 @inject IAttendenceService AttendenceService
 @inject IStudentService StudentService
@@ -99,8 +101,7 @@
         {
             ClassStatus.Active => Color.Success,
             ClassStatus.Deleted => Color.Error,
-            @* ClassStatus.Full => Color.Warning,
-            ClassStatus.Ongoing => Color.Warning, *@
+     
             _ => Color.Default
         };
     }
@@ -204,4 +205,5 @@
 
     
 }
+
 

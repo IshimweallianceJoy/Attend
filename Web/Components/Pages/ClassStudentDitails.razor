@@ -1,6 +1,8 @@
 @using Application.DTOs
 @using Application.Services.ClassStudentServices
 @using Application.Services.ClassServices
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 @inject NavigationManager NavigationManager
 @inject IClassService ClassService
 @inject IClassStudentService ClassStudentService

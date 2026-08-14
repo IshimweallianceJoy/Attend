@@ -17,7 +17,8 @@ builder.Services.AddRazorComponents()
 
     //Registration of Services
     builder.Services.AddMudServices();
-
+builder.Services.AddControllers();
+ 
 
 builder.Services.AddApplicationServices();
 
@@ -36,10 +37,18 @@ app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages:
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseAntiforgery();
 
+app.UseAntiforgery();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
+
     .AddInteractiveServerRenderMode();
+   
+
+app.UseAuthentication();
+
+ app.UseAuthorization();
+
+app.MapControllers(); // Account login/logout endpoints
 
 app.Run();

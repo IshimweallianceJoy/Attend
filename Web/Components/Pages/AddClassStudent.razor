@@ -3,7 +3,9 @@
 @using Domain.Entities
 @using Application.Services.ClassServices
 @using Application.Services.StudentServices
-@using Domain.ValueObject;
+@using Domain.ValueObject
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
 @inject IStudentService StudentService

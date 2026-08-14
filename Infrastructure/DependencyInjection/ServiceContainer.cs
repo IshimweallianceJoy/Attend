@@ -18,6 +18,8 @@ namespace Infrastructure.DependencyInjection
             );
 
              services.AddAuthenticationService(configuration);
+              services.AddHttpContextAccessor();
+            services.AddScoped<IUserContext, UserContext>();
             services.AddScoped<IStudent, StudentRepository>();
             
             services.AddScoped<IClass, ClassRepository>();

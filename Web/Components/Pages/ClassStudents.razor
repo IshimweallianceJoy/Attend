@@ -3,6 +3,8 @@
 @using Application.DTOs;
 @using Domain.Entities;
 @using Domain.ValueObject;
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 
 @inject IDialogService DialogService
 @inject IClassStudentService ClassStudentService

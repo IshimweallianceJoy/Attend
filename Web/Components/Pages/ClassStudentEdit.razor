@@ -3,6 +3,8 @@
 @using Application.Services.ClassStudentServices
 @using Application.Services.ClassServices
 @using Application.Services.StudentServices
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 
 @inject IClassService ClassService
 @inject IStudentService StudentService

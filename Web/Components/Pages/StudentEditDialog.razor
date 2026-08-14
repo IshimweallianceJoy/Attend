@@ -1,5 +1,7 @@
 @using Application.DTOs
 @using Application.Services.StudentServices
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 
 @inject IStudentService StudentService
 

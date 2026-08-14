@@ -2,7 +2,8 @@
 @using Application.Services.ClassServices
 @using Application.Services.FaculityServices
 @using Application.Services.EducationLevelServices
-
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize] 
 @inject IFaculityService FaculityService
 @inject IEducationLevelService EducationLevelService
 
