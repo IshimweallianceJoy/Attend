@@ -1,4 +1,6 @@
 @inherits LayoutComponentBase
+<MudThemeProvider Theme="_theme" />
+
 <MudLayout>
     <MudContainer>
         <MudMainContent>
@@ -6,3 +8,47 @@
         </MudMainContent>
     </MudContainer>
 </MudLayout>
+
+@code{
+    private MudTheme _theme = new MudTheme()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Primary = Colors.Orange.Darken2,
+            Secondary = Colors.Teal.Darken1,
+            Tertiary = Colors.Orange.Accent2,
+            AppbarBackground = Colors.Orange  .Darken3,
+            Background = Colors.Gray.Lighten5,
+            Surface = Colors.Shades.White,
+            DrawerBackground = Colors.Shades.White,
+            DrawerText = Colors.Shades.Black,
+            Success = Colors.Green.Darken1,
+            Warning = Colors.Orange.Darken1,
+            Error = Colors.Red.Darken1,
+            Info = Colors.Orange.Darken1,
+            TextPrimary = Colors.Shades.Black,
+            TextSecondary = Colors.Gray.Darken1,
+            Divider = Colors.Gray.Lighten1,
+            DividerLight = Colors.Gray.Lighten2
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Blue.Lighten1,
+            Secondary = Colors.Teal.Lighten1,
+            Tertiary = Colors.Orange.Lighten1,
+            AppbarBackground = Colors.Gray.Darken4,
+            Background = Colors.Gray.Darken3,
+            Surface = Colors.Gray.Darken2,
+            DrawerBackground = Colors.Gray.Darken3,
+            DrawerText = Colors.Shades.White,
+            Success = Colors.Green.Lighten1,
+            Warning = Colors.Orange.Lighten1,
+            Error = Colors.Red.Lighten1,
+            Info = Colors.Blue.Lighten1,
+            TextPrimary = Colors.Shades.White,
+            TextSecondary = Colors.Gray.Lighten1,
+            Divider = Colors.Gray.Darken1,
+            DividerLight = Colors.Gray.Darken2
+        }
+    };
+}

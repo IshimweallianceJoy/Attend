@@ -8,12 +8,14 @@
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
+
+
 <PageTitle>Login</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.Small">
     <MudCard Elevation="3">
         <MudCardContent>
-            <MudText Typo="Typo.h4" Align="Align.Center" Class="mb-6">CRM Demo</MudText>
+            <MudText Typo="Typo.h4" Align="Align.Center" Class="mb-6"></MudText>
             <MudText Typo="Typo.h6" Align="Align.Center" Color="Color.Secondary" Class="mb-6">Sign in to your account</MudText>
 
             @if (!string.IsNullOrEmpty(Error))
@@ -53,7 +55,7 @@
                 <MudCheckBox @bind-Value="rememberMe"
                              Label="Remember me"
                              Class="mb-4"
-                             UserAttributes="@(new Dictionary<string, object> { { "name", "rememberMe" } })" />
+                             UserAttributes="@(new Dictionary<string, object> { { "name", "rememberMe"},{"value", "true" } })" />
 
                 <MudButton ButtonType="ButtonType.Submit"
                            Variant="Variant.Filled"
@@ -67,6 +69,7 @@
         </MudCardContent>
     </MudCard>
 </MudContainer>
+
 
 @code {
     [Parameter]

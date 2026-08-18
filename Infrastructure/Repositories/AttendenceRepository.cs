@@ -4,19 +4,22 @@ using Infrastructure.Data;
 using Application.DTOs;
 using Domain.ValueObject;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Identity;
 namespace Infrastructure.Repositories
 {
     public class AttendenceRepository : IAttendence
     {
      
          private readonly ApplicationDbContext _dbcontext;
-        public AttendenceRepository(ApplicationDbContext dbcontext)
+         private readonly IUserContext _Usercontext;
+        public AttendenceRepository(ApplicationDbContext dbcontext, IUserContext userContext)
         {
             _dbcontext= dbcontext;
+            _Usercontext=userContext;
         }
 
 
-        public async Task <List<GetAttendenceDTO>> GetAttendencesAsync()
+        public async Task<List<GetAttendenceDTO>> GetAttendencesAsync()
         {
               return await _dbcontext.Attendences
                 .Include(a => a.Classs)
@@ -41,7 +44,7 @@ namespace Infrastructure.Repositories
                     ClasssId = attendence.ClasssId,
                     Status = AttendenceStatus.Active,
                     Date = attendence.Date,
-                    UserAdded = "Joy",
+                    UserAdded = _Usercontext.Email,
                     DateAdded = DateTime.UtcNow
             });
           await  _dbcontext.SaveChangesAsync();
@@ -82,7 +85,7 @@ namespace Infrastructure.Repositories
             } await _dbcontext.SaveChangesAsync();
         }
 
-          public async Task<List<GetStudentAttendenceDTO>> AddAttendanceWithStudentAttendanceAsync(AddAttendenceDTO attendance)
+        public async Task<List<GetStudentAttendenceDTO>> AddAttendanceWithStudentAttendanceAsync(AddAttendenceDTO attendance)
         {
            
             ///Insert into attendance
@@ -91,7 +94,7 @@ namespace Infrastructure.Repositories
                 ClasssId= attendance.ClasssId,
                 InstructorName = attendance.InstructorName,
                 Date = attendance.Date,
-                UserAdded =attendance.InstructorName,
+                UserAdded = _Usercontext.Email,
                 DateAdded = DateTime.UtcNow,
                 Status= AttendenceStatus.Active
             };
@@ -113,7 +116,7 @@ namespace Infrastructure.Repositories
                Attendence = attendanceEntity,
                Status = AttendenceStatus.UnTaken,
                DateAdded= DateTime.UtcNow,
-               UserAdded= "Admin",
+               UserAdded= _Usercontext.Email,
                
             }).ToList();
             await _dbcontext.StudentAttendences.AddRangeAsync(studentAttendanceEntity);

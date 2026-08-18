@@ -10,12 +10,13 @@ namespace Infrastructure.Identity
     /// </summary>
     public class CustomUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<User, IdentityRole<int>>
     {
-        public CustomUserClaimsPrincipalFactory(
+        public CustomUserClaimsPrincipalFactory(    
             UserManager<User> userManager,
             RoleManager<IdentityRole<int>> roleManager,
             IOptions<IdentityOptions> options)
             : base(userManager, roleManager, options)
-        {
+        {  
+            
         }
 
         protected override async Task<ClaimsIdentity> GenerateClaimsAsync(User user)

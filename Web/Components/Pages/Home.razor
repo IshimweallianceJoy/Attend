@@ -14,6 +14,7 @@
 <PageTitle>Dashboard</PageTitle>
 <MudContainer Class="p-4">
     <MudGrid>
+    
         <MudItem xs="12" sm="6" md="6">
             <Cards Title="Total Students" Value="@totalStudents" Icon="@Icons.Material.Filled.Person"
                    ValueColor="Color.Success" IconColor="Color.Success" TitleColor="Color.Dark" />
@@ -26,8 +27,8 @@
                        Icon="@Icons.Material.Filled.Person" ValueColor="@GetValueColor(classStatusCount.Status)"
                        IconColor="@GetValueColor(classStatusCount.Status)" TitleColor="Color.Dark" />
             </MudItem>
-        }
-
+        }                                          
+                      
         @foreach (var studentSexCount in studentSexCounts)
         {
             <MudItem xs="12" sm="6" md="3">

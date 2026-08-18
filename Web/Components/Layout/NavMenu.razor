@@ -1,19 +1,39 @@
 ﻿<MudNavMenu>
-    <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
-    <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All"  >Dashboard</MudNavLink>
+    @* <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
+   
 
 
    
-    <MudNavLink  Href="/Students" Icon="@Icons.Material.Filled.Group" Match="NavLinkMatch.Prefix">Students</MudNavLink>
-     <MudNavLink Href="/Class" Icon="@Icons.Material.Filled.Class" Match="NavLinkMatch.Prefix">Class</MudNavLink>
+
      <MudNavLink Href="/ClassStudent" Icon="@Icons.Material.Filled.School" Match="NavLinkMatch.Prefix">Class_Student</MudNavLink>
-     <MudNavLink Href="/attendance" Icon="@Icons.Material.Filled.ContentPaste" Match="NavLinkMatch.Prefix">Attendance</MudNavLink>
+     
      <MudNavLink Href="/Stattendence" Icon="@Icons.Material.Filled.FormatListNumbered"  Match="NavLinkMatch.Prefix">Student_Attendence</MudNavLink>
       
     <MudNavGroup Title="Settings" Expanded="true">
         
-        <MudNavLink Href="/identity"  Icon="@Icons.Material.Filled.SupervisedUserCircle" Match="NavLinkMatch.Prefix">Users</MudNavLink>
+        
         <MudNavLink Href="/security"  Match="NavLinkMatch.Prefix">Security</MudNavLink>
     </MudNavGroup>
-    <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
+    <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink> *@
+
+ <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All"  >Dashboard</MudNavLink>
+
+<AuthorizeView Roles="Admin, Director of Studies">
+    <Authorized>
+        <MudNavLink  Href="/Students" Icon="@Icons.Material.Filled.Group" Match="NavLinkMatch.Prefix">Students</MudNavLink>
+        <MudNavLink Href="/Class" Icon="@Icons.Material.Filled.Class" Match="NavLinkMatch.Prefix">Class</MudNavLink>
+    </Authorized>
+</AuthorizeView>
+
+<AuthorizeView Roles="Admin, Instructor">
+  <Authorized>
+    <MudNavLink Href="/attendance" Icon="@Icons.Material.Filled.ContentPaste" Match="NavLinkMatch.Prefix">Attendance</MudNavLink>
+  </Authorized>
+</AuthorizeView>
+
+<AuthorizeView Roles="Admin">
+  <Authorized>
+    <MudNavLink Href="/identity" Icon="@Icons.Material.Filled.ContentPaste" Match="NavLinkMatch.Prefix">Users</MudNavLink>
+  </Authorized>
+</AuthorizeView>
 </MudNavMenu>

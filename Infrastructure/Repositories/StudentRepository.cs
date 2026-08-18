@@ -9,9 +9,11 @@ namespace Infrastructure.Repositories
     public class StudentRepository : IStudent
     {
          private readonly ApplicationDbContext _dbcontext;
-        public StudentRepository(ApplicationDbContext dbcontext)
+         private readonly IUserContext _Usercontext;
+        public StudentRepository(ApplicationDbContext dbcontext, IUserContext userContext)
         {
             _dbcontext= dbcontext;
+            _Usercontext=userContext;
         }
 
 
@@ -49,7 +51,7 @@ namespace Infrastructure.Repositories
                Adress = student.Adress,
                ParentNames = student.ParentNames,
                ParentPhone = student.ParentPhone,
-               UserAdded = "Joy",
+               UserAdded = _Usercontext.Email,
                DateAdded = DateTime.UtcNow,
                Status = StudentStatus.Active,
             });

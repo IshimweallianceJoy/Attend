@@ -9,10 +9,12 @@ namespace Infrastructure.Repositories
     public class ClassStudentRepository : IClassStudent
     {
         private readonly ApplicationDbContext _dbcontext;
+        private readonly IUserContext _Usercontext;
         
-        public ClassStudentRepository(ApplicationDbContext applicationDb)
+        public ClassStudentRepository(ApplicationDbContext applicationDb, IUserContext userContext)
         {
             _dbcontext=applicationDb;
+            _Usercontext=userContext;
         }
         public async Task <List<GetClassStudentDTO>> GetClassStudentsAsync()
         {
@@ -47,7 +49,7 @@ namespace Infrastructure.Repositories
                 
                 StartDate = classStudent.StartDate ?? DateOnly.FromDateTime(DateTime.Today),
                  EndDate = classStudent.EndDate ?? DateOnly.FromDateTime(DateTime.Today),
-                UserAdded="Joy",
+                UserAdded=_Usercontext.Email,
                 DateAdded= DateTime.UtcNow,
                 Status=ClassStudentStatus.Active,
             });

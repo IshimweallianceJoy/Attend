@@ -10,9 +10,11 @@ namespace Infrastructure.Repositories
     {
      
          private readonly ApplicationDbContext _dbcontext;
-        public StudentAttendenceRepository(ApplicationDbContext dbcontext)
+         private readonly IUserContext _Usercontext;
+        public StudentAttendenceRepository(ApplicationDbContext dbcontext, IUserContext userContext)
         {
             _dbcontext= dbcontext;
+            _Usercontext=userContext;
         }
 
 

@@ -5,7 +5,7 @@
 @using Web.Components.SharedComps;
 @using Domain.ValueObject;
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize] 
+@attribute [Authorize(Roles ="Admin")] 
 
 @inject IDialogService DialogService
  @inject IIdentityService IdentityService
