@@ -31,11 +31,14 @@
                   </MudTextField>
                 </MudContainer>
 
-                <MudButton 
+                @if(UserContext.IsInstructor)
+                {
+                    <MudButton 
                           Color="Color.Primary" 
                           Variant="Variant.Filled" 
                           Class="ml-4" @onclick="() => OpenDialogAsync(_closeButton)">
                           Add Attendence</MudButton>
+                }
             </ToolBarContent>
 
             <Columns>

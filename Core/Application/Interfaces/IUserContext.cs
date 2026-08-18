@@ -41,5 +41,9 @@ namespace Application.Interfaces
         /// Gets the avatar initials (first letter of first name + first letter of last name)
         /// </summary>
         string Initials { get; }
+
+        bool IsAdmin { get; }
+
+        bool IsInstructor { get; }
     }
 }

@@ -59,5 +59,11 @@ namespace Infrastructure.Identity
                 return $"{first}{last}";
             }
         }
+        public bool IsAdmin => ClaimsPrincipal?.IsInRole("Admin") == true
+        ||ClaimsPrincipal?.FindFirst(ClaimTypes.Role)?.Value?.Equals("Admin", StringComparison.OrdinalIgnoreCase) == true;
+
+         public bool IsInstructor => ClaimsPrincipal?.IsInRole("Instructor") == true
+        ||ClaimsPrincipal?.FindFirst(ClaimTypes.Role)?.Value?.Equals("Instructor", StringComparison.OrdinalIgnoreCase) == true;
+        
     }
 }

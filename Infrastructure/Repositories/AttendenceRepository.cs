@@ -37,8 +37,11 @@ namespace Infrastructure.Repositories
         }        
          public async Task AddAttendenceAsync(AddAttendenceDTO attendence)
         {
-           
-            _dbcontext.Attendences.Add( new Attendence
+           if(_Usercontext.IsInstructor==false)
+            {
+                throw new UnauthorizedAccessException("Only Instructor can add new attendance.");
+            }
+            await _dbcontext.Attendences.AddAsync(new Attendence
             {
                InstructorName = attendence.InstructorName,
                     ClasssId = attendence.ClasssId,

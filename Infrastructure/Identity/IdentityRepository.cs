@@ -9,19 +9,22 @@ namespace Infrastructure.Identity
     public class IdentityRepository:IIdentity
     {
         private readonly ApplicationDbContext _dbcontext;
+        private readonly IUserContext _Usercontext;
          public readonly SignInManager<User> _signInManager;
         public readonly UserManager<User> _userManager;
         public readonly RoleManager<IdentityRole<int>> _roleManager;
 
-        public IdentityRepository(ApplicationDbContext dbContext,  UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, SignInManager<User> signInManager)
+        public IdentityRepository(ApplicationDbContext dbContext,  UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, SignInManager<User> signInManager, IUserContext userContext)
         {
             _dbcontext=dbContext;
              _signInManager =signInManager;
             _userManager = userManager;
             _roleManager= roleManager;
+            _Usercontext = userContext;
         }
         public async Task<List<GetUserDTO>> GetAllUsersAsync()
         {
+            
             return await _dbcontext.Users.Select(u=> new GetUserDTO
             {
                 Id=u.Id,
@@ -36,6 +39,10 @@ namespace Infrastructure.Identity
         }
         public async Task RegisterUserAsync(RegisterUserDTO register)
         {
+            if(_Usercontext.IsAdmin==false)
+            {
+                throw new UnauthorizedAccessException("Only Admin can register new users.");
+            }
            User newuser = new User()
            {
                FirstName = register.FirstName,
